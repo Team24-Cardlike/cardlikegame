@@ -1,12 +1,12 @@
 public class Card {
-    private final String suit;
-    private final int value;
-    Card(String suit, int value){
+    public final String suit;
+    public final int rank;
+    private final String pic;
+    Card(String suit, int rank, String pic){
         this.suit = suit;
-        this.value = value;
+        this.rank = rank;
+        this.pic = pic; //named as suit+rank in files later
     }
-
-    Card card = new Card("hearts", 7);
 }
 
 
