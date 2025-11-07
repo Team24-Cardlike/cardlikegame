@@ -1,17 +1,12 @@
 public class Card {
-    private final Suit suit;
+    private final String suit;
     private final int value;
-    Card(Suit suit, int value){
+    Card(String suit, int value){
         this.suit = suit;
         this.value = value;
     }
-    public enum Suit {
-        HEARTS,
-        DIAMONDS,
-        CLUBS,
-        SPADES
-    }
-    Card card = new Card(Suit.HEARTS, 7);
+
+    Card card = new Card("hearts", 7);
 }
 
 
