@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Opponent extends Player {
-    private int damage;
+    public int damage;
     private int turns;
 
     Opponent(int startHealth, int damage, int turns){

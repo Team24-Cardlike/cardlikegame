@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Stack;
 
 public class Deck {
     ArrayList<Card> cards = new ArrayList<>();
@@ -9,16 +10,15 @@ public class Deck {
     Deck(){
         generateDeck();
     }
-    public ArrayList<Card> generateDeck(){
+    public void generateDeck(){
         for(String suit : suits) {
             for (int rank : ranks) {
                 this.cards.add(new Card(suit, rank));
             }
         }
-
-        return this.cards;
     }
     public ArrayList<Card> shuffle(){
+        generateDeck();
         ArrayList<Card> temp = new ArrayList<>(this.cards);
         ArrayList<Card> shuffledCards = new ArrayList<>(Arrays.asList(new Card[this.cards.size()]));
         Random r = new Random();
@@ -28,6 +28,13 @@ public class Deck {
             temp.remove(rand);
         }
         return shuffledCards;
+    }
+
+    Stack<Card> createInGameDeck(){
+        ArrayList<Card> shuffled = shuffle();
+        Stack<Card> inGameDeck = new Stack<>();
+        inGameDeck.addAll(shuffled);
+        return inGameDeck;
     }
 
     /*public static void main (String[]args){
