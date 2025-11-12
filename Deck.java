@@ -4,9 +4,12 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Deck {
+
     ArrayList<Card> cards = new ArrayList<>();
+    Stack<Card> deck = new Stack<>();
     ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning", "tree"));
     ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
+
     Deck(){
         generateDeck();
     }
@@ -17,6 +20,8 @@ public class Deck {
             }
         }
     }
+
+    // Doesn't change this.cards, returns shuffled version
     public ArrayList<Card> shuffle(){
         generateDeck();
         ArrayList<Card> temp = new ArrayList<>(this.cards);
@@ -26,15 +31,19 @@ public class Deck {
             int rand = r.nextInt(temp.size());
             shuffledCards.set(i, temp.get(rand));
             temp.remove(rand);
-        }
+        }        
         return shuffledCards;
     }
 
-    Stack<Card> createInGameDeck(){
+    void createInGameDeck(){
         ArrayList<Card> shuffled = shuffle();
         Stack<Card> inGameDeck = new Stack<>();
         inGameDeck.addAll(shuffled);
-        return inGameDeck;
+        this.deck = inGameDeck;        
+    }
+
+    Stack<Card> getDeck() {
+        return this.deck;
     }
 
     /*public static void main (String[]args){
