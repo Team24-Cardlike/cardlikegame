@@ -12,7 +12,7 @@ public class Opponent extends Player {
     }
 
     @Override
-    public int getDamage(Object context) {
+    public int getDamage() {
         return this.damage;
     }
 }

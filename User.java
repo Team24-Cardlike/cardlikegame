@@ -7,6 +7,7 @@ public class User extends Player {
     int gold;
     int shield = 0;
     int cardsPerHand = 10;
+    ArrayList<Card> selectedCards;
 
 
     User(int startHealth){        
@@ -14,6 +15,7 @@ public class User extends Player {
         this.hand = new ArrayList<>(cardsPerHand);
         this.health = maxHealth;
         this.gold = 0;
+        this.selectedCards=new ArrayList<>();
     }
     /*void attack(ArrayList<Card> cardsPlayed, Player victim){
         int damage = getDamage(cardsPlayed);
@@ -28,30 +30,18 @@ public class User extends Player {
             this.hand.add(deck.pop());
         }
     }
-
     @Override
-    int getDamage(Object context) {
-        int damage = 0;
-        if(context instanceof ArrayList<?>){
-            ArrayList<Card> cardsPlayed = (ArrayList<Card>) context;
-            Card hiCard = cardsPlayed.getFirst();
-            Card loCard = cardsPlayed.getFirst();
-            for(Card card : cardsPlayed){
-                // TODO: Calculate damage of cards
-                // TODO: We need to decide on what the suits mean
-                damage += card.rank;
-            }
-
-
+    int getDamage() {
+        int damage=0;
+        Card hiCard = this.selectedCards.getFirst();
+        Card loCard = this.selectedCards.getFirst();
+        for(Card card : this.selectedCards){
+            // TODO: Calculate damage of cards
+            // TODO: We need to decide on what the suits mean
+            damage += card.rank;
         }
-        //TODO: FINISH FUNCTION
         return damage;
     }
-
-    void takeDamage(Object context, int damage) {
-        this.health -= damage;
-    }
-
     /**
      * Removes selected cards from hand 
      * @param cardsPlayed Cards that you selected
@@ -61,7 +51,7 @@ public class User extends Player {
             this.hand.remove(card);                                    
         }
         // TODO: FINISH FUNCTION
-        getDamage(cardsPlayed);        
+        getDamage();
     }
 
     public void setHand(ArrayList<Card> hand) {

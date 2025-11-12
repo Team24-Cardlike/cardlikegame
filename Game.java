@@ -31,7 +31,8 @@ public class Game {
         }
     }
 
-    void damage(Player damagee, Player damaged, int damage){
+    void damage(Player defender, Player attacker){
+        defender.takeDamage(attacker.getDamage());
         //TODO: make the damagee damage the damaged
     }
 
@@ -42,20 +43,16 @@ public class Game {
         while(this.opponent.health>0 && this.user.health>0){
             
             // TODO: add logic to choose cards from hand to play
-            ArrayList<Card> selectedCards = new ArrayList<>(); // Connect with frontend
+            // Connect with frontend
 
             // Test 
-            selectedCards.add(this.user.hand.get(0));
+            this.user.selectedCards.add(this.user.hand.getFirst());
             //
-            
-            int damageToOpponent = this.user.getDamage(selectedCards);
-            damage(user, opponent, damageToOpponent);
 
-            this.user.playCards(selectedCards);
-            this.user.drawCards(this.gameDeck, selectedCards.size());
+            damage(user, opponent);
 
-            int damageRecieved = this.opponent.getDamage(null);
-            this.user.takeDamage(null, damageRecieved);                            
+            this.user.playCards(this.user.selectedCards);
+            this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
 
         }
     }
