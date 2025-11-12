@@ -39,7 +39,7 @@ public class Deck {
         ArrayList<Card> shuffled = shuffle();
         Stack<Card> inGameDeck = new Stack<>();
         inGameDeck.addAll(shuffled);        
-        this.deck = inGameDeck;            
+        this.deck = inGameDeck;
     }
 
     Stack<Card> getInGameDeck() {        
