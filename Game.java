@@ -69,11 +69,13 @@ public class Game {
                 this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
                 
                 this.user.selectedCards.clear();
-
-                turn = 0;
+                System.out.println("player turn");
+            
             }
-            else {                
+            else {    
+                System.out.println("opp turn");            
                 damage(opponent, user);
+                turn = 0;
             }
         }
     }
