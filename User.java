@@ -12,7 +12,7 @@ public class User extends Player {
 
     User(int startHealth){        
         this.maxHealth = startHealth;
-        this.hand = new ArrayList<>(cardsPerHand);
+        this.hand = new ArrayList<>();
         this.health = maxHealth;
         this.gold = 0;
         this.selectedCards=new ArrayList<>();
@@ -28,7 +28,7 @@ public class User extends Player {
         
         for (int i = 0; i < amount; i++) {
             this.hand.add(deck.pop());
-        }
+        }        
     }
     @Override
     int getDamage() {

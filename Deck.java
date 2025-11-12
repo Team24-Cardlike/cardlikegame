@@ -18,12 +18,12 @@ public class Deck {
             for (int rank : ranks) {
                 this.cards.add(new Card(suit, rank));
             }
-        }
+        }        
     }
 
     // Doesn't change this.cards, returns shuffled version
     public ArrayList<Card> shuffle(){
-        generateDeck();
+        
         ArrayList<Card> temp = new ArrayList<>(this.cards);
         ArrayList<Card> shuffledCards = new ArrayList<>(Arrays.asList(new Card[this.cards.size()]));
         Random r = new Random();
@@ -38,11 +38,11 @@ public class Deck {
     void createInGameDeck(){
         ArrayList<Card> shuffled = shuffle();
         Stack<Card> inGameDeck = new Stack<>();
-        inGameDeck.addAll(shuffled);
-        this.deck = inGameDeck;        
+        inGameDeck.addAll(shuffled);        
+        this.deck = inGameDeck;            
     }
 
-    Stack<Card> getDeck() {
+    Stack<Card> getInGameDeck() {        
         return this.deck;
     }
 

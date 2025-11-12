@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Opponent extends Player {
     public int damage;
-    private int turns;
+    public int turns;
 
     Opponent(int startHealth, int damage, int turns){
         this.maxHealth = startHealth;
