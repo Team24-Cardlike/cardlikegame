@@ -14,7 +14,7 @@ public class Game {
         this.deck     = new Deck();
         this.upgrades = new Upgrades();
         this.user     = new User(100);
-        this.opponent = new Opponent(500, 5, 2);        
+        this.opponent = new Opponent(500, 5, 10);        
         this.deck.createInGameDeck();
         this.gameDeck = this.deck.getInGameDeck();        
 
@@ -45,38 +45,36 @@ public class Game {
         while(this.opponent.health>0 && this.user.health>0){    
                         
             
-            // if (this.gameDeck.size() <= 5) {
-
-            // }
+            // TODO: Refill deck when needed
+            if (this.gameDeck.size() <= 5) {
+                this.deck.createInGameDeck();
+                this.gameDeck = this.deck.getInGameDeck();  
+            }
             
-            
-            // TODO: add logic to choose cards from hand to play
-            // Connect with frontend
-            
-            // Test 
-            this.user.selectedCards.add(this.user.hand.getFirst());
-            //
-            // System.out.println(this.user.health + " " + this.gameDeck.size() + " " + this.user.selectedCards.size());            
-            System.out.println(this.opponent.health);
-
+                                                             
+                        
             
             turn++;
-            if (this.opponent.turns != turn) { // DOesn't work!!! or maybe
+            if (this.opponent.turns != turn) {
+                
+                // TODO: add logic to choose cards from hand to play
+                // Connect with frontend
+                this.user.selectedCards.add(this.user.hand.getFirst()); // TEMPORARY
 
-                damage(user, opponent);
-                
+                damage(opponent, user);
+                                
                 this.user.playCards(this.user.selectedCards);
-                this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
-                
+                this.user.drawCards(this.gameDeck, this.user.selectedCards.size());                               
+                                
                 this.user.selectedCards.clear();
-                System.out.println("player turn");
             
             }
-            else {    
-                System.out.println("opp turn");            
-                damage(opponent, user);
+            else {                              
+                damage(user, opponent);        
                 turn = 0;
             }
+            System.out.println("Your health: " + user.health + ", Opponent's health: " + opponent.health);
+            System.out.println(gameDeck.size());
         }
     }
 

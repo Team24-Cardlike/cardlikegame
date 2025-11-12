@@ -6,7 +6,7 @@ import java.util.Stack;
 public class Deck {
 
     ArrayList<Card> cards = new ArrayList<>();
-    Stack<Card> deck = new Stack<>();
+    Stack<Card> gameDeck = new Stack<>();
     ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning", "tree"));
     ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
 
@@ -39,11 +39,11 @@ public class Deck {
         ArrayList<Card> shuffled = shuffle();
         Stack<Card> inGameDeck = new Stack<>();
         inGameDeck.addAll(shuffled);        
-        this.deck = inGameDeck;            
+        this.gameDeck = inGameDeck;            
     }
 
     Stack<Card> getInGameDeck() {        
-        return this.deck;
+        return this.gameDeck;
     }
 
     /*public static void main (String[]args){
