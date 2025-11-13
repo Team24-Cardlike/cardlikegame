@@ -58,4 +58,13 @@ public class Deck {
         }
         return null;
     }
+
+    void refill(ArrayList<Card> hand) {
+        Random random = new Random();
+        for (Card card : cards) {
+            if (!hand.contains(card) && !gameDeck.contains(card)) {
+                gameDeck.insertElementAt(card, random.nextInt(gameDeck.size()));
+            }            
+        }
+    }
 }

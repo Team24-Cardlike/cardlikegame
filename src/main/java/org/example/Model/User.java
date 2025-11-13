@@ -31,7 +31,7 @@ public class User extends Player {
         // ArrayList<Card> drawnCards = new ArrayList<>();
                 
         for (int i = 0; i < amount; i++) {                   
-            this.hand.add(deck.pop());            
+            this.hand.add(deck.pop());
         }        
     }
 
@@ -42,7 +42,7 @@ public class User extends Player {
     @Override
     int getDamage() {
         int damage = getHiVal(this.selectedCards) + combos.checkCombo(this.selectedCards).value;
-        this.selectedCards.clear();
+        // this.selectedCards.clear();
         return damage;
     }
 
@@ -50,8 +50,7 @@ public class User extends Player {
         ArrayList<Integer> ranks = new ArrayList<>();
         for (Card c : cards) {
             ranks.add(c.rank);
-        }
-        Collections.sort(ranks);
+        }        
         return ranks.getLast();
     }
     /**
@@ -60,7 +59,8 @@ public class User extends Player {
      */
     void playCards(ArrayList<Card> cardsPlayed){
         for(Card card : cardsPlayed){
-            this.selectedCards.add(card);
+
+            // this.selectedCards.add(card);
             this.hand.remove(card);
         }
         // TODO: FINISH FUNCTION

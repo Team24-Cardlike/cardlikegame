@@ -16,7 +16,7 @@ public class Game {
         this.deck     = new Deck();
         //this.upgrades = new Upgrades();
         this.user     = new User(100);
-        this.opponent = new Opponent(500, 5, 10);        
+        this.opponent = new Opponent(500, 5, 6);        
         this.deck.createInGameDeck();
         this.gameDeck = this.deck.getInGameDeck();        
 
@@ -46,15 +46,11 @@ public class Game {
 
         while(this.opponent.health>0 && this.user.health>0){    
                         
-            
-            // TODO: Refill deck when needed
-            if (this.gameDeck.size() <= 5) {
-                this.deck.createInGameDeck();
-                this.gameDeck = this.deck.getInGameDeck();  
-            }
-            
-                                                             
                         
+            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) { // Hard-coded                
+                deck.refill(user.hand);                                
+            }
+                                                                                                 
             
             turn++;
             if (this.opponent.turns != turn) {
@@ -62,6 +58,7 @@ public class Game {
                 // TODO: add logic to choose cards from hand to play
                 // Connect with frontend
                 this.user.selectedCards.add(this.user.hand.getFirst()); // TEMPORARY
+                this.user.selectedCards.add(this.user.hand.getLast());
 
                 damage(opponent, user);
                                 
@@ -77,6 +74,11 @@ public class Game {
             }
             System.out.println("Your health: " + user.health + ", Opponent's health: " + opponent.health);
             System.out.println(gameDeck.size());
+            
+            for (Card c : user.hand) {
+                System.err.print(c.rank + " ");
+            }
+            System.out.println();
         }
     }
 
