@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 public class Deck {
 
@@ -46,10 +43,17 @@ public class Deck {
         return this.gameDeck;
     }
 
-    /*public static void main (String[]args){
-        Deck deck = new Deck();
-        for (Card c : deck.shuffle()) {
-            System.out.println(c.suit + " " + c.rank + ": " + deck.shuffle().size());
+
+    /**
+     *
+     * @param name in the format "suit of rank", ex. "10 of sun"
+     * @return the card with the name put in, if null card does not exist
+     */
+    Card getCard(String name){
+        for(Card card : this.cards){
+            if(Objects.equals(card.name, name))
+                return card;
         }
-    }*/
+        return null;
+    }
 }

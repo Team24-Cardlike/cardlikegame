@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Stack;
 
 public class User extends Player {
@@ -8,6 +9,7 @@ public class User extends Player {
     int shield = 0;
     int cardsPerHand = 10;
     ArrayList<Card> selectedCards;
+    CardCombos combos = new CardCombos();
 
 
     User(int startHealth){        
@@ -30,32 +32,43 @@ public class User extends Player {
             this.hand.add(deck.pop());            
         }        
     }
+
+    /**
+     *
+     * @return the value of the highest card + the value of the best combo, in the cards played.
+     */
     @Override
     int getDamage() {
-        int damage=0;
-        // Card hiCard = this.selectedCards.getFirst();
-        // Card loCard = this.selectedCards.getFirst();
-        for(Card card : this.selectedCards){
-            // TODO: Calculate damage of cards
-            // TODO: We need to decide on what the suits mean
-            damage += card.rank;
-            
-        }        
+        int damage = getHiVal(this.selectedCards) + combos.checkCombo(this.selectedCards).value;
+        this.selectedCards.clear();
         return damage;
     }
+
+    int getHiVal(ArrayList<Card> cards){
+        ArrayList<Integer> ranks = new ArrayList<>();
+        for (Card c : cards) {
+            ranks.add(c.rank);
+        }
+        Collections.sort(ranks);
+        return ranks.getLast();
+    }
     /**
-     * Removes selected cards from hand 
+     * Removes selected cards from hand
      * @param cardsPlayed Cards that you selected
      */
     void playCards(ArrayList<Card> cardsPlayed){
-        for(Card card : cardsPlayed){                
-            this.hand.remove(card);                                    
+        for(Card card : cardsPlayed){
+            this.selectedCards.add(card);
+            this.hand.remove(card);
         }
         // TODO: FINISH FUNCTION
-        getDamage();
     }
 
     public void setHand(ArrayList<Card> hand) {
         this.hand = hand;
+    }
+
+    public ArrayList<Card> getHand() {
+        return this.hand;
     }
 }

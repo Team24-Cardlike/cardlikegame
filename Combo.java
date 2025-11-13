@@ -1,5 +1,3 @@
-import javax.swing.*;
-
 public class Combo {
     String name;
     int value;
