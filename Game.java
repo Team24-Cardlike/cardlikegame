@@ -4,7 +4,7 @@ import java.util.Stack;
 public class Game {
 
     Deck deck;
-    Upgrades upgrades;
+    //Upgrades upgrades;
     User user;
     Opponent opponent;
     Stack<Card> gameDeck;   
@@ -12,7 +12,7 @@ public class Game {
 
     Game(){
         this.deck     = new Deck();
-        this.upgrades = new Upgrades();
+        //this.upgrades = new Upgrades();
         this.user     = new User(100);
         this.opponent = new Opponent(500, 5, 6);        
         this.deck.createInGameDeck();
