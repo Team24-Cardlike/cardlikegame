@@ -1,9 +1,14 @@
-public abstract class Player {
-    int maxHealth;
-    int health;
+import java.util.ArrayList;
 
-    abstract int getDamage(int damage);
+public abstract class Player {
+    public int maxHealth;
+    public int health;
+    abstract int getDamage();
     int getHealth(Player player){
         return player.health;
     }
+    void takeDamage(int damage){
+        this.health-=damage;
+    }
+
 }

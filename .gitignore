@@ -1,2 +1,8 @@
 .DS_Store
 target/
+# Default ignored files
+/shelf/
+/workspace.xml
+lib/
+.idea/
+*.iml   
