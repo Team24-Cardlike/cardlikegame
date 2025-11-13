@@ -2,22 +2,34 @@ package org.example;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import org.lwjgl.opengl.GL20;
+import org.w3c.dom.Text;
 
 public class GameRender extends ApplicationAdapter {
     Texture background;
     Texture card;
+    Image startButton;
+
     SpriteBatch spriteBatch;
     Sprite cardSprite;
     FitViewport viewport;
+
+    private Stage stage;
 
     private Array<Sprite> cards;
     private Array<Boolean> selected;
@@ -27,6 +39,17 @@ public class GameRender extends ApplicationAdapter {
     public void create() {
         background =  new Texture(Gdx.files.internal("assets/images/bräde.png"));
         card = new Texture("assets/images/soler3.png");
+
+        viewport = new FitViewport(8, 5);
+        spriteBatch = new SpriteBatch();
+        stage = new Stage(viewport, spriteBatch);
+
+        startButton = new Image(new Texture("assets/images/start (1).png"));
+        startButton.setPosition(0,0);
+        startButton.setSize(2, 1);
+        stage.addActor(startButton);
+        Gdx.input.setInputProcessor(stage);
+
         cardSprite = new Sprite(card);
         cardSprite.setSize(1, 2);
 
@@ -43,11 +66,13 @@ public class GameRender extends ApplicationAdapter {
             hovered.add(false);
         }
 
-        spriteBatch = new SpriteBatch();
-        viewport = new FitViewport(8, 5);
-
+        startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                playSelectedCards();
+            }
+        });
     }
-
 
     @Override
     public void resize(int width, int height) {
@@ -80,11 +105,25 @@ public class GameRender extends ApplicationAdapter {
         }
 
         if (Gdx.input.justTouched()) {
+
             for (int i = 0; i < cards.size; i++){
                 Sprite card = cards.get(i);
                 if(card.getBoundingRectangle().contains(cords.x, cords.y)){
                     selected.set(i, !selected.get(i));
                 }
+            }
+        }
+
+
+    }
+
+    private void playSelectedCards(){
+        float lift = viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
+        for (int i = 0; i < cards.size; i++) {
+            if (selected.get(i)) {
+                Sprite card = cards.get(i);
+                card.setY(card.getY() + lift);
+                selected.set(i, false);
             }
         }
     }
@@ -99,11 +138,11 @@ public class GameRender extends ApplicationAdapter {
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();
 
+
         // store the worldWidth and worldHeight as local variables for brevity
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
         spriteBatch.draw(background, 0, 0, worldWidth, worldHeight); // draw the background
-
         for (int i = 0; i < cards.size; i++) {
             Sprite card = cards.get(i);
 
@@ -117,16 +156,10 @@ public class GameRender extends ApplicationAdapter {
                 card.setColor(Color.WHITE);
             card.draw(spriteBatch);
         }
-/*
-        card1.setPosition(viewport.getWorldWidth()/5, viewport.getWorldHeight()/4);
-        card2.setPosition(viewport.getWorldWidth()/3, viewport.getWorldHeight()/4);
-        card3.setPosition(viewport.getWorldWidth()/2.5f, viewport.getWorldHeight()/4);
-
-        card1.draw(spriteBatch);
-        card2.draw(spriteBatch);
-        card3.draw(spriteBatch);
-*/
         spriteBatch.end();
+
+       stage.act(Gdx.graphics.getDeltaTime());
+       stage.draw();
     }
 
     @Override
@@ -142,7 +175,4 @@ public class GameRender extends ApplicationAdapter {
     @Override
     public void dispose() {
     }
-
-
-
 }
