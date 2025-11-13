@@ -10,7 +10,7 @@ public class User extends Player {
     int cardsPerHand = 10;
     ArrayList<Card> selectedCards;
     CardCombos combos = new CardCombos();
-
+    ArrayList<Upgrade> upgrades = new ArrayList<>();
 
     User(int startHealth){        
         this.maxHealth = startHealth;
