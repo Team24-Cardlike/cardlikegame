@@ -1,8 +1,8 @@
-package org.example.Model;
+package src.test.java.org.example.Model;
 
 
 import org.junit.*;
-// import org.example.Model.*;
+import src.main.java.org.example.Model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ public class Testing {
     @Test
     public void test_deck_cards(){
         Deck deck = new Deck();
-        for(Card card : deck.cards){
+        for(Card card : deck.getCards()){
             assertTrue(deck.suits.contains(card.suit));
             assertTrue(deck.ranks.contains(card.rank));
             assertEquals(card.name, card.rank + " of " + card.suit);
@@ -28,11 +28,11 @@ public class Testing {
     @Test
     public void test_shuffledCards() {
         Deck deck = new Deck();
-        assertEquals(52, deck.cards.size());
+        assertEquals(52, deck.getCards().size());
         ArrayList<Card> shuffled = deck.shuffle();
-        assertEquals(deck.cards.size(), shuffled.size());
+        assertEquals(deck.getCards().size(), shuffled.size());
         for(Card card: shuffled){
-            assertTrue(deck.cards.contains(card));
+            assertTrue(deck.getCards().contains(card));
         }
     }
 
@@ -43,15 +43,15 @@ public class Testing {
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(new Card("sun", 10),
                 new Card("sun", 11))
         );
-        user.hand.addAll(cards);
-        user.selectedCards.addAll(user.hand);
+        user.getHand().addAll(cards);
+        user.getSelectedCards().addAll(user.getHand());
         opp.health -= user.getDamage();
         assertEquals(1989, opp.health);
         cards.addAll(Arrays.asList(new Card("sun", 12),
                 new Card("sun", 13),
                 new Card("sun", 14)));
         user.setHand(cards);
-        user.selectedCards = user.hand;
+        user.setSelectedCards(user.getHand());
         opp.health -= user.getDamage();
         assertEquals(475, opp.health);
     }

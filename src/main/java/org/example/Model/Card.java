@@ -1,4 +1,4 @@
-package org.example.Model;
+package src.main.java.org.example.Model;
 
 public class Card {
     public final String suit;
