@@ -74,6 +74,7 @@ public class GameRender extends ApplicationAdapter {
         });
     }
 
+
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true); // true centers the camera
@@ -143,6 +144,7 @@ public class GameRender extends ApplicationAdapter {
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
         spriteBatch.draw(background, 0, 0, worldWidth, worldHeight); // draw the background
+
         for (int i = 0; i < cards.size; i++) {
             Sprite card = cards.get(i);
 
