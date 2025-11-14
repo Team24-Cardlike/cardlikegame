@@ -1,4 +1,6 @@
-package src.main.java.org.example.Model;
+package org.example.Model;
+
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 // import java.util.Collections;
@@ -12,6 +14,9 @@ public class User extends Player {
     ArrayList<Card> selectedCards;
     CardCombos combos = new CardCombos();
     ArrayList<Upgrade> upgrades = new ArrayList<>();
+
+    private Array<Boolean> selected;
+    private Array<Boolean> hovered;
 
     public User(int startHealth){
         this.maxHealth = startHealth;
@@ -75,4 +80,6 @@ public class User extends Player {
     public void setSelectedCards(ArrayList<Card> selectedCards){
         this.selectedCards = selectedCards;
     }
+
+    public ArrayList<Boolean>
 }

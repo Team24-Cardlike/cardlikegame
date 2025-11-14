@@ -1,4 +1,4 @@
-package src.main.java.org.example;
+package org.example;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import org.example.Model.Card;
 import org.w3c.dom.Text;
 
 public class GameRender extends ApplicationAdapter {
@@ -37,6 +39,7 @@ public class GameRender extends ApplicationAdapter {
 
     @Override
     public void create() {
+
         background =  new Texture(Gdx.files.internal("assets/images/bräde.png"));
         card = new Texture("assets/images/soler3.png");
 
@@ -114,8 +117,6 @@ public class GameRender extends ApplicationAdapter {
                 }
             }
         }
-
-
     }
 
     private void playSelectedCards(){

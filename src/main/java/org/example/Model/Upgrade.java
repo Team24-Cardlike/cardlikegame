@@ -1,4 +1,4 @@
-package src.main.java.org.example.Model;
+package org.example.Model;
 
 public abstract class Upgrade {
     String name;

@@ -1,4 +1,4 @@
-package src.main.java.org.example;
+package org.example;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
