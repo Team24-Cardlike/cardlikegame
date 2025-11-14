@@ -50,18 +50,14 @@ public class User extends Player {
     }
     /**
      * Removes selected cards from hand
+     *
      * @param cardsPlayed Cards that you selected
      */
-    int playCards(ArrayList<Card> cardsPlayed){
+    void playCards(ArrayList<Card> cardsPlayed){
         for(Card card : cardsPlayed){
             this.selectedCards.add(card);
             this.hand.remove(card);
         }
-        int damage = getDamage();
-        this.selectedCards.clear();
-        //MAYBE ADD DRAWCARDS HERE
-        return damage;
-        // TODO: FINISH FUNCTION
     }
 
     public void setHand(ArrayList<Card> hand) {
