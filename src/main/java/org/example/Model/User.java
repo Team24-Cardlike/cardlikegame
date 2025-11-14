@@ -1,5 +1,7 @@
+package src.main.java.org.example.Model;
+
 import java.util.ArrayList;
-import java.util.Collections;
+// import java.util.Collections;
 import java.util.Stack;
 
 public class User extends Player {

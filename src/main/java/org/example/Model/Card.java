@@ -1,9 +1,11 @@
+package src.main.java.org.example.Model;
+
 public class Card {
     public final String suit;
     public final int rank;
     public final String name;
     public final String pic;
-    Card(String suit, int rank){
+    public Card(String suit, int rank){
         this.suit = suit;
         this.rank = rank;
         this.name = rank + " of " + suit;

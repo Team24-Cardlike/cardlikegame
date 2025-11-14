@@ -1,4 +1,6 @@
-import java.util.ArrayList;
+package src.main.java.org.example.Model;
+
+// import java.util.ArrayList;
 
 public class Opponent extends Player {
     public int damage;
