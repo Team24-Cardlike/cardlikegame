@@ -6,8 +6,8 @@ public class Deck {
 
     ArrayList<Card> cards = new ArrayList<>();
     Stack<Card> gameDeck = new Stack<>();
-    ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning", "tree"));
-    ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
+    public final ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning", "tree"));
+    public final ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
 
     public Deck(){
         generateDeck();
@@ -18,6 +18,10 @@ public class Deck {
                 this.cards.add(new Card(suit, rank));
             }
         }        
+    }
+
+    public ArrayList<Card> getCards(){
+        return this.cards;
     }
 
     // Doesn't change this.cards, returns shuffled version
