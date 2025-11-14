@@ -1,4 +1,4 @@
-package src.main.java.org.example;
+package org.example;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;

@@ -1,4 +1,4 @@
-package src.test.java.org.example.Model;
+package org.example.Model;
 
 
 import org.junit.*;
