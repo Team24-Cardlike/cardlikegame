@@ -1,4 +1,7 @@
+package src.main.java.org.example.Model;
+
 import org.junit.*;
+import src.main.java.org.example.Model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

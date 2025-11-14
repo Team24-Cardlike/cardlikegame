@@ -1,3 +1,5 @@
+package src.main.java.org.example.Model;
+
 import java.util.ArrayList;
 
 public abstract class Player {
