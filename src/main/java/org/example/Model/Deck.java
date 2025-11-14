@@ -1,4 +1,4 @@
-package src.main.java.org.example.Model;
+package org.example.Model;
 
 import java.util.*;
 
@@ -9,7 +9,7 @@ public class Deck {
     ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning", "tree"));
     ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
 
-    Deck(){
+    public Deck(){
         generateDeck();
     }
     public void generateDeck(){
@@ -59,6 +59,10 @@ public class Deck {
         return null;
     }
 
+    /**
+     * Refills deck so that it's never empty
+     * @param hand
+     */
     void refill(ArrayList<Card> hand) {
         Random random = new Random();
         for (Card card : cards) {

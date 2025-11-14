@@ -1,6 +1,6 @@
-package src.main.java.org.example.Model;
+package org.example.Model;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 
 public abstract class Player {
     public int maxHealth;

@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import org.lwjgl.opengl.GL20;
+// import org.lwjgl.opengl.GL20;
 
 public class GameRender extends ApplicationAdapter {
     Texture background;

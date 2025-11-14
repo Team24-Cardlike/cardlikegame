@@ -4,5 +4,6 @@ target/
 /shelf/
 /workspace.xml
 lib/
+.vscode/
 .idea/
 *.iml   
