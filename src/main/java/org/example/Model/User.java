@@ -57,6 +57,7 @@ public class User extends Player {
     }
     /**
      * Removes selected cards from hand
+     *
      * @param cardsPlayed Cards that you selected
      */
     int playCards(ArrayList<Card> cardsPlayed){

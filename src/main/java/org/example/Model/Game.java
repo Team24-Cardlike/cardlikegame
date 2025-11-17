@@ -59,14 +59,35 @@ public class Game {
 
     void damage(Player defender, Player attacker){
         defender.takeDamage(attacker.getDamage());
-        //TODO: make the damagee damage the damaged
+    }
+
+    /**
+     *  <b>Does the following:</b>
+     * <ul>
+     *   <li>user.playCards()</li>
+     *   <li>this.damage()</li>
+     *   <li>user.drawCards()</li>
+     * </ul>
+     * @param playedCards cards played from the front end
+     */
+    void playCards(ArrayList<Card> playedCards){
+        this.user.playCards(playedCards);
+        damage(opponent, user);
+        this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
+        this.user.selectedCards.clear();
     }
 
     void gameLoop() {
+
         this.user.drawCards(this.gameDeck, user.cardsPerHand);
 
-        while(this.opponent.health>0 && this.user.health>0){    
-                        
+        while(this.opponent.health>0 && this.user.health>0){
+            System.out.println("-------------");
+            for (Card c : user.hand) {
+                System.out.print(c.rank + " ");
+            }
+            System.out.println();
+            System.out.println("-------------");
                         
             if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) { // Hard-coded                
                 deck.refill(user.hand);                                
@@ -75,19 +96,9 @@ public class Game {
             
             turn++;
             if (this.opponent.turns != turn) {
-                
                 // TODO: add logic to choose cards from hand to play
                 // Connect with frontend
-                this.user.selectedCards.add(this.user.hand.getFirst()); // TEMPORARY
-                this.user.selectedCards.add(this.user.hand.getLast());
-
-                damage(opponent, user);
-                                
-                this.user.playCards(this.user.selectedCards);
-                this.user.drawCards(this.gameDeck, this.user.selectedCards.size());                               
-                                
-                this.user.selectedCards.clear();
-            
+                this.playCards(new ArrayList<>(Arrays.asList(this.user.hand.getFirst(), this.user.hand.getLast())));
             }
             else {                              
                 damage(user, opponent);        
@@ -96,10 +107,8 @@ public class Game {
             System.out.println("Your health: " + user.health + ", Opponent's health: " + opponent.health);
             System.out.println(gameDeck.size());
             
-            for (Card c : user.hand) {
-                System.err.print(c.rank + " ");
-            }
-            System.out.println();
+
+
         }
     }
 
