@@ -1,7 +1,7 @@
 package org.example.Controller;
 
 import org.example.Model.Game;
-import org.example.View;
+import org.example.View.View;
 
 public class Controller{
     private View view;

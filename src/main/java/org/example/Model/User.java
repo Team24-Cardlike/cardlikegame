@@ -12,11 +12,13 @@ public class User extends Player {
     int gold;
     int cardsPerHand = 10;
     ArrayList<Card> selectedCards;
+
+    ArrayList<Boolean> hoveredCards;
+    ArrayList<Boolean> boolSelectedCards;
+
     CardCombos combos = new CardCombos();
     ArrayList<Upgrade> upgrades = new ArrayList<>();
 
-    private Array<Boolean> selected;
-    private Array<Boolean> hovered;
 
     public User(int startHealth){
         this.maxHealth = startHealth;
@@ -81,5 +83,18 @@ public class User extends Player {
         this.selectedCards = selectedCards;
     }
 
-    public ArrayList<Boolean>
+    public void setCardAsSelectedBool(int i, boolean value){
+        this.boolSelectedCards.set(i, value);
+    }
+    public void setCardAsHovered(int i, boolean value){
+        this.hoveredCards.set(i, value);
+    }
+    public ArrayList<Boolean> getBoolSelectedCards(){
+        return this.boolSelectedCards;
+    }
+    public ArrayList<Boolean> getHoveredCards(){
+        return this.hoveredCards;
+    }
+
+
 }

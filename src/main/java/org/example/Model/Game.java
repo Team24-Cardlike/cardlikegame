@@ -1,6 +1,19 @@
 package org.example.Model;
 
 // import java.util.ArrayList;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Game {
@@ -10,7 +23,14 @@ public class Game {
     User user;
     Opponent opponent;
     Stack<Card> gameDeck;   
-    int turn = 0; 
+    int turn = 0;
+    Viewport viewport;
+    SpriteBatch spriteBatch;
+    Stage stage;
+
+    ArrayList<Sprite> spriteList;
+    ArrayList<Boolean> selected;
+    ArrayList<Boolean> hovered;
 
     Game(){
         this.deck     = new Deck();
@@ -22,6 +42,8 @@ public class Game {
 
         this.gameLoop();
     }
+
+    public User getUser(){return user;}
 
     String getGameEndContext(){
         if(this.opponent.health<=0){
@@ -41,7 +63,6 @@ public class Game {
     }
 
     void gameLoop() {
-
         this.user.drawCards(this.gameDeck, user.cardsPerHand);
 
         while(this.opponent.health>0 && this.user.health>0){    
@@ -82,8 +103,58 @@ public class Game {
         }
     }
 
+    public void create() {
+        Board board = new Board("bräde");
+        //background =  new Texture(Gdx.files.internal("assets/images/bräde.png"));
+        Texture background = board.getBoard();
+        //card = new Texture("assets/images/3sun.png");
+        spriteList = new ArrayList<Sprite>();
+        selected = new ArrayList<Boolean>();
+        hovered = new ArrayList<Boolean>();
+
+        for(int i = 0; i < user.getHand().size(); i++){
+            Texture card = (user.getHand().get(i).getCardTexture());
+            Sprite cardSprite = new Sprite(card);
+            cardSprite.setSize(1,2);
+            spriteList.add(cardSprite);
+            cardSprite.setPosition(1+i*1.2f,1);
+            selected.add(false);
+            hovered.add(false);
+        }
+
+        viewport = new FitViewport(8, 5);
+        spriteBatch = new SpriteBatch();
+        stage = new Stage(viewport, spriteBatch);
+
+        Image startButton = new Image(new Texture("assets/images/start (1).png"));
+        startButton.setPosition(0,0);
+        startButton.setSize(2, 1);
+        stage.addActor(startButton);
+        Gdx.input.setInputProcessor(stage);
+
+
+        startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                playSelectedCards();
+            }
+        });
+    }
+
+    private void playSelectedCards(){
+        float lift = viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
+        for (int i = 0; i < user.getHand().size(); i++) {
+            if (selected.get(i)) {
+                Sprite card = spriteList.get(i);
+                card.setY(card.getY() + lift);
+                selected.set(i, false);
+            }
+        }
+    }
+
     public static void main(String[]args){
-        Game game = new Game();             
+        Game game = new Game();
+        game.create();
         System.out.println(game.getGameEndContext());
     }
 }

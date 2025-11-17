@@ -2,25 +2,17 @@ package org.example;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import org.example.Model.Card;
-import org.w3c.dom.Text;
 
 public class GameRender extends ApplicationAdapter {
     Texture background;
@@ -41,7 +33,7 @@ public class GameRender extends ApplicationAdapter {
     public void create() {
 
         background =  new Texture(Gdx.files.internal("assets/images/bräde.png"));
-        card = new Texture("assets/images/soler3.png");
+        card = new Texture("assets/images/3sun.png");
 
         viewport = new FitViewport(8, 5);
         spriteBatch = new SpriteBatch();
