@@ -11,29 +11,69 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import org.example.Model.Board;
-import org.example.Model.Card;
-import org.example.Model.Game;
-import org.example.Model.User;
+import org.example.Model.*;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class View extends ApplicationAdapter {
     FitViewport viewport;
-    SpriteBatch spriteBatch;
-    Game game;
+    private SpriteBatch spriteBatch;
+    private Game game;
     private ArrayList<Sprite> cardSprites;
+    private Board board;
+    private User user;
+    private Stage stage;
+    private Stack<Card> gameDeck;
+    private Deck deck;
+    private ArrayList<Boolean> hoveredCards;
+    private ArrayList<Boolean> boolSelectedCards;
 
 
+    @Override
+    public void create() {
+        game = new Game();  // modellen har ingen rendering
+        user = game.getUser();
+
+        deck = new Deck();
+        deck.createInGameDeck();
+        gameDeck = deck.getInGameDeck();
+
+        user.drawCards(this.gameDeck, user.cardsPerHand);
+        spriteBatch = new SpriteBatch();
+        board = new Board("bräde");
+        viewport = new FitViewport(8, 5);
+        stage = new Stage(viewport, spriteBatch);
+        cardSprites = new ArrayList<>();
+        createSpriteList();
+    }
+
+    @Override
+    public void render() {
+        float delta = Gdx.graphics.getDeltaTime();
+        input();
+        game.update(delta);
+        draw();         // grafik
+    }
+
+    private void createSpriteList(){
+
+        for (int i = 0; i < user.getHand().size(); i++) {
+            Sprite cardSprite = new Sprite(new Texture("assets/images/3sun.png"));
+            cardSprites.add(cardSprite);
+            cardSprite.setSize(1,2);
+            cardSprite.setPosition(1 + i * 1.2f, 1);
+
+            user.getBoolSelectedCards().add(false);
+            user.getHoveredCards().add(false);
+        }
+    }
     private void input() {
         //float speed = 4f;
         //float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
-        spriteBatch = new SpriteBatch();
-        viewport = new FitViewport(8, 5);
 
         Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.getCamera().unproject(cords);
-        cardSprites = new ArrayList<>();
         ArrayList<Card> cards = game.getUser().getHand();
 
         for (int a = 0; a < cards.size(); a++){
@@ -55,7 +95,7 @@ public class View extends ApplicationAdapter {
         }
     }
 
-    private void draw(Board board, User user, float worldWidth, float worldHeight, Stage stage) {
+    private void draw() {
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
@@ -65,7 +105,7 @@ public class View extends ApplicationAdapter {
         //float worldWidth = viewport.getWorldWidth();
         //float worldHeight = viewport.getWorldHeight();
         Texture background = board.getBoard();
-        spriteBatch.draw(background, 0, 0, worldWidth, worldHeight); // draw the background
+        spriteBatch.draw(background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight()); // draw the background
         //ArrayList<Sprite> cards = user.getHand();
 
         for (int i = 0; i < cardSprites.size(); i++) {

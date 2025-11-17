@@ -24,23 +24,22 @@ public class Game {
     Opponent opponent;
     Stack<Card> gameDeck;   
     int turn = 0;
-    Viewport viewport;
-    SpriteBatch spriteBatch;
-    Stage stage;
+    //Viewport viewport;
+    //SpriteBatch spriteBatch;
+    //Stage stage;
 
     ArrayList<Sprite> spriteList;
     ArrayList<Boolean> selected;
     ArrayList<Boolean> hovered;
 
-    Game(){
-        this.deck     = new Deck();
+    public Game(){
+        this.deck = new Deck();
         //this.upgrades = new Upgrades();
         this.user     = new User(100);
         this.opponent = new Opponent(500, 5, 6);        
         this.deck.createInGameDeck();
-        this.gameDeck = this.deck.getInGameDeck();        
-
-        this.gameLoop();
+        this.gameDeck = this.deck.getInGameDeck();
+        user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
     }
 
     public User getUser(){return user;}
@@ -77,9 +76,27 @@ public class Game {
         this.user.selectedCards.clear();
     }
 
-    void gameLoop() {
+    public void update(float delta) {
+        if (this.opponent.health <= 0 || this.user.health <= 0) return;
 
-        this.user.drawCards(this.gameDeck, user.cardsPerHand);
+        // exempel på tur-logik
+        turn++;
+        if (turn >= this.opponent.turns) {
+            damage(user, opponent);
+            turn = 0;
+        }
+
+        // Dra kort EN gång per runda
+        if (user.hand.size() < user.cardsPerHand) {
+            int toDraw = user.cardsPerHand - user.hand.size();
+            while (!gameDeck.isEmpty() && toDraw > 0) {
+                user.drawCards(gameDeck, 1);
+                toDraw--;
+            }
+        }
+    }
+
+    public void gameLoop() {
 
         while(this.opponent.health>0 && this.user.health>0){
             System.out.println("-------------");
@@ -98,7 +115,7 @@ public class Game {
             if (this.opponent.turns != turn) {
                 // TODO: add logic to choose cards from hand to play
                 // Connect with frontend
-                this.playCards(new ArrayList<>(Arrays.asList(this.user.hand.getFirst(), this.user.hand.getLast())));
+                //this.playCards(new ArrayList<Card>((this.user.hand.getFirst(), this.user.hand.getLast())));
             }
             else {                              
                 damage(user, opponent);        
@@ -106,16 +123,13 @@ public class Game {
             }
             System.out.println("Your health: " + user.health + ", Opponent's health: " + opponent.health);
             System.out.println(gameDeck.size());
-            
-
-
         }
     }
 
     public void create() {
         Board board = new Board("bräde");
         //background =  new Texture(Gdx.files.internal("assets/images/bräde.png"));
-        Texture background = board.getBoard();
+        Texture background = new Texture(Gdx.files.internal("assets/images/" + "bräde"+ ".png"));
         //card = new Texture("assets/images/3sun.png");
         spriteList = new ArrayList<Sprite>();
         selected = new ArrayList<Boolean>();
@@ -131,16 +145,10 @@ public class Game {
             hovered.add(false);
         }
 
-        viewport = new FitViewport(8, 5);
-        spriteBatch = new SpriteBatch();
-        stage = new Stage(viewport, spriteBatch);
 
         Image startButton = new Image(new Texture("assets/images/start (1).png"));
         startButton.setPosition(0,0);
         startButton.setSize(2, 1);
-        stage.addActor(startButton);
-        Gdx.input.setInputProcessor(stage);
-
 
         startButton.addListener(new ClickListener() {
             @Override
@@ -151,7 +159,7 @@ public class Game {
     }
 
     private void playSelectedCards(){
-        float lift = viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
+        float lift = 10;//viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
         for (int i = 0; i < user.getHand().size(); i++) {
             if (selected.get(i)) {
                 Sprite card = spriteList.get(i);
@@ -161,9 +169,9 @@ public class Game {
         }
     }
 
-    public static void main(String[]args){
+    /*public static void main(String[]args){
         Game game = new Game();
         game.create();
         System.out.println(game.getGameEndContext());
-    }
+    }*/
 }

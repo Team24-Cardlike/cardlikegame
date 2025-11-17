@@ -38,14 +38,14 @@ public class Deck {
         return shuffledCards;
     }
 
-    void createInGameDeck(){
+    public void createInGameDeck(){
         ArrayList<Card> shuffled = shuffle();
         Stack<Card> inGameDeck = new Stack<>();
         inGameDeck.addAll(shuffled);        
         this.gameDeck = inGameDeck;            
     }
 
-    Stack<Card> getInGameDeck() {        
+    public Stack<Card> getInGameDeck() {
         return this.gameDeck;
     }
 

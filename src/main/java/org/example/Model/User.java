@@ -10,7 +10,7 @@ public class User extends Player {
     
     ArrayList<Card> hand;
     int gold;
-    int cardsPerHand = 10;
+    public int cardsPerHand = 10;
     ArrayList<Card> selectedCards;
 
     ArrayList<Boolean> hoveredCards;
@@ -26,12 +26,27 @@ public class User extends Player {
         this.health = maxHealth;
         this.gold = 0;
         this.selectedCards = new ArrayList<>();
+
+        this.hoveredCards = new ArrayList<>();
+        this.boolSelectedCards = new ArrayList<>();
     }
 
-    void drawCards(Stack<Card> deck, int amount){
-        for (int i = 0; i < amount; i++) {                   
-            this.hand.add(deck.pop());
-        }        
+    public void drawCards(Stack<Card> deck, int amount){
+        Card card;
+        for (int i = 0; i < amount; i++) {
+            card = deck.pop();
+            this.hand.add(card);
+            boolSelectedCards.add(false);
+            hoveredCards.add(false);
+        }
+
+        hoveredCards = new ArrayList<>();
+        boolSelectedCards = new ArrayList<>();
+
+        for (int i = 0; i < amount; i++) {
+            hoveredCards.add(false);
+            boolSelectedCards.add(false);
+        }
     }
 
     public ArrayList<Card> getSelectedCards(){

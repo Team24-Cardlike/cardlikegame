@@ -11,6 +11,7 @@ public class Board {
     }
 
     public Texture getBoard(){
+        System.out.println("assets/images/"+pic+".png");
         return new Texture(Gdx.files.internal("assets/images/"+pic+".png"));
     }
 }
