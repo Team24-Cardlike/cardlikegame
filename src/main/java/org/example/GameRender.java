@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import org.example.Model.Game;
+import org.example.Model.GameObserver;
 
 public class GameRender extends ApplicationAdapter {
     Texture background;
@@ -170,4 +172,6 @@ public class GameRender extends ApplicationAdapter {
     @Override
     public void dispose() {
     }
+
+
 }

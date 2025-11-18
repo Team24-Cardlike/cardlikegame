@@ -14,86 +14,110 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Model.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
-public class View extends ApplicationAdapter {
+public class View extends ApplicationAdapter  implements GameObserver{
     FitViewport viewport;
     private SpriteBatch spriteBatch;
-    private Game game;
+    Texture background;
+    private List<String> handImages = new ArrayList<>();
     private ArrayList<Sprite> cardSprites;
-    private Board board;
-    private User user;
-    private Stage stage;
-    private Stack<Card> gameDeck;
-    private Deck deck;
+
+    // Seving hand if LibGDX not yet initialized
+    private List<String> tempHand;
+
+     private Stage stage;
     private ArrayList<Boolean> hoveredCards;
     private ArrayList<Boolean> boolSelectedCards;
 
 
     @Override
     public void create() {
-        game = new Game();  // modellen har ingen rendering
-        user = game.getUser();
-
-        deck = new Deck();
-        deck.createInGameDeck();
-        gameDeck = deck.getInGameDeck();
-
-        user.drawCards(this.gameDeck, user.cardsPerHand);
         spriteBatch = new SpriteBatch();
-        board = new Board("bräde");
         viewport = new FitViewport(8, 5);
         stage = new Stage(viewport, spriteBatch);
         cardSprites = new ArrayList<>();
+        hoveredCards = new ArrayList<>();
+        boolSelectedCards = new ArrayList<>();
+
+        //if onHandChanged is caled before libGDX inits
+
+        if (tempHand != null) {
+            this.handImages = new ArrayList<>(tempHand);
+            tempHand = null;
+        }
         createSpriteList();
+        background = new Texture("assets/images/bräde.png");
     }
 
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
         input();
-        game.update(delta);
+
         draw();         // grafik
     }
 
     private void createSpriteList(){
+        cardSprites.clear();
+        hoveredCards = new ArrayList<>();
+        boolSelectedCards = new ArrayList<>();
 
-        for (int i = 0; i < user.getHand().size(); i++) {
-            Sprite cardSprite = new Sprite(new Texture("assets/images/3sun.png"));
+        for (int i = 0; i < handImages.size(); i++) {
+            Sprite cardSprite = new Sprite(new Texture("assets/images/" + handImages.get(i)));
+            cardSprite.setSize(1,1.5f);
+            cardSprite.setPosition(0.25f + i * 1.2f, 0.25f);
             cardSprites.add(cardSprite);
-            cardSprite.setSize(1,2);
-            cardSprite.setPosition(1 + i * 1.2f, 1);
 
-            user.getBoolSelectedCards().add(false);
-            user.getHoveredCards().add(false);
+            boolSelectedCards.add(false);
+            hoveredCards.add(false);
         }
     }
+
+    //Sends input to controler to update Game
     private void input() {
         //float speed = 4f;
         //float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
 
         Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.getCamera().unproject(cords);
-        ArrayList<Card> cards = game.getUser().getHand();
 
-        for (int a = 0; a < cards.size(); a++){
-            Sprite card = cardSprites.get(a);
-            //Sprite cardSprite = new Sprite(cards.get(a).getCardTexture());
-            game.getUser().setCardAsHovered(a, card.getBoundingRectangle().contains(cords.x, cords.y));
+        //Check if user hovers over card
+        for (int a = 0; a < cardSprites.size(); a++){
+            hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
         }
 
         if (Gdx.input.justTouched()) {
+            for (int i = 0; i < cardSprites.size(); i ++) {
+                if (cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
+                    boolSelectedCards.set(i,!boolSelectedCards.get(i));
+                }
+            }
+            playSelectedCards();
 
-            for (int i = 0; i < game.getUser().getHand().size(); i++){
+            //Send input to controler
+
+           /* for (int i = 0; i < game.getUser().getHand().size(); i++){
                 Sprite card = cardSprites.get(i);
                 if(card.getBoundingRectangle().contains(cords.x, cords.y)){
                     boolean bool = game.getUser().getBoolSelectedCards().get(i);
                     game.getUser().setCardAsSelectedBool(i, !bool);
                     //selected.set(i, !selected.get(i));
                 }
-            }
+            } */
         }
     }
+
+    //Animation moving card forward
+    private void playSelectedCards(){
+        float lift = viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
+        for (int i = 0; i < cardSprites.size(); i++) {
+            if (boolSelectedCards.get(i)) {
+                Sprite card = cardSprites.get(i);
+                card.setY(card.getY() + lift);
+                boolSelectedCards.set(i, false);}
+        }}
 
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
@@ -101,19 +125,19 @@ public class View extends ApplicationAdapter {
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();
 
+
         // store the worldWidth and worldHeight as local variables for brevity
         //float worldWidth = viewport.getWorldWidth();
         //float worldHeight = viewport.getWorldHeight();
-        Texture background = board.getBoard();
         spriteBatch.draw(background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight()); // draw the background
         //ArrayList<Sprite> cards = user.getHand();
 
         for (int i = 0; i < cardSprites.size(); i++) {
             Sprite card = cardSprites.get(i);
 
-            if (user.getBoolSelectedCards().get(i))
+            if (boolSelectedCards.get(i))
                 card.setColor(Color.GOLD);
-            else if (user.getHoveredCards().get(i)) {
+            else if (hoveredCards.get(i)) {
                 // Ljusgrå highlight = hover
                 card.setColor(Color.LIGHT_GRAY);
             }
@@ -126,4 +150,35 @@ public class View extends ApplicationAdapter {
        stage.act(Gdx.graphics.getDeltaTime());
        stage.draw();
     }
+
+
+
+
+    @Override
+    //Draw updated hand
+    public void onHandChanged(List<String> hand) {
+        if (spriteBatch == null) { // If LibGDX not initialized shave hand
+            tempHand = new ArrayList<>(hand);}
+        else {
+        this.handImages = new ArrayList<>(hand); //Save updated hand
+        createSpriteList();}
+    }
+
+    @Override
+
+    public void onHealthChanged(int userHealth, int opponentHealth) {
+
+    }
+
+    @Override
+    public void onCardSelected(int index, boolean selected) {
+
+    }
+
+    @Override
+    public void onGameEnded(String resultMessage) {
+
+    }
+
+
 }

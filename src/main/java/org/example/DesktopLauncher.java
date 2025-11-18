@@ -10,6 +10,15 @@ public class DesktopLauncher {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(("Maven LibGDX test"));
         config.setWindowedMode(800,600);
-        new Lwjgl3Application(new View(), config);
+
+        Game game = new Game();
+        View view = new View();
+
+        game.observers.addObserver(view);
+        game.observers.notifyGameInit();
+        new Lwjgl3Application(view, config);
+
+
+
     }
 }
