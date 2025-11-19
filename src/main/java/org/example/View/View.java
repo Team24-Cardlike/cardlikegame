@@ -23,11 +23,12 @@ public class View extends ApplicationAdapter  implements GameObserver{
     Texture background;
     private List<String> handImages = new ArrayList<>();
     private ArrayList<Sprite> cardSprites;
-
+    private Texture opponentTexture;
+    private Sprite opponentSprite;
     // Seving hand if LibGDX not yet initialized
     private List<String> tempHand;
 
-     private Stage stage;
+    private Stage stage;
     private ArrayList<Boolean> hoveredCards;
     private ArrayList<Boolean> boolSelectedCards;
 
@@ -48,6 +49,11 @@ public class View extends ApplicationAdapter  implements GameObserver{
             tempHand = null;
         }
         createSpriteList();
+
+        opponentTexture = new Texture("assets/images/enemyCorrect.png");
+        opponentSprite = new Sprite(opponentTexture);
+        opponentSprite.setSize(3, 2);
+        opponentSprite.setPosition(3,3);
         background = new Texture("assets/images/bräde.png");
     }
 
@@ -127,8 +133,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
 
         // store the worldWidth and worldHeight as local variables for brevity
-        //float worldWidth = viewport.getWorldWidth();
-        //float worldHeight = viewport.getWorldHeight();
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
         spriteBatch.draw(background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight()); // draw the background
         //ArrayList<Sprite> cards = user.getHand();
 
@@ -145,14 +151,12 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 card.setColor(Color.WHITE);
             card.draw(spriteBatch);
         }
+        opponentSprite.draw(spriteBatch);
         spriteBatch.end();
 
        stage.act(Gdx.graphics.getDeltaTime());
        stage.draw();
     }
-
-
-
 
     @Override
     //Draw updated hand
@@ -178,6 +182,16 @@ public class View extends ApplicationAdapter  implements GameObserver{
     @Override
     public void onGameEnded(String resultMessage) {
 
+    }
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height, true); // true centers the camera
+
+        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
+        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
+        if(width <= 0 || height <= 0) return;
+
+        // Resize your application here. The parameters represent the new window size.
     }
 
 

@@ -22,13 +22,11 @@ public class Game {
         this.deck = new Deck();
         //this.upgrades = new Upgrades();
         this.user     = new User(100);
-        this.opponent = new Opponent(500, 5, 6);        
+        this.opponent = new Opponent(500, 5, 6, "enemyEvil");
         this.deck.createInGameDeck();
         this.gameDeck = this.deck.getInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         observers = new GameObservers(this);
-
-
     }
 
 

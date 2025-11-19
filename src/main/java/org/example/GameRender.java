@@ -48,7 +48,7 @@ public class GameRender extends ApplicationAdapter {
         Gdx.input.setInputProcessor(stage);
 
         cardSprite = new Sprite(card);
-        cardSprite.setSize(1, 2);
+        //cardSprite.setSize(0.5f, 1);
 
         selected = new Array<>();
         cards = new Array<>();
@@ -56,7 +56,7 @@ public class GameRender extends ApplicationAdapter {
 
         for (int i = 0; i < 5; i++) {
             Sprite s = new Sprite(card);
-            s.setSize(1, 1.5f);
+            s.setSize(0.5f, 0.75f);
             s.setPosition(1 + i * 1.2f, 1);
             cards.add(s);
             selected.add(false); // alla börjar omarkerade

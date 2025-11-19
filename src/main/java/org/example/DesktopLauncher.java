@@ -9,7 +9,7 @@ public class DesktopLauncher {
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(("Maven LibGDX test"));
-        config.setWindowedMode(800,600);
+        config.setWindowedMode(1920,1080);
 
         Game game = new Game();
         View view = new View();

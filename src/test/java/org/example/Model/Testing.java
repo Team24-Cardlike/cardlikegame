@@ -38,7 +38,7 @@ public class Testing {
     @Test
     public void test_CardCombo_checkCombo(){
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3);
+        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(new Card("sun", 10),
                 new Card("sun", 11))
         );
