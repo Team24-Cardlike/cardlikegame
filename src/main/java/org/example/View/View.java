@@ -7,10 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import org.example.Controller.Controller;
 import org.example.Model.*;
 
 import java.util.ArrayList;
@@ -21,16 +25,22 @@ public class View extends ApplicationAdapter  implements GameObserver{
     FitViewport viewport;
     private SpriteBatch spriteBatch;
     Texture background;
+    Image startButton;
+
     private List<String> handImages = new ArrayList<>();
     private ArrayList<Sprite> cardSprites;
     private Texture opponentTexture;
     private Sprite opponentSprite;
     // Seving hand if LibGDX not yet initialized
     private List<String> tempHand;
-
+    Controller controller;
     private Stage stage;
     private ArrayList<Boolean> hoveredCards;
     private ArrayList<Boolean> boolSelectedCards;
+
+    public View(Controller controller) {
+        this.controller = controller;
+    }
 
 
     @Override
@@ -42,6 +52,11 @@ public class View extends ApplicationAdapter  implements GameObserver{
         hoveredCards = new ArrayList<>();
         boolSelectedCards = new ArrayList<>();
 
+        startButton = new Image(new Texture("assets/images/start (1).png"));
+        startButton.setPosition(0,2);
+        startButton.setSize(2, 1);
+        stage.addActor(startButton);
+        Gdx.input.setInputProcessor(stage);
         //if onHandChanged is caled before libGDX inits
 
         if (tempHand != null) {
@@ -55,13 +70,19 @@ public class View extends ApplicationAdapter  implements GameObserver{
         opponentSprite.setSize(3, 2);
         opponentSprite.setPosition(3,3);
         background = new Texture("assets/images/bräde.png");
+
+        startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                playSelectedCards();
+            }
+        });
     }
 
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
         input();
-
         draw();         // grafik
     }
 
@@ -100,8 +121,6 @@ public class View extends ApplicationAdapter  implements GameObserver{
                     boolSelectedCards.set(i,!boolSelectedCards.get(i));
                 }
             }
-            playSelectedCards();
-
             //Send input to controler
 
            /* for (int i = 0; i < game.getUser().getHand().size(); i++){
@@ -118,12 +137,19 @@ public class View extends ApplicationAdapter  implements GameObserver{
     //Animation moving card forward
     private void playSelectedCards(){
         float lift = viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
+        ArrayList<Integer> selectedIndices = new ArrayList<>();
+
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
+                selectedIndices.add(i);
+
                 Sprite card = cardSprites.get(i);
                 card.setY(card.getY() + lift);
-                boolSelectedCards.set(i, false);}
-        }}
+                boolSelectedCards.set(i, false);
+            }
+        }
+        controller.onPlaySelectedCards(selectedIndices);
+    }
 
     private void draw() {
         ScreenUtils.clear(Color.BLACK);

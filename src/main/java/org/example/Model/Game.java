@@ -3,6 +3,7 @@ package org.example.Model;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.*;
 
 public class Game {
 
@@ -30,7 +31,6 @@ public class Game {
     }
 
     public void gameLoop() {
-
         while(this.opponent.health>0 && this.user.health>0){
             System.out.println("-------------");
             for (Card c : user.hand) {
@@ -43,12 +43,12 @@ public class Game {
                 deck.refill(user.hand);
             }
 
-
             turn++;
             if (this.opponent.turns != turn) {
                 // TODO: add logic to choose cards from hand to play
                 // Connect with frontend
                 //this.playCards(new ArrayList<Card>((this.user.hand.getFirst(), this.user.hand.getLast())));
+                playCards(user.getSelectedCards());
             }
             else {
                 damage(user, opponent);
@@ -58,7 +58,6 @@ public class Game {
             System.out.println(gameDeck.size());
         }
     }
-
 
     public User getUser(){return user;}
 
@@ -88,12 +87,30 @@ public class Game {
      * </ul>
      * @param playedCards cards played from the front end
      */
+
     void playCards(ArrayList<Card> playedCards){
         this.user.playCards(playedCards);
         damage(opponent, user);
         this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
         this.user.selectedCards.clear();
-
     }
+/*
+    public void playCards(ArrayList<Integer> selectedCards) {
+        int totalDamage = 0;
+
+        for (int index : selectedCards) {
+            Card c = user.getHand().get(index);
+            totalDamage += c.rank;
+            // eller kombologik här
+        }
+
+        opponent.takeDamage(totalDamage);
+
+        // uppdatera handen
+        user.removeCards(selectedCards);
+
+        notifyHandChanged();
+        notifyHealthChanged(player.getHealth(), opponent.getHealth());
+    }*/
 }
 

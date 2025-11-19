@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 // import java.util.Collections;
+import java.util.Collections;
 import java.util.Stack;
 
 public class User extends Player {
@@ -12,7 +13,6 @@ public class User extends Player {
     int gold;
     public int cardsPerHand = 10;
     ArrayList<Card> selectedCards;
-
     ArrayList<Boolean> hoveredCards;
     ArrayList<Boolean> boolSelectedCards;
 
@@ -26,7 +26,6 @@ public class User extends Player {
         this.health = maxHealth;
         this.gold = 0;
         this.selectedCards = new ArrayList<>();
-
         this.hoveredCards = new ArrayList<>();
         this.boolSelectedCards = new ArrayList<>();
     }
@@ -75,6 +74,20 @@ public class User extends Player {
      *
      * @param cardsPlayed Cards that you selected
      */
+
+    public ArrayList<Card> removeCards(ArrayList<Integer> indices) {
+        ArrayList<Card> played = new ArrayList<>();
+
+        // Sortera indices fallande så remove() funkar
+        indices.sort(Collections.reverseOrder());
+
+        for (int index : indices) {
+            played.add(hand.remove(index));
+        }
+
+        return played;
+    }
+
     int playCards(ArrayList<Card> cardsPlayed){
         for(Card card : cardsPlayed){
             this.selectedCards.add(card);

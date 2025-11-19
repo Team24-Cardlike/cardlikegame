@@ -33,7 +33,6 @@ public class GameRender extends ApplicationAdapter {
 
     @Override
     public void create() {
-
         background =  new Texture(Gdx.files.internal("assets/images/bräde.png"));
         card = new Texture("assets/images/3sun.png");
 

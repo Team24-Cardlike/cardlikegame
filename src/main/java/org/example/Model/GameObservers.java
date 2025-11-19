@@ -23,8 +23,6 @@ public class GameObservers {
     public void notifyGameInit() {
         notifyHandChanged(game.getUser().getHand());
         notifyHealthChanged(game.user.health,game.opponent.health);
-
-
     }
 
     // Hand changed sending updated hand to view in a list of strings
@@ -38,12 +36,12 @@ public class GameObservers {
             o.onHandChanged(handToString);}
     }
 
-
     public void notifyHealthChanged(int playerHealth,int opponentHealth) {
         for (GameObserver o : observers) {
             o.onHealthChanged(playerHealth,opponentHealth);
         }
     }
+
     public void notifyGameEnded() {
         for (GameObserver o : observers) {
             o.onGameEnded("game ended ?? ");
