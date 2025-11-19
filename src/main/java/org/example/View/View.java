@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import org.example.Controller.Controller;
 import org.example.Model.*;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
     // Seving hand if LibGDX not yet initialized
     private List<String> tempHand;
 
-     private Stage stage;
+    private Stage stage;
     private ArrayList<Boolean> hoveredCards;
     private ArrayList<Boolean> boolSelectedCards;
 
@@ -54,9 +56,9 @@ public class View extends ApplicationAdapter  implements GameObserver{
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
-        input();
-
-        draw();         // grafik
+        Controller.input(cardSprites, viewport, hoveredCards, boolSelectedCards);
+        playSelectedCards(); // Move cards up
+        draw();              // graphics
     }
 
     private void createSpriteList(){
@@ -75,49 +77,16 @@ public class View extends ApplicationAdapter  implements GameObserver{
         }
     }
 
-    //Sends input to controler to update Game
-    private void input() {
-        //float speed = 4f;
-        //float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
-
-        Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.getCamera().unproject(cords);
-
-        //Check if user hovers over card
-        for (int a = 0; a < cardSprites.size(); a++){
-            hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
-        }
-
-        if (Gdx.input.justTouched()) {
-            for (int i = 0; i < cardSprites.size(); i ++) {
-                if (cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
-                    boolSelectedCards.set(i,!boolSelectedCards.get(i));
-                }
-            }
-            playSelectedCards();
-
-            //Send input to controler
-
-           /* for (int i = 0; i < game.getUser().getHand().size(); i++){
-                Sprite card = cardSprites.get(i);
-                if(card.getBoundingRectangle().contains(cords.x, cords.y)){
-                    boolean bool = game.getUser().getBoolSelectedCards().get(i);
-                    game.getUser().setCardAsSelectedBool(i, !bool);
-                    //selected.set(i, !selected.get(i));
-                }
-            } */
-        }
-    }
-
     //Animation moving card forward
-    private void playSelectedCards(){
-        float lift = viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
+    public void playSelectedCards(){
+        float lift = viewport.getWorldHeight() * 0.1f; // 10% up
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
                 Sprite card = cardSprites.get(i);
                 card.setY(card.getY() + lift);
                 boolSelectedCards.set(i, false);}
-        }}
+        }
+    }
 
     private void draw() {
         ScreenUtils.clear(Color.BLACK);
@@ -138,7 +107,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
             if (boolSelectedCards.get(i))
                 card.setColor(Color.GOLD);
             else if (hoveredCards.get(i)) {
-                // Ljusgrå highlight = hover
+                // lightgrey highlight = hover
                 card.setColor(Color.LIGHT_GRAY);
             }
             else
@@ -161,7 +130,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
             tempHand = new ArrayList<>(hand);}
         else {
         this.handImages = new ArrayList<>(hand); //Save updated hand
-        createSpriteList();}
+        createSpriteList();}        
     }
 
     @Override

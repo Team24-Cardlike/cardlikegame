@@ -43,7 +43,7 @@ public class Game {
             System.out.println();
             System.out.println("-------------");
 
-            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) { // Hard-coded
+            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) {
                 deck.refill(user.hand);
             }
 
@@ -101,9 +101,5 @@ public class Game {
 
     }
 
-
-
-
-
-    }
+}
 
