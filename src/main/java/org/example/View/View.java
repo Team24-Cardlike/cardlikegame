@@ -37,11 +37,6 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private ArrayList<Boolean> hoveredCards;
     private ArrayList<Boolean> boolSelectedCards;
 
-    public View(Controller controller) {
-        this.controller = controller;
-    }
-
-
     @Override
     public void create() {
         spriteBatch = new SpriteBatch();

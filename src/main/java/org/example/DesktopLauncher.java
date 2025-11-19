@@ -17,8 +17,6 @@ public class DesktopLauncher {
         Game game = new Game();
         View view = new View();
         Controller controller = new Controller(view, game);
-        Controller controller = new Controller(game);
-        View view = new View(controller);
 
         game.observers.addObserver(view);
         game.observers.notifyGameInit();
