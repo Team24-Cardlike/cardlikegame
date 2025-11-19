@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -82,6 +81,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
+        Controller.input(cardSprites, viewport, hoveredCards, boolSelectedCards);
+        playSelectedCards(); // Move cards up
         input();
         draw();         // grafik
     }
@@ -138,7 +139,6 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private void playSelectedCards(){
         float lift = viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
         ArrayList<Integer> selectedIndices = new ArrayList<>();
-
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
                 selectedIndices.add(i);
@@ -170,7 +170,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
             if (boolSelectedCards.get(i))
                 card.setColor(Color.GOLD);
             else if (hoveredCards.get(i)) {
-                // Ljusgrå highlight = hover
+                // lightgrey highlight = hover
                 card.setColor(Color.LIGHT_GRAY);
             }
             else
@@ -183,6 +183,9 @@ public class View extends ApplicationAdapter  implements GameObserver{
        stage.act(Gdx.graphics.getDeltaTime());
        stage.draw();
     }
+
+
+
 
     @Override
     //Draw updated hand

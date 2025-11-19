@@ -28,9 +28,14 @@ public class Game {
         this.gameDeck = this.deck.getInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         observers = new GameObservers(this);
+
+
     }
 
+
+
     public void gameLoop() {
+
         while(this.opponent.health>0 && this.user.health>0){
             System.out.println("-------------");
             for (Card c : user.hand) {
@@ -39,9 +44,10 @@ public class Game {
             System.out.println();
             System.out.println("-------------");
 
-            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) { // Hard-coded
+            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) {
                 deck.refill(user.hand);
             }
+
 
             turn++;
             if (this.opponent.turns != turn) {
@@ -58,6 +64,7 @@ public class Game {
             System.out.println(gameDeck.size());
         }
     }
+
 
     public User getUser(){return user;}
 
@@ -76,6 +83,7 @@ public class Game {
 
     void damage(Player defender, Player attacker){
         defender.takeDamage(attacker.getDamage());
+
     }
 
     /**
@@ -87,12 +95,12 @@ public class Game {
      * </ul>
      * @param playedCards cards played from the front end
      */
-
     void playCards(ArrayList<Card> playedCards){
         this.user.playCards(playedCards);
         damage(opponent, user);
         this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
         this.user.selectedCards.clear();
+
     }
 /*
     public void playCards(ArrayList<Integer> selectedCards) {
