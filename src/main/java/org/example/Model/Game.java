@@ -28,11 +28,7 @@ public class Game {
         this.gameDeck = this.deck.getInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         observers = new GameObservers(this);
-
-
     }
-
-
 
     public void gameLoop() {
 

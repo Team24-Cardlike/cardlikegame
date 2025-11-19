@@ -13,7 +13,7 @@ public class Deck {
    // public final ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
 
     public Deck(){
-        generateDeck();
+        generateTEMPORARYdeck();
     }
     public void generateDeck(){
         for (int i = 0; i <20; i ++) {
@@ -22,6 +22,24 @@ public class Deck {
                 this.cards.add(new Card(suit, rank));
             }}
         }        
+    }
+
+    public void generateTEMPORARYdeck(){
+        int i = 0;
+        int j = 0;
+        int x = 0;
+        while(x<4){
+            this.cards.add(new Card("lightning", 3));
+            x++;
+        }
+        while(i<4){
+            this.cards.add(new Card("moon", 3));
+            i++;
+        }
+        while(j<4){
+            this.cards.add(new Card("sun", 3));
+            j++;
+        }
     }
 
     public ArrayList<Card> getCards(){

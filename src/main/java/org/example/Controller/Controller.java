@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Controller{
     private View view;
-    private Game game;
+    public Game game;
 
     public Controller(View _view, Game _game){
         this.view = _view;
@@ -52,7 +52,8 @@ public class Controller{
             } */
         }
     }
-    void selectCards(ArrayList<Card> cards){
+    /*
+    public void onPlaySelectedCards(ArrayList<Integer> cards){
         this.game.user.setSelectedCards(cards);
-    }
+    }*/
 }

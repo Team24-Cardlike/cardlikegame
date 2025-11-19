@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -36,6 +37,10 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private Stage stage;
     private ArrayList<Boolean> hoveredCards;
     private ArrayList<Boolean> boolSelectedCards;
+
+    public void setController(Controller controller){
+        this.controller = controller;
+    }
 
     @Override
     public void create() {
@@ -87,8 +92,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
         hoveredCards = new ArrayList<>();
         boolSelectedCards = new ArrayList<>();
 
-        for (int i = 0; i < handImages.size(); i++) {
-            Sprite cardSprite = new Sprite(new Texture("assets/images/" + handImages.get(i)));
+        for (int i = 0; i < controller.game.getUser().getHand().size(); i++) {
+            Sprite cardSprite = new Sprite(new Texture("assets/images/" + controller.game.getUser().getHand().get(i).pic));
             cardSprite.setSize(1,1.5f);
             cardSprite.setPosition(0.25f + i * 1.2f, 0.25f);
             cardSprites.add(cardSprite);
@@ -143,7 +148,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 boolSelectedCards.set(i, false);
             }
         }
-        controller.onPlaySelectedCards(selectedIndices);
+        //controller.onPlaySelectedCards(selectedIndices);
     }
 
     private void draw() {
@@ -217,6 +222,4 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         // Resize your application here. The parameters represent the new window size.
     }
-
-
 }
