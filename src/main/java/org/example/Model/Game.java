@@ -72,8 +72,6 @@ public class Game {
             if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) { // Hard-coded                
                 deck.refill(user.hand);                                
             }
-                                                                                                 
-            
             turn++;
             if (this.opponent.turns != turn) {
                 // TODO: add logic to choose cards from hand to play
