@@ -29,8 +29,6 @@ public class Game {
         observers = new GameObservers(this);
     }
 
-
-
     public void gameLoop() {
 
         while(this.opponent.health>0 && this.user.health>0){
@@ -79,7 +77,6 @@ public class Game {
 
     void damage(Player defender, Player attacker){
         defender.takeDamage(attacker.getDamage());
-
     }
 
     /**
@@ -98,10 +95,5 @@ public class Game {
         this.user.selectedCards.clear();
 
     }
-
-
-
-
-
-    }
+}
 
