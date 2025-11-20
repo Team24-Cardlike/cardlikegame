@@ -48,6 +48,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         viewport = new FitViewport(8, 5);
         stage = new Stage(viewport, spriteBatch);
         cardSprites = new ArrayList<>();
+
         hoveredCards = new ArrayList<>();
         boolSelectedCards = new ArrayList<>();
 
@@ -82,15 +83,13 @@ public class View extends ApplicationAdapter  implements GameObserver{
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
         Controller.input(cardSprites, viewport, hoveredCards, boolSelectedCards);
-        playSelectedCards(); // Move cards up
-        input();
+        //playSelectedCards(); // Move cards up
+        //input();
         draw();         // grafik
     }
 
-    private void createSpriteList(){
+    public void createSpriteList(){
         cardSprites.clear();
-        hoveredCards = new ArrayList<>();
-        boolSelectedCards = new ArrayList<>();
 
         for (int i = 0; i < controller.game.getUser().getHand().size(); i++) {
             Sprite cardSprite = new Sprite(new Texture("assets/images/" + controller.game.getUser().getHand().get(i).pic));
@@ -148,7 +147,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 boolSelectedCards.set(i, false);
             }
         }
-        //controller.onPlaySelectedCards(selectedIndices);
+        if(!selectedIndices.isEmpty()){controller.onPlaySelectedCards(selectedIndices);}
     }
 
     private void draw() {

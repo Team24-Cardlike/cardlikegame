@@ -1,6 +1,8 @@
 package org.example.Model;
 
 
+import org.example.Controller.Controller;
+
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.*;
@@ -15,7 +17,7 @@ public class Game {
     public Opponent opponent;
     Stack<Card> gameDeck;   
     int turn = 0;
-
+    Controller controller;
     //Stage stage;
 
 
@@ -64,7 +66,6 @@ public class Game {
 
     public User getUser(){return user;}
 
-
     String getGameEndContext(){
         if(this.opponent.health<=0){
             return("You won! :D");
@@ -77,9 +78,12 @@ public class Game {
         }
     }
 
+    public void setController(Controller controller){
+        this.controller = controller;
+    }
+
     void damage(Player defender, Player attacker){
         defender.takeDamage(attacker.getDamage());
-
     }
 
     /**
@@ -91,11 +95,16 @@ public class Game {
      * </ul>
      * @param playedCards cards played from the front end
      */
-    void playCards(ArrayList<Card> playedCards){
-        this.user.playCards(playedCards);
+    public void playCards(ArrayList<Card> playedCards){
+        //Gör att det blir motståndarens runda
+        int damage = user.playCards(playedCards);
+        this.opponent.takeDamage(damage);
+        System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
+        controller.updateView(playedCards);
+        /**this.user.playCards(playedCards);
         damage(opponent, user);
         this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
-        this.user.selectedCards.clear();
+        this.user.selectedCards.clear();*/
 
     }
 /*

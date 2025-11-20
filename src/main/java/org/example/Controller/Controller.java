@@ -52,8 +52,17 @@ public class Controller{
             } */
         }
     }
-    /*
+
     public void onPlaySelectedCards(ArrayList<Integer> cards){
-        this.game.user.setSelectedCards(cards);
-    }*/
+        ArrayList<Card> hand = this.game.user.getHand();
+        ArrayList<Card> temp = new ArrayList<>();
+        for(int i : cards){
+            temp.add(hand.get(i));
+        }
+        this.game.playCards(temp);
+    }
+
+    public void updateView(ArrayList<Card> cards){
+        view.createSpriteList();
+    }
 }
