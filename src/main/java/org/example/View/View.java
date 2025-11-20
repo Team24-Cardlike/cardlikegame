@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,6 +25,8 @@ import java.util.Stack;
 public class View extends ApplicationAdapter  implements GameObserver{
     FitViewport viewport;
     private SpriteBatch spriteBatch;
+    private ShapeRenderer sr;
+
     Texture background;
     Image startButton;
 
@@ -44,6 +47,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     @Override
     public void create() {
+        sr = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(8, 5);
         stage = new Stage(viewport, spriteBatch);
@@ -77,6 +81,49 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 playSelectedCards();
             }
         });
+    }
+
+    public void drawHealthBars(){
+        sr.setProjectionMatrix(viewport.getCamera().combined);
+
+        // USER HEALTH BAR (bottom-left)
+        float x = 0.5f;
+        float y = 4.5f;
+        float width = 3f;
+        float height = 0.3f;
+
+        float healthPercent = (float) controller.game.user.health / controller.game.user.maxHealth;
+
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+
+        float greenWidthUser = width * healthPercent;
+        float redWidthUser = width - greenWidthUser;
+
+        // RED background
+        sr.setColor(Color.RED);
+        sr.rect(x, y, redWidthUser, height);
+
+        // GREEN foreground (scaled)
+        sr.setColor(Color.GREEN);
+        sr.rect(x+redWidthUser, y, greenWidthUser, height);
+
+        // ENEMY HEALTH BAR (top-right)
+        float ex = 4.5f;
+        float ey = 4.5f;
+
+        float enemyPercent = (float) controller.game.opponent.health / controller.game.opponent.maxHealth;
+
+        float greenWidthOpp = width * enemyPercent;
+        float redWidthOpp = width - greenWidthOpp;
+        // RED
+        sr.setColor(Color.RED);
+        sr.rect(ex, ey, redWidthOpp, height);
+
+        // GREEN
+        sr.setColor(Color.GREEN);
+        sr.rect(ex+redWidthOpp, ey, greenWidthOpp, height);
+
+        sr.end();
     }
 
     @Override
@@ -178,7 +225,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         }
         opponentSprite.draw(spriteBatch);
         spriteBatch.end();
-
+        drawHealthBars();
        stage.act(Gdx.graphics.getDeltaTime());
        stage.draw();
     }
