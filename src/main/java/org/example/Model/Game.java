@@ -19,7 +19,7 @@ public class Game {
     int turn = 0;
     Controller controller;
     //Stage stage;
-
+    turnManager tm;
 
     public Game(){
         this.deck = new Deck();
@@ -30,8 +30,11 @@ public class Game {
         this.gameDeck = this.deck.getInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         observers = new GameObservers(this);
+        this.tm = new turnManager(true);
     }
-
+    public turnManager getTurnManager(){
+        return tm;
+    }
     public void gameLoop() {
 
         while(this.opponent.health>0 && this.user.health>0){
@@ -101,6 +104,14 @@ public class Game {
         this.opponent.takeDamage(damage);
         System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
         controller.updateView(playedCards);
+        tm.swapTurn();
+        if(!tm.getCurrentPlayer()){
+            this.user.takeDamage(opponent.getDamage());
+            System.out.println("Du tog "+opponent.getDamage()+" skada! Du har "+ this.user.health+ " hp kvar");
+            controller.opponentAnimation();
+
+            //tm.swapTurn();
+        }
         /**this.user.playCards(playedCards);
         damage(opponent, user);
         this.user.drawCards(this.gameDeck, this.user.selectedCards.size());

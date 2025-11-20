@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
@@ -41,12 +43,27 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private ArrayList<Boolean> hoveredCards;
     private ArrayList<Boolean> boolSelectedCards;
 
+
+    private boolean animatingOpponent = false;
+    private boolean falling = true;
+
+    private float animationTime = 0f;
+    private float fallDuration = 0.3f;  // snabb fallning
+    private float riseDuration = 0.6f;  // långsam uppgång
+
+    private float opponentStartY = 3f;      // original Y
+    private float opponentDropY = 1.8f;
+
+
     public void setController(Controller controller){
         this.controller = controller;
     }
 
     @Override
     public void create() {
+
+
+
         sr = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(8, 5);
@@ -129,7 +146,10 @@ public class View extends ApplicationAdapter  implements GameObserver{
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
+        updateOpponentAnimation(delta);  // <<< Lägg till detta
+
         Controller.input(cardSprites, viewport, hoveredCards, boolSelectedCards);
+
         //playSelectedCards(); // Move cards up
         //input();
         draw();         // grafik
@@ -227,11 +247,52 @@ public class View extends ApplicationAdapter  implements GameObserver{
         spriteBatch.end();
         drawHealthBars();
        stage.act(Gdx.graphics.getDeltaTime());
-       stage.draw();
+       if(controller.game.getTurnManager().getCurrentPlayer()){
+           stage.draw();
+       }
     }
+    public void oppAnimation(){
+        animatingOpponent = true;
+        falling = true;
+        animationTime = 0;
+    }
+    public void updateOpponentAnimation(float delta) {
+        if (!animatingOpponent) return;
 
+        animationTime += delta;
 
+        if (falling) {
+            // Ease-out fall: snabbt → långsamt
+            float t = animationTime / fallDuration;
+            if (t > 1f) {
+                t = 1f;
+                falling = false;
+                animationTime = 0f; // reset for rise
+            }
 
+            // t^0.5 ger snabb start, mjuk slut
+            float eased = (float)Math.pow(t, 0.5);
+            float newY = opponentStartY + (opponentDropY - opponentStartY) * eased;
+            opponentSprite.setY(newY);
+
+        } else {
+            // Ease-in rise: långsam → snabb
+            float t = animationTime / riseDuration;
+            if (t > 1f) {
+                t = 1f;
+                animatingOpponent = false;
+                opponentSprite.setY(opponentStartY);
+
+                controller.game.getTurnManager().swapTurn(); // animation klar → byt tur
+                return;
+            }
+
+            // t^2 ger långsam start, snabb slut
+            float eased = (float)Math.pow(t, 2);
+            float newY = opponentDropY + (opponentStartY - opponentDropY) * eased;
+            opponentSprite.setY(newY);
+        }
+    }
 
     @Override
     //Draw updated hand

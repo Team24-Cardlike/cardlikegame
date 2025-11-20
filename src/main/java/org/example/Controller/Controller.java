@@ -65,4 +65,7 @@ public class Controller{
     public void updateView(ArrayList<Card> cards){
         view.createSpriteList();
     }
+    public void opponentAnimation(){
+        view.oppAnimation();
+    }
 }
