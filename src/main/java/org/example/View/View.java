@@ -42,7 +42,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private Stage stage;
     private ArrayList<Boolean> hoveredCards;
     private ArrayList<Boolean> boolSelectedCards;
-
+    private ArrayList<Sprite> centerSelectedCard;
 
     private boolean animatingOpponent = false;
     private boolean falling = true;
@@ -53,7 +53,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     private float opponentStartY = 3f;      // original Y
     private float opponentDropY = 1.8f;
-
+    int a = 0;
 
     public void setController(Controller controller){
         this.controller = controller;
@@ -61,9 +61,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     @Override
     public void create() {
-
-
-
+        centerSelectedCard = new ArrayList<>();
         sr = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(8, 5);
@@ -75,7 +73,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         startButton = new Image(new Texture("assets/images/start (1).png"));
         startButton.setPosition(0,2);
-        startButton.setSize(2, 1);
+        startButton.setSize(1.5f, 1);
         stage.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
         //if onHandChanged is caled before libGDX inits
@@ -88,8 +86,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         opponentTexture = new Texture("assets/images/enemyCorrect.png");
         opponentSprite = new Sprite(opponentTexture);
-        opponentSprite.setSize(3, 2);
-        opponentSprite.setPosition(3,3);
+        opponentSprite.setSize(2.5f, 1.5f);
+        opponentSprite.setPosition(viewport.getWorldWidth()/2-(1.25f), 3.5f);
         background = new Texture("assets/images/bräde.png");
 
         startButton.addListener(new ClickListener() {
@@ -104,9 +102,9 @@ public class View extends ApplicationAdapter  implements GameObserver{
         sr.setProjectionMatrix(viewport.getCamera().combined);
 
         // USER HEALTH BAR (bottom-left)
-        float x = 0.5f;
-        float y = 4.5f;
-        float width = 3f;
+        float x = 0.1f;
+        float y = 4.7f;
+        float width = 2.5f;
         float height = 0.3f;
 
         float healthPercent = (float) controller.game.user.health / controller.game.user.maxHealth;
@@ -125,8 +123,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
         sr.rect(x+redWidthUser, y, greenWidthUser, height);
 
         // ENEMY HEALTH BAR (top-right)
-        float ex = 4.5f;
-        float ey = 4.5f;
+        float ex = 5.4f;
+        float ey = 4.7f;
 
         float enemyPercent = (float) controller.game.opponent.health / controller.game.opponent.maxHealth;
 
@@ -160,44 +158,12 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         for (int i = 0; i < controller.game.getUser().getHand().size(); i++) {
             Sprite cardSprite = new Sprite(new Texture("assets/images/" + controller.game.getUser().getHand().get(i).pic));
-            cardSprite.setSize(1,1.5f);
-            cardSprite.setPosition(0.25f + i * 1.2f, 0.25f);
+            cardSprite.setSize(0.75f,1.25f);
+            cardSprite.setPosition(0.05f + i*0.9f, 0.1f);
             cardSprites.add(cardSprite);
 
             boolSelectedCards.add(false);
             hoveredCards.add(false);
-        }
-    }
-
-    //Sends input to controler to update Game
-    private void input() {
-        //float speed = 4f;
-        //float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
-
-        Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.getCamera().unproject(cords);
-
-        //Check if user hovers over card
-        for (int a = 0; a < cardSprites.size(); a++){
-            hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
-        }
-
-        if (Gdx.input.justTouched()) {
-            for (int i = 0; i < cardSprites.size(); i ++) {
-                if (cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
-                    boolSelectedCards.set(i,!boolSelectedCards.get(i));
-                }
-            }
-            //Send input to controler
-
-           /* for (int i = 0; i < game.getUser().getHand().size(); i++){
-                Sprite card = cardSprites.get(i);
-                if(card.getBoundingRectangle().contains(cords.x, cords.y)){
-                    boolean bool = game.getUser().getBoolSelectedCards().get(i);
-                    game.getUser().setCardAsSelectedBool(i, !bool);
-                    //selected.set(i, !selected.get(i));
-                }
-            } */
         }
     }
 
@@ -218,6 +184,14 @@ public class View extends ApplicationAdapter  implements GameObserver{
     }
 
     private void draw() {
+        centerSelectedCard.clear();
+
+        for (int i = 0; i < cardSprites.size(); i++) {
+            if (boolSelectedCards.get(i)) {
+                centerSelectedCard.add(cardSprites.get(i));
+            }
+        }
+
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
@@ -230,11 +204,35 @@ public class View extends ApplicationAdapter  implements GameObserver{
         spriteBatch.draw(background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight()); // draw the background
         //ArrayList<Sprite> cards = user.getHand();
 
+        for (int i = 0; i < centerSelectedCard.size(); i++) {
+            Sprite selectedCard = centerSelectedCard.get(i);
+
+            // temporär position under render
+            float cx = 1.5f + i * 0.9f;
+            float cy = 2f;
+
+            selectedCard.setPosition(cx, cy);
+            selectedCard.setColor(Color.GOLD);
+            selectedCard.draw(spriteBatch);
+        }
         for (int i = 0; i < cardSprites.size(); i++) {
             Sprite card = cardSprites.get(i);
 
             if (boolSelectedCards.get(i))
+                continue;   // valda kort ritas i mitten istället
+
+            card.setColor(hoveredCards.get(i) ? Color.LIGHT_GRAY : Color.WHITE);
+            card.draw(spriteBatch);
+        }
+        /*
+        for (int i = 0; i < cardSprites.size(); i++) {
+            Sprite card = cardSprites.get(i);
+            Sprite selectedCard = centerSelectedCard.get(i);
+
+
+            if (boolSelectedCards.get(i)){
                 card.setColor(Color.GOLD);
+            }
             else if (hoveredCards.get(i)) {
                 // lightgrey highlight = hover
                 card.setColor(Color.LIGHT_GRAY);
@@ -242,7 +240,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
             else
                 card.setColor(Color.WHITE);
             card.draw(spriteBatch);
-        }
+        }*/
         opponentSprite.draw(spriteBatch);
         spriteBatch.end();
         drawHealthBars();
@@ -251,11 +249,13 @@ public class View extends ApplicationAdapter  implements GameObserver{
            stage.draw();
        }
     }
+
     public void oppAnimation(){
         animatingOpponent = true;
         falling = true;
         animationTime = 0;
     }
+
     public void updateOpponentAnimation(float delta) {
         if (!animatingOpponent) return;
 
