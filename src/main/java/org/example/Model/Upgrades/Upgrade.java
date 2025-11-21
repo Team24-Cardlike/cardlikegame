@@ -1,4 +1,8 @@
-package org.example.Model;
+package org.example.Model.Upgrades;
+
+import org.example.Model.Card;
+import org.example.Model.Combo;
+import org.example.Model.User;
 
 public abstract class Upgrade {
     String name;

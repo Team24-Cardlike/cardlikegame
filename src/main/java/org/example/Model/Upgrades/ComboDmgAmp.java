@@ -1,4 +1,6 @@
-package org.example.Model;
+package org.example.Model.Upgrades;
+
+import org.example.Model.Combo;
 
 public class ComboDmgAmp extends DamageUpgrade{
     final Combo combo;

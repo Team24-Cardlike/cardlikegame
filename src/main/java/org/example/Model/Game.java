@@ -19,11 +19,11 @@ public class Game {
     //Stage stage;
 
 
-    public Game(){
+    public Game(Opponent opponent){
         this.deck = new Deck();
         //this.upgrades = new Upgrades();
         this.user     = new User(100);
-        this.opponent = new Opponent(500, 5, 6, "enemyEvil");
+        this.opponent = opponent;
         this.deck.createInGameDeck();
         this.gameDeck = this.deck.getInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);

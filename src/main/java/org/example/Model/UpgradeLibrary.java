@@ -1,4 +1,6 @@
 package org.example.Model;
+import org.example.Model.Upgrades.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
