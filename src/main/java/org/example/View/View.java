@@ -71,7 +71,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         hoveredCards = new ArrayList<>();
         boolSelectedCards = new ArrayList<>();
 
-        startButton = new Image(new Texture("assets/images/start (1).png"));
+        startButton = new Image(new Texture("assets/images/enemyEvil.png"));
         startButton.setPosition(0,2);
         startButton.setSize(1.5f, 1);
         stage.addActor(startButton);

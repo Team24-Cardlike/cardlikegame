@@ -15,7 +15,7 @@ public class DesktopLauncher {
         config.setTitle(("Maven LibGDX test"));
         config.setWindowedMode(800,600);
 
-        Opponent opp = new Opponent(250, 25, 3, "start (1)");
+        Opponent opp = new Opponent(250, 25, 3, "enemyEvil");
         Game game = new Game(opp);
         View view = new View();
         Controller controller = new Controller(view, game);
