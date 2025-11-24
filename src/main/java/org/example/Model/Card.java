@@ -16,7 +16,7 @@ public class Card {
         this.suit = suit;
         this.rank = rank;
         this.name = rank + " of " + suit;
-        this.pic = (rank+suit+".png"); //named as suit+rank in files later
+        this.pic = ("cardPics/" + suit+"/" + rank+suit+".png"); //named as suit+rank in files later
     }
 
     public Texture getCardTexture(){return new Texture(pic);}
