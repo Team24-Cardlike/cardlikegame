@@ -1,4 +1,4 @@
-package src.main.java.org.example.Model;
+package org.example.Model;
 
 
 import org.example.Controller.Controller;
@@ -11,7 +11,7 @@ public class Game {
 
     public GameObservers observers;
 
-    Deck deck;
+    src.main.java.org.example.Model.Deck deck;
     //Upgrades upgrades;
     public User user;
     public Opponent opponent;

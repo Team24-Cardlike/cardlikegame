@@ -3,8 +3,7 @@ package org.example;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
-import org.example.Controller.Controller;
-import org.example.Controller.Controller;
+import org.example.Controller.Controler;
 import org.example.Model.Game;
 import org.example.Model.Opponent;
 import org.example.View.View;

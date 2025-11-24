@@ -1,4 +1,4 @@
-package src.main.java.org.example.Model;
+package org.example.Model.Upgrades;
 
 public class DamageUpgrade extends Upgrade{
     DamageUpgrade(String name, String desc, int cost) {

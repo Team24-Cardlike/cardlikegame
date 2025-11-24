@@ -1,4 +1,4 @@
-package src.main.java.org.example.Model;
+package org.example.Model.Upgrades;
 
 public class ComboDmgAmp extends DamageUpgrade{
     final Combo combo;

@@ -1,4 +1,6 @@
-package src.main.java.org.example.Model;
+package org.example.Model;
+
+import org.example.Model.Upgrades.Upgrade;
 
 import java.util.ArrayList;
 // import java.util.Collections;

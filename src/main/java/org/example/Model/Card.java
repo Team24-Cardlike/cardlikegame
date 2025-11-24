@@ -1,4 +1,4 @@
-package src.main.java.org.example.Model;
+package org.example.Model;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
