@@ -16,6 +16,8 @@ public class DesktopLauncher {
         config.setWindowedMode(800,600);
 
         Game game = new Game(new Opponent(200, 10, 3, "enemy"));
+        Opponent opp = new Opponent(250, 25, 3, "start (1)");
+        Game game = new Game(opp);
         View view = new View();
         Controller controller = new Controller(view, game);
         game.setController(controller);
