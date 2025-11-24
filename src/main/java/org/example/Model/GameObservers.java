@@ -15,6 +15,7 @@ public class GameObservers {
     public void addObserver(GameObserver observer) {
         observers.add(observer);
     }
+
     //Remove observer from observer's list
     public void removeObserver(GameObserver observer) {
         observers.remove(observer);

@@ -24,7 +24,7 @@ public class Game {
     public Game(Opponent opponent){
         this.deck = new Deck();
         //this.upgrades = new Upgrades();
-        this.user     = new User(100);
+        this.user = new User(100);
         this.opponent = opponent;
         this.deck.createInGameDeck();
         this.gameDeck = this.deck.getInGameDeck();
@@ -32,6 +32,7 @@ public class Game {
         observers = new GameObservers(this);
         this.tm = new turnManager(true);
     }
+
     public turnManager getTurnManager(){
         return tm;
     }

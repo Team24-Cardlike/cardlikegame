@@ -62,14 +62,14 @@ public class User extends Player {
         return damage;
     }
 
-    int getHiVal(ArrayList<Card> cards){
+    int getHiVal(ArrayList<Card> cards){//Ger den verkligen högsta?
         ArrayList<Integer> ranks = new ArrayList<>();
         for (Card c : cards) {
             ranks.add(c.rank);
-        }        
+        }
         return ranks.getLast();
     }
-    /**
+    /*
      * Removes selected cards from hand
      *
      * @param indices indices of cards that you selected
@@ -80,7 +80,6 @@ public class User extends Player {
 
         // Sortera indices fallande så remove() funkar
         indices.sort(Collections.reverseOrder());
-
         for (int index : indices) {
             played.add(hand.remove(index));
         }
