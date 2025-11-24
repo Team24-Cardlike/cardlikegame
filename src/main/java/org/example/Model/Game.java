@@ -1,27 +1,74 @@
 package src.main.java.org.example.Model;
 
-// import java.util.ArrayList;
+
+import org.example.Controller.Controller;
+
+import java.util.ArrayList;
 import java.util.Stack;
+import java.util.*;
 
 public class Game {
 
+    public GameObservers observers;
+
     Deck deck;
     //Upgrades upgrades;
-    User user;
-    Opponent opponent;
+    public User user;
+    public Opponent opponent;
     Stack<Card> gameDeck;   
-    int turn = 0; 
+    int turn = 0;
+    Controller controller;
+    //Stage stage;
+    turnManager tm;
 
-    Game(){
-        this.deck     = new Deck();
+    public Game(Opponent opponent){
+        this.deck = new Deck();
         //this.upgrades = new Upgrades();
-        this.user     = new User(100);
-        this.opponent = new Opponent(500, 5, 6);        
+        this.user = new User(100);
+        this.opponent = opponent;
         this.deck.createInGameDeck();
-        this.gameDeck = this.deck.getInGameDeck();        
-
-        this.gameLoop();
+        this.gameDeck = this.deck.getInGameDeck();
+        user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
+        observers = new GameObservers(this);
+        this.tm = new turnManager(true);
     }
+
+    public turnManager getTurnManager(){
+        return tm;
+    }
+    public void gameLoop() {
+
+        while(this.opponent.health>0 && this.user.health>0){
+            System.out.println("-------------");
+            for (Card c : user.hand) {
+                System.out.print(c.rank + " ");
+            }
+            System.out.println();
+            System.out.println("-------------");
+
+            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) {
+                deck.refill(user.hand);
+            }
+
+
+            turn++;
+            if (this.opponent.turns != turn) {
+                // TODO: add logic to choose cards from hand to play
+                // Connect with frontend
+                //this.playCards(new ArrayList<Card>((this.user.hand.getFirst(), this.user.hand.getLast())));
+                playCards(user.getSelectedCards());
+            }
+            else {
+                damage(user, opponent);
+                turn = 0;
+            }
+            System.out.println("Your health: " + user.health + ", Opponent's health: " + opponent.health);
+            System.out.println(gameDeck.size());
+        }
+    }
+
+
+    public User getUser(){return user;}
 
     String getGameEndContext(){
         if(this.opponent.health<=0){
@@ -35,55 +82,60 @@ public class Game {
         }
     }
 
+    public void setController(Controller controller){
+        this.controller = controller;
+    }
+
     void damage(Player defender, Player attacker){
         defender.takeDamage(attacker.getDamage());
-        //TODO: make the damagee damage the damaged
     }
 
-    void gameLoop() {
+    /**
+     *  <b>Does the following:</b>
+     * <ul>
+     *   <li>user.playCards()</li>
+     *   <li>this.damage()</li>
+     *   <li>user.drawCards()</li>
+     * </ul>
+     * @param playedCards cards played from the front end
+     */
+    public void playCards(ArrayList<Card> playedCards){
+        //Gör att det blir motståndarens runda
+        int damage = user.playCards(playedCards);
+        this.opponent.takeDamage(damage);
+        System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
+        controller.updateView(playedCards);
+        tm.swapTurn();
+        if(!tm.getCurrentPlayer()){
+            this.user.takeDamage(opponent.getDamage());
+            System.out.println("Du tog "+opponent.getDamage()+" skada! Du har "+ this.user.health+ " hp kvar");
+            controller.opponentAnimation();
 
-        this.user.drawCards(this.gameDeck, user.cardsPerHand);
-
-        while(this.opponent.health>0 && this.user.health>0){    
-                        
-                        
-            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) { // Hard-coded                
-                deck.refill(user.hand);                                
-            }
-                                                                                                 
-            
-            turn++;
-            if (this.opponent.turns != turn) {
-                
-                // TODO: add logic to choose cards from hand to play
-                // Connect with frontend
-                this.user.selectedCards.add(this.user.hand.getFirst()); // TEMPORARY
-                this.user.selectedCards.add(this.user.hand.getLast());
-
-                damage(opponent, user);
-                                
-                this.user.playCards(this.user.selectedCards);
-                this.user.drawCards(this.gameDeck, this.user.selectedCards.size());                               
-                                
-                this.user.selectedCards.clear();
-            
-            }
-            else {                              
-                damage(user, opponent);        
-                turn = 0;
-            }
-            System.out.println("Your health: " + user.health + ", Opponent's health: " + opponent.health);
-            System.out.println(gameDeck.size());
-            
-            for (Card c : user.hand) {
-                System.err.print(c.rank + " ");
-            }
-            System.out.println();
+            //tm.swapTurn();
         }
-    }
+        /**this.user.playCards(playedCards);
+        damage(opponent, user);
+        this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
+        this.user.selectedCards.clear();*/
 
-    public static void main(String[]args){
-        Game game = new Game();             
-        System.out.println(game.getGameEndContext());
     }
+/*
+    public void playCards(ArrayList<Integer> selectedCards) {
+        int totalDamage = 0;
+
+        for (int index : selectedCards) {
+            Card c = user.getHand().get(index);
+            totalDamage += c.rank;
+            // eller kombologik här
+        }
+
+        opponent.takeDamage(totalDamage);
+
+        // uppdatera handen
+        user.removeCards(selectedCards);
+
+        notifyHandChanged();
+        notifyHealthChanged(player.getHealth(), opponent.getHealth());
+    }*/
 }
+
