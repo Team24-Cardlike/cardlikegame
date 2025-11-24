@@ -11,7 +11,7 @@ public class Game {
 
     public GameObservers observers;
 
-    src.main.java.org.example.Model.Deck deck;
+    Deck deck;
     //Upgrades upgrades;
     public User user;
     public Opponent opponent;
@@ -56,7 +56,7 @@ public class Game {
                 // TODO: add logic to choose cards from hand to play
                 // Connect with frontend
                 //this.playCards(new ArrayList<Card>((this.user.hand.getFirst(), this.user.hand.getLast())));
-                playCards(user.getSelectedCards());
+                //playCards(user.getSelectedCards());
             }
             else {
                 damage(user, opponent);

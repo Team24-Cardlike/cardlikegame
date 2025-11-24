@@ -1,5 +1,7 @@
 package org.example.Model.Upgrades;
 
+import org.example.Model.Combo;
+
 public class ComboLifesteal extends Upgrade{
     final Combo combo;
     final double vampAmount;
