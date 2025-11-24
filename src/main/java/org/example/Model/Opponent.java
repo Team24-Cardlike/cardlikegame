@@ -6,7 +6,7 @@ public class Opponent extends Player {
     public int damage;
     public int turns;
 
-    public Opponent(int startHealth, int damage, int turns){
+    Opponent(int startHealth, int damage, int turns){
         this.maxHealth = startHealth;
         this.damage = damage;
         this.turns = turns;

@@ -1,7 +1,5 @@
 package src.main.java.org.example.Model;
 
-import com.badlogic.gdx.utils.Array;
-
 import java.util.ArrayList;
 // import java.util.Collections;
 import java.util.Stack;
@@ -10,30 +8,31 @@ public class User extends Player {
     
     ArrayList<Card> hand;
     int gold;
+    int shield = 0;
     int cardsPerHand = 10;
     ArrayList<Card> selectedCards;
     CardCombos combos = new CardCombos();
     ArrayList<Upgrade> upgrades = new ArrayList<>();
 
-    private Array<Boolean> selected;
-    private Array<Boolean> hovered;
-
-    public User(int startHealth){
+    User(int startHealth){        
         this.maxHealth = startHealth;
         this.hand = new ArrayList<>();
         this.health = maxHealth;
         this.gold = 0;
         this.selectedCards = new ArrayList<>();
     }
+    /*void attack(ArrayList<Card> cardsPlayed, Player victim){
+        int damage = getDamage(cardsPlayed);
+
+    }*/
 
     void drawCards(Stack<Card> deck, int amount){
+        //TODO: IMPLEMENT
+        // ArrayList<Card> drawnCards = new ArrayList<>();
+                
         for (int i = 0; i < amount; i++) {                   
             this.hand.add(deck.pop());
         }        
-    }
-
-    public ArrayList<Card> getSelectedCards(){
-        return this.selectedCards;
     }
 
     /**
@@ -41,8 +40,9 @@ public class User extends Player {
      * @return the value of the highest card + the value of the best combo, in the cards played.
      */
     @Override
-    public int getDamage() {
+    int getDamage() {
         int damage = getHiVal(this.selectedCards) + combos.checkCombo(this.selectedCards).value;
+        // this.selectedCards.clear();
         return damage;
     }
 
@@ -57,15 +57,12 @@ public class User extends Player {
      * Removes selected cards from hand
      * @param cardsPlayed Cards that you selected
      */
-    int playCards(ArrayList<Card> cardsPlayed){
+    void playCards(ArrayList<Card> cardsPlayed){
         for(Card card : cardsPlayed){
-            this.selectedCards.add(card);
+
+            // this.selectedCards.add(card);
             this.hand.remove(card);
         }
-        int damage = getDamage();
-        this.selectedCards.clear();
-        //MAYBE ADD DRAWCARDS HERE
-        return damage;
         // TODO: FINISH FUNCTION
     }
 
@@ -76,10 +73,4 @@ public class User extends Player {
     public ArrayList<Card> getHand() {
         return this.hand;
     }
-
-    public void setSelectedCards(ArrayList<Card> selectedCards){
-        this.selectedCards = selectedCards;
-    }
-
-    public ArrayList<Boolean>
 }
