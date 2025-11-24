@@ -3,18 +3,18 @@ package src.main.java.org.example.Model;
 import java.util.*;
 
 public class CardCombos {
-    final Combo single;
-    final Combo pair;
-    final Combo two_pair;
-    final Combo three_of_a_kind;
-    final Combo straight;
-    final Combo flush;
-    final Combo full_house;
-    final Combo four_of_a_kind;
-    final Combo straight_flush;
-    final Combo royal_straight_flush;
+    final public Combo single;
+    final public Combo pair;
+    final public Combo two_pair;
+    final public Combo three_of_a_kind;
+    final public Combo straight;
+    final public Combo flush;
+    final public Combo full_house;
+    final public Combo four_of_a_kind;
+    final public Combo straight_flush;
+    final public Combo royal_straight_flush;
 
-    CardCombos(){
+    public CardCombos(){
         this.single = new Combo("Single", 0, "One card alone.");
         this.pair = new Combo("Pair", 20, "Two cards of the same rank.");
         this.two_pair = new Combo("Two-pair", 40, "Two different pairs. (see pair)");

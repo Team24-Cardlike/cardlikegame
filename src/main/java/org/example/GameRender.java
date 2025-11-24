@@ -1,148 +1,179 @@
 package org.example;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-// import org.lwjgl.opengl.GL20;
+// package org.example;
 
-public class GameRender extends ApplicationAdapter {
-    Texture background;
-    Texture card;
-    SpriteBatch spriteBatch;
-    Sprite cardSprite;
-    FitViewport viewport;
+// import com.badlogic.gdx.ApplicationAdapter;
+// import com.badlogic.gdx.Gdx;
+// import com.badlogic.gdx.graphics.Color;
+// import com.badlogic.gdx.graphics.Texture;
+// import com.badlogic.gdx.graphics.g2d.*;
+// import com.badlogic.gdx.math.Vector3;
+// import com.badlogic.gdx.scenes.scene2d.InputEvent;
+// import com.badlogic.gdx.scenes.scene2d.Stage;
+// import com.badlogic.gdx.scenes.scene2d.ui.Image;
+// import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+// import com.badlogic.gdx.utils.Array;
+// import com.badlogic.gdx.utils.ScreenUtils;
+// import com.badlogic.gdx.utils.viewport.FitViewport;
+// import org.example.Model.Game;
+// import org.example.Model.GameObserver;
 
-    private Array<Sprite> cards;
-    private Array<Boolean> selected;
-    private Array<Boolean> hovered;
+// public class GameRender extends ApplicationAdapter {
+//     Texture background;
+//     Texture card;
+//     Image startButton;
 
-    @Override
-    public void create() {
-        background =  new Texture(Gdx.files.internal("assets/images/bräde.png"));
-        card = new Texture("assets/images/soler3.png");
-        cardSprite = new Sprite(card);
-        cardSprite.setSize(1, 2);
+//     SpriteBatch spriteBatch;
+//     Sprite cardSprite;
+//     FitViewport viewport;
 
-        selected = new Array<>();
-        cards = new Array<>();
-        hovered = new Array<>();
+//     private Stage stage;
 
-        for (int i = 0; i < 5; i++) {
-            Sprite s = new Sprite(card);
-            s.setSize(1, 1.5f);
-            s.setPosition(1 + i * 1.2f, 1);
-            cards.add(s);
-            selected.add(false); // alla börjar omarkerade
-            hovered.add(false);
-        }
+//     private Array<Sprite> cards;
+//     private Array<Boolean> selected;
+//     private Array<Boolean> hovered;
 
-        spriteBatch = new SpriteBatch();
-        viewport = new FitViewport(8, 5);
+//     @Override
+//     public void create() {
 
-    }
+//         background =  new Texture(Gdx.files.internal("assets/images/bräde.png"));
+//         card = new Texture("assets/images/3sun.png");
 
+//         viewport = new FitViewport(8, 5);
+//         spriteBatch = new SpriteBatch();
+//         stage = new Stage(viewport, spriteBatch);
 
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height, true); // true centers the camera
+//         startButton = new Image(new Texture("assets/images/start (1).png"));
+//         startButton.setPosition(0,0);
+//         startButton.setSize(2, 1);
+//         stage.addActor(startButton);
+//         Gdx.input.setInputProcessor(stage);
 
-        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
-        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
-        if(width <= 0 || height <= 0) return;
+//         cardSprite = new Sprite(card);
+//         cardSprite.setSize(1, 2);
 
-        // Resize your application here. The parameters represent the new window size.
-    }
+//         selected = new Array<>();
+//         cards = new Array<>();
+//         hovered = new Array<>();
 
-    @Override
-    public void render() {
-        // Draw your application here.
-        input();
-        logic();
-        draw();
-    }
+//         for (int i = 0; i < 5; i++) {
+//             Sprite s = new Sprite(card);
+//             s.setSize(1, 1.5f);
+//             s.setPosition(1 + i * 1.2f, 1);
+//             cards.add(s);
+//             selected.add(false); // alla börjar omarkerade
+//             hovered.add(false);
+//         }
 
-    private void input() {
-        //float speed = 4f;
-        //float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
-        Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.getCamera().unproject(cords);
-
-        for (int a = 0; a < cards.size; a++){
-            Sprite card = cards.get(a);
-            hovered.set(a, card.getBoundingRectangle().contains(cords.x, cords.y));
-        }
-
-        if (Gdx.input.justTouched()) {
-            for (int i = 0; i < cards.size; i++){
-                Sprite card = cards.get(i);
-                if(card.getBoundingRectangle().contains(cords.x, cords.y)){
-                    selected.set(i, !selected.get(i));
-                }
-            }
-        }
-    }
-
-    private void logic() {
-
-    }
-
-    private void draw() {
-        ScreenUtils.clear(Color.BLACK);
-        viewport.apply();
-        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-        spriteBatch.begin();
-
-        // store the worldWidth and worldHeight as local variables for brevity
-        float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
-        spriteBatch.draw(background, 0, 0, worldWidth, worldHeight); // draw the background
-
-        for (int i = 0; i < cards.size; i++) {
-            Sprite card = cards.get(i);
-
-            if (selected.get(i))
-                card.setColor(Color.GOLD);
-            else if (hovered.get(i)) {
-                // Ljusgrå highlight = hover
-                card.setColor(Color.LIGHT_GRAY);
-            }
-            else
-                card.setColor(Color.WHITE);
-            card.draw(spriteBatch);
-        }
-/*
-        card1.setPosition(viewport.getWorldWidth()/5, viewport.getWorldHeight()/4);
-        card2.setPosition(viewport.getWorldWidth()/3, viewport.getWorldHeight()/4);
-        card3.setPosition(viewport.getWorldWidth()/2.5f, viewport.getWorldHeight()/4);
-
-        card1.draw(spriteBatch);
-        card2.draw(spriteBatch);
-        card3.draw(spriteBatch);
-*/
-        spriteBatch.end();
-    }
-
-    @Override
-    public void pause() {
-        // Invoked when your application is paused.
-    }
-
-    @Override
-    public void resume() {
-        // Invoked when your application is resumed after pause.
-    }
-
-    @Override
-    public void dispose() {
-    }
+//         startButton.addListener(new ClickListener() {
+//             @Override
+//             public void clicked(InputEvent event, float x, float y) {
+//                 playSelectedCards();
+//             }
+//         });
+//     }
 
 
+//     @Override
+//     public void resize(int width, int height) {
+//         viewport.update(width, height, true); // true centers the camera
 
-}
+//         // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
+//         // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
+//         if(width <= 0 || height <= 0) return;
+
+//         // Resize your application here. The parameters represent the new window size.
+//     }
+
+//     @Override
+//     public void render() {
+//         // Draw your application here.
+//         input();
+//         logic();
+//         draw();
+//     }
+
+//     private void input() {
+//         //float speed = 4f;
+//         //float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
+//         Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+//         viewport.getCamera().unproject(cords);
+
+//         for (int a = 0; a < cards.size; a++){
+//             Sprite card = cards.get(a);
+//             hovered.set(a, card.getBoundingRectangle().contains(cords.x, cords.y));
+//         }
+
+//         if (Gdx.input.justTouched()) {
+
+//             for (int i = 0; i < cards.size; i++){
+//                 Sprite card = cards.get(i);
+//                 if(card.getBoundingRectangle().contains(cords.x, cords.y)){
+//                     selected.set(i, !selected.get(i));
+//                 }
+//             }
+//         }
+//     }
+
+//     private void playSelectedCards(){
+//         float lift = viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
+//         for (int i = 0; i < cards.size; i++) {
+//             if (selected.get(i)) {
+//                 Sprite card = cards.get(i);
+//                 card.setY(card.getY() + lift);
+//                 selected.set(i, false);
+//             }
+//         }
+//     }
+
+//     private void logic() {
+
+//     }
+
+//     private void draw() {
+//         ScreenUtils.clear(Color.BLACK);
+//         viewport.apply();
+//         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+//         spriteBatch.begin();
+
+
+//         // store the worldWidth and worldHeight as local variables for brevity
+//         float worldWidth = viewport.getWorldWidth();
+//         float worldHeight = viewport.getWorldHeight();
+//         spriteBatch.draw(background, 0, 0, worldWidth, worldHeight); // draw the background
+
+//         for (int i = 0; i < cards.size; i++) {
+//             Sprite card = cards.get(i);
+
+//             if (selected.get(i))
+//                 card.setColor(Color.GOLD);
+//             else if (hovered.get(i)) {
+//                 // Ljusgrå highlight = hover
+//                 card.setColor(Color.LIGHT_GRAY);
+//             }
+//             else
+//                 card.setColor(Color.WHITE);
+//             card.draw(spriteBatch);
+//         }
+//         spriteBatch.end();
+
+//        stage.act(Gdx.graphics.getDeltaTime());
+//        stage.draw();
+//     }
+
+//     @Override
+//     public void pause() {
+//         // Invoked when your application is paused.
+//     }
+
+//     @Override
+//     public void resume() {
+//         // Invoked when your application is resumed after pause.
+//     }
+
+//     @Override
+//     public void dispose() {
+//     }
+
+
+// }

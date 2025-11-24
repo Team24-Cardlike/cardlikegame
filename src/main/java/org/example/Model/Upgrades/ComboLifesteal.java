@@ -1,4 +1,6 @@
-package src.main.java.org.example.Model;
+package org.example.Model.Upgrades;
+
+import org.example.Model.Combo;
 
 public class ComboLifesteal extends Upgrade{
     final Combo combo;

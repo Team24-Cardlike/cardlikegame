@@ -1,4 +1,6 @@
-package src.main.java.org.example.Model;
+package org.example.Model.Upgrades;
+import org.example.Model.CardCombos;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

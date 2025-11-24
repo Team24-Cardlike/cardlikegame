@@ -1,4 +1,4 @@
-package src.main.java.org.example.Model;
+package org.example.Model;
 
 import java.util.*;
 
@@ -6,18 +6,44 @@ public class Deck {
 
     ArrayList<Card> cards = new ArrayList<>();
     Stack<Card> gameDeck = new Stack<>();
-    ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning", "tree"));
-    ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
+    public final ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning"));
+    public final ArrayList<Integer> ranks = new ArrayList<>(List.of(3));
+
+    // public final ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning", "tree"));
+   // public final ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
 
     public Deck(){
-        generateDeck();
+        generateTEMPORARYdeck();
     }
     public void generateDeck(){
+        for (int i = 0; i <20; i ++) {
         for(String suit : suits) {
             for (int rank : ranks) {
                 this.cards.add(new Card(suit, rank));
-            }
+            }}
         }        
+    }
+
+    public void generateTEMPORARYdeck(){
+        int i = 0;
+        int j = 0;
+        int x = 0;
+        while(x<4){
+            this.cards.add(new Card("lightning", 3));
+            x++;
+        }
+        while(i<4){
+            this.cards.add(new Card("moon", 3));
+            i++;
+        }
+        while(j<4){
+            this.cards.add(new Card("sun", 3));
+            j++;
+        }
+    }
+
+    public ArrayList<Card> getCards(){
+        return this.cards;
     }
 
     // Doesn't change this.cards, returns shuffled version
@@ -34,14 +60,14 @@ public class Deck {
         return shuffledCards;
     }
 
-    void createInGameDeck(){
+    public void createInGameDeck(){
         ArrayList<Card> shuffled = shuffle();
         Stack<Card> inGameDeck = new Stack<>();
         inGameDeck.addAll(shuffled);        
         this.gameDeck = inGameDeck;            
     }
 
-    Stack<Card> getInGameDeck() {        
+    public Stack<Card> getInGameDeck() {
         return this.gameDeck;
     }
 
