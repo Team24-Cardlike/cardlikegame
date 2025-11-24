@@ -6,22 +6,19 @@ public class Deck {
 
     ArrayList<Card> cards = new ArrayList<>();
     Stack<Card> gameDeck = new Stack<>();
-    public final ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning"));
-    public final ArrayList<Integer> ranks = new ArrayList<>(List.of(3));
-
-    // public final ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "lightning", "tree"));
-   // public final ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
+    public final ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "water", "tree"));
+    public final ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
 
     public Deck(){
-        generateTEMPORARYdeck();
+        generateDeck();
     }
+
     public void generateDeck(){
-        for (int i = 0; i <20; i ++) {
-        for(String suit : suits) {
-            for (int rank : ranks) {
+        for(String suit : this.suits) {
+            for (int rank : this.ranks) {
                 this.cards.add(new Card(suit, rank));
-            }}
-        }        
+            }
+        }
     }
 
     public void generateTEMPORARYdeck(){

@@ -3,7 +3,6 @@ import org.w3c.dom.Node;
 
 
 import java.util.*;
-/*
 public class GameMap {
     Graph<Game> map;
     ArrayList<Opponent> opponents;
@@ -39,4 +38,3 @@ public class GameMap {
         return this.map;
     }
 }
-*/
