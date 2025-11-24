@@ -5,16 +5,18 @@ package org.example.Model;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Opponent extends Player {
+    private final String name;
     public int damage;
     public int turns;
     public String image;
 
-    public Opponent(int startHealth, int damage, int turns, String image){
+    public Opponent(int startHealth, int damage, int turns, String name){
         this.maxHealth = startHealth;
         this.damage = damage;
         this.turns = turns;
         this.health = maxHealth;
-        this.image = image;
+        this.name = name;
+        this.image = name+".png";
     }
 
     @Override

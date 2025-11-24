@@ -1,5 +1,5 @@
-package org.example.Model;
-import org.example.Model.Upgrades.*;
+package org.example.Model.Upgrades;
+import org.example.Model.CardCombos;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -17,7 +17,7 @@ public class User extends Player {
     ArrayList<Boolean> boolSelectedCards;
 
     CardCombos combos = new CardCombos();
-    ArrayList<Upgrade> upgrades = new ArrayList<>();
+    //ArrayList<Upgrade> upgrades = new ArrayList<>();
 
 
     public User(int startHealth){
@@ -72,7 +72,7 @@ public class User extends Player {
     /**
      * Removes selected cards from hand
      *
-     * @param cardsPlayed Cards that you selected
+     * @param indices indices of cards that you selected
      */
 
     public ArrayList<Card> removeCards(ArrayList<Integer> indices) {
