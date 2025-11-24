@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import org.example.Controller.Controller;
 import org.example.Model.*;
 
 import java.util.ArrayList;
@@ -25,23 +24,23 @@ import java.util.List;
 import java.util.Stack;
 
 public class View extends ApplicationAdapter  implements GameObserver{
-    FitViewport viewport;
+    public FitViewport viewport;
     private SpriteBatch spriteBatch;
     private ShapeRenderer sr;
 
     Texture background;
-    Image startButton;
+    public Image startButton;
 
     private List<String> handImages = new ArrayList<>();
-    private ArrayList<Sprite> cardSprites;
+    public ArrayList<Sprite> cardSprites;
     private Texture opponentTexture;
     private Sprite opponentSprite;
     // Seving hand if LibGDX not yet initialized
     private List<String> tempHand;
-    Controller controller;
+    private Game game;
     private Stage stage;
-    private ArrayList<Boolean> hoveredCards;
-    private ArrayList<Boolean> boolSelectedCards;
+    public ArrayList<Boolean> hoveredCards;
+    public ArrayList<Boolean> boolSelectedCards;
     private ArrayList<Sprite> centerSelectedCard;
 
     private boolean animatingOpponent = false;
@@ -54,13 +53,14 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private float opponentStartY = 3f;      // original Y
     private float opponentDropY = 1.8f;
     int a = 0;
+    public ArrayList<Integer> selectedIndices;    
 
-    public void setController(Controller controller){
-        this.controller = controller;
+    public void setGame(Game game) {
+        this.game = game;
     }
-
-    @Override
+    
     public void create() {
+    // public View() {
         centerSelectedCard = new ArrayList<>();
         sr = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
@@ -90,12 +90,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         opponentSprite.setPosition(viewport.getWorldWidth()/2-(1.25f), 3.5f);
         background = new Texture("assets/images/bräde.png");
 
-        startButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                playSelectedCards();
-            }
-        });
+        
     }
 
     public void drawHealthBars(){
@@ -107,7 +102,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         float width = 2.5f;
         float height = 0.3f;
 
-        float healthPercent = (float) controller.game.user.health / controller.game.user.maxHealth;
+        float healthPercent = (float) game.user.health / game.user.maxHealth;
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -126,7 +121,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         float ex = 5.4f;
         float ey = 4.7f;
 
-        float enemyPercent = (float) controller.game.opponent.health / controller.game.opponent.maxHealth;
+        float enemyPercent = (float) game.opponent.health / game.opponent.maxHealth;
 
         float greenWidthOpp = width * enemyPercent;
         float redWidthOpp = width - greenWidthOpp;
@@ -140,24 +135,13 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         sr.end();
     }
-
-    @Override
-    public void render() {
-        float delta = Gdx.graphics.getDeltaTime();
-        updateOpponentAnimation(delta);  // <<< Lägg till detta
-
-        Controller.input(cardSprites, viewport, hoveredCards, boolSelectedCards);
-
-        //playSelectedCards(); // Move cards up
-        //input();
-        draw();         // grafik
-    }
+    
 
     public void createSpriteList(){
-        cardSprites.clear();
-
-        for (int i = 0; i < controller.game.getUser().getHand().size(); i++) {
-            Sprite cardSprite = new Sprite(new Texture("assets/images/" + controller.game.getUser().getHand().get(i).pic));
+        cardSprites.clear();        
+        
+        for (int i = 0; i < game.getUser().getHand().size(); i++) {                        
+            Sprite cardSprite = new Sprite(new Texture("assets/images/" + game.getUser().getHand().get(i).pic));
             cardSprite.setSize(0.75f,1.25f);
             cardSprite.setPosition(0.05f + i*0.9f, 0.1f);
             cardSprites.add(cardSprite);
@@ -168,9 +152,10 @@ public class View extends ApplicationAdapter  implements GameObserver{
     }
 
     //Animation moving card forward
-    private void playSelectedCards(){
+    public void playSelectedCards(){
         float lift = viewport.getWorldHeight() * 0.1f; // t.ex. 10% uppåt
-        ArrayList<Integer> selectedIndices = new ArrayList<>();
+        // ArrayList<Integer> selectedIndices = new ArrayList<>();
+        selectedIndices = new ArrayList<>();
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
                 selectedIndices.add(i);
@@ -180,10 +165,12 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 boolSelectedCards.set(i, false);
             }
         }
-        if(!selectedIndices.isEmpty()){controller.onPlaySelectedCards(selectedIndices);}
+        System.out.println(selectedIndices + "" + this.selectedIndices);
+        // this.selectedIndices = selectedIndices;
+               
     }
 
-    private void draw() {
+    public void draw() {
         centerSelectedCard.clear();
 
         for (int i = 0; i < cardSprites.size(); i++) {
@@ -245,7 +232,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         spriteBatch.end();
         drawHealthBars();
        stage.act(Gdx.graphics.getDeltaTime());
-       if(controller.game.getTurnManager().getCurrentPlayer()){
+       if(game.getTurnManager().getCurrentPlayer()){
            stage.draw();
        }
     }
@@ -283,7 +270,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 animatingOpponent = false;
                 opponentSprite.setY(opponentStartY);
 
-                controller.game.getTurnManager().swapTurn(); // animation klar → byt tur
+                game.getTurnManager().swapTurn(); // animation klar → byt tur
                 return;
             }
 
