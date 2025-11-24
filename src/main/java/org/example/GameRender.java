@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,6 +27,13 @@ public class GameRender extends ApplicationAdapter {
     Sprite cardSprite;
     FitViewport viewport;
 
+
+    //hp bar things
+    float barProgress;
+    float fullWidth;
+
+    ShapeRenderer sr;
+
     private Stage stage;
 
     private Array<Sprite> cards;
@@ -40,6 +49,12 @@ public class GameRender extends ApplicationAdapter {
         viewport = new FitViewport(8, 5);
         spriteBatch = new SpriteBatch();
         stage = new Stage(viewport, spriteBatch);
+
+        //Hp bar things
+        barProgress = 1;
+        fullWidth = 3;
+        sr = new ShapeRenderer();
+        //skapa en renderer
 
         startButton = new Image(new Texture("assets/images/start (1).png"));
         startButton.setPosition(0,0);
@@ -70,7 +85,6 @@ public class GameRender extends ApplicationAdapter {
             }
         });
     }
-
 
     @Override
     public void resize(int width, int height) {
@@ -122,6 +136,7 @@ public class GameRender extends ApplicationAdapter {
                 selected.set(i, false);
             }
         }
+        barProgress = 0.5f;
     }
 
     private void logic() {
@@ -139,7 +154,6 @@ public class GameRender extends ApplicationAdapter {
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
         spriteBatch.draw(background, 0, 0, worldWidth, worldHeight); // draw the background
-
         for (int i = 0; i < cards.size; i++) {
             Sprite card = cards.get(i);
 
@@ -154,6 +168,11 @@ public class GameRender extends ApplicationAdapter {
             card.draw(spriteBatch);
         }
         spriteBatch.end();
+
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        sr.setColor(Color.RED);
+        sr.rect(0,0,fullWidth*barProgress, 0.5f);
+        sr.end();
 
        stage.act(Gdx.graphics.getDeltaTime());
        stage.draw();
