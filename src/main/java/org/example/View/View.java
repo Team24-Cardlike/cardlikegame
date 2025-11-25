@@ -37,7 +37,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private Sprite opponentSprite;
     // Seving hand if LibGDX not yet initialized
     private List<String> tempHand;
-    private Game game;
+   //   private Game game; TODO REMOVE
     private Stage stage;
     public ArrayList<Boolean> hoveredCards;
     public ArrayList<Boolean> boolSelectedCards;
@@ -52,12 +52,19 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     private float opponentStartY = 3f;      // original Y
     private float opponentDropY = 1.8f;
+
+
+
+    private float opponentHealthPercentage;
+    private float userHealthPercentage;
+    private boolean playerTurn;
+
     int a = 0;
     public ArrayList<Integer> selectedIndices;    
 
-    public void setGame(Game game) {
+   /* public void setGame(Game game) {
         this.game = game;
-    }
+    }TODO REMOVE*/
     
     public void create() {
     // public View() {
@@ -93,6 +100,9 @@ public class View extends ApplicationAdapter  implements GameObserver{
         
     }
 
+
+
+
     public void drawHealthBars(){
         sr.setProjectionMatrix(viewport.getCamera().combined);
 
@@ -102,11 +112,11 @@ public class View extends ApplicationAdapter  implements GameObserver{
         float width = 2.5f;
         float height = 0.3f;
 
-        float healthPercent = (float) game.user.health / game.user.maxHealth;
+        //float healthPercent = (float) game.user.health / game.user.maxHealth; TODO REMOVE
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        float greenWidthUser = width * healthPercent;
+        float greenWidthUser = width * userHealthPercentage;
         float redWidthUser = width - greenWidthUser;
 
         // RED background
@@ -121,9 +131,9 @@ public class View extends ApplicationAdapter  implements GameObserver{
         float ex = 5.4f;
         float ey = 4.7f;
 
-        float enemyPercent = (float) game.opponent.health / game.opponent.maxHealth;
+       //  float enemyPercent = (float) game.opponent.health / game.opponent.maxHealth; TODO REMOVE
 
-        float greenWidthOpp = width * enemyPercent;
+        float greenWidthOpp = width * opponentHealthPercentage;
         float redWidthOpp = width - greenWidthOpp;
         // RED
         sr.setColor(Color.RED);
@@ -140,8 +150,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
     public void createSpriteList(){
         cardSprites.clear();        
         
-        for (int i = 0; i < game.getUser().getHand().size(); i++) {                        
-            Sprite cardSprite = new Sprite(new Texture("assets/images/" + game.getUser().getHand().get(i).pic));
+        for (int i = 0; i < handImages.size(); i++) {
+            Sprite cardSprite = new Sprite(new Texture("assets/images/" + handImages.get(i)));
             cardSprite.setSize(0.75f,1.25f);
             cardSprite.setPosition(0.05f + i*0.9f, 0.1f);
             cardSprites.add(cardSprite);
@@ -170,8 +180,19 @@ public class View extends ApplicationAdapter  implements GameObserver{
                
     }
 
+
+    //Check if user hovers over card
+    public void getHoverdCards() {
+        Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.getCamera().unproject(cords);
+        for (int i = 0; i < cardSprites.size(); i ++) {
+         for (int a = 0; a < cardSprites.size(); a++){
+        hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
+    }}}
+
     public void draw() {
         centerSelectedCard.clear();
+        getHoverdCards();
 
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
@@ -232,7 +253,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         spriteBatch.end();
         drawHealthBars();
        stage.act(Gdx.graphics.getDeltaTime());
-       if(game.getTurnManager().getCurrentPlayer()){
+       if(playerTurn){
            stage.draw();
        }
     }
@@ -270,7 +291,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 animatingOpponent = false;
                 opponentSprite.setY(opponentStartY);
 
-                game.getTurnManager().swapTurn(); // animation klar → byt tur
+                 // game.getTurnManager().swapTurn(); // animation klar → byt tur TODO Remove, should be updated in model
                 return;
             }
 
@@ -292,13 +313,16 @@ public class View extends ApplicationAdapter  implements GameObserver{
     }
 
     @Override
-
-    public void onHealthChanged(int userHealth, int opponentHealth) {
-
+    // Getting notified to update healthPercentage
+    public void onHealthChanged(float userHealth, float opponentHealth) {
+    userHealthPercentage= userHealth;
+    opponentHealthPercentage = opponentHealth;
     }
 
     @Override
     public void onCardSelected(int index, boolean selected) {
+        boolSelectedCards.set(index,selected);
+
 
     }
 
@@ -306,6 +330,12 @@ public class View extends ApplicationAdapter  implements GameObserver{
     public void onGameEnded(String resultMessage) {
 
     }
+
+    @Override
+    public void onPlayerTurn(boolean playerTurn) {
+        this.playerTurn = playerTurn;
+    }
+
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true); // true centers the camera

@@ -17,7 +17,9 @@ public class Game {
     Stack<Card> gameDeck;   
     int turn = 0;    
     //Stage stage;
+    boolean playerTurn;
     turnManager tm;
+    ArrayList selectedCards;
 
     public Game(Opponent opponent){
         this.deck = new Deck();
@@ -27,8 +29,12 @@ public class Game {
         this.deck.createInGameDeck();
         this.gameDeck = this.deck.getInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
+        this.selectedCards = new ArrayList<>(Collections.nCopies(user.getHand().size(),false));
         observers = new GameObservers(this);
+        playerTurn = true;
         this.tm = new turnManager(true);
+
+
     }
     public turnManager getTurnManager(){
         return tm;
@@ -111,25 +117,15 @@ public class Game {
         damage(opponent, user);
         this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
         this.user.selectedCards.clear();*/
+        observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
+    }
+
+    public void setSelectedCards(int index, boolean b) {
+        selectedCards.set(index,b);
+        observers.notifyCardSelect(index,b);
 
     }
-/*
-    public void playCards(ArrayList<Integer> selectedCards) {
-        int totalDamage = 0;
 
-        for (int index : selectedCards) {
-            Card c = user.getHand().get(index);
-            totalDamage += c.rank;
-            // eller kombologik här
-        }
 
-        opponent.takeDamage(totalDamage);
-
-        // uppdatera handen
-        user.removeCards(selectedCards);
-
-        notifyHandChanged();
-        notifyHealthChanged(player.getHealth(), opponent.getHealth());
-    }*/
 }
 

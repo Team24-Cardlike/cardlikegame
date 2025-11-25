@@ -22,7 +22,7 @@ public class DesktopLauncher {
         GameRender gameRender = new GameRender(game, view, controller);
 
         // game.setController(controller);        
-        view.setGame(game);
+        //view.setGame(game);
         game.observers.addObserver(view);
         game.observers.notifyGameInit();
         new Lwjgl3Application(gameRender, config);

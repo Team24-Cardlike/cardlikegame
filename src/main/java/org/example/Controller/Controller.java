@@ -26,8 +26,10 @@ public class Controller{
     public void create() {
         view.startButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {                
+            public void clicked(InputEvent event, float x, float y) {
+               // game.playSelectedCards()
                 view.playSelectedCards();
+
                 onPlaySelectedCards(view.selectedIndices);                
             }
         });
@@ -40,15 +42,15 @@ public class Controller{
         Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         view.viewport.getCamera().unproject(cords);
 
-        //Check if user hovers over card
+       /* //Check if user hovers over card
         for (int a = 0; a < view.cardSprites.size(); a++){
             view.hoveredCards.set(a,view.cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
-        }
+        } */// TODO Remove from here, moved to view
 
         if (Gdx.input.justTouched()) {
             for (int i = 0; i < view.cardSprites.size(); i ++) {
                 if (view.cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
-                    view.boolSelectedCards.set(i,!view.boolSelectedCards.get(i));
+                    game.setSelectedCards(i, true);
                 }
             }
             // playSelectedCards();

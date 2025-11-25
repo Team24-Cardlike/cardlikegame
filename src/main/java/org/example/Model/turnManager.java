@@ -3,7 +3,6 @@ package org.example.Model;
 public class turnManager {
     boolean currentPlayer;
 
-
     public turnManager(boolean first) {
         this.currentPlayer = first;
     }
