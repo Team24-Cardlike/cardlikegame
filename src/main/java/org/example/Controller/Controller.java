@@ -28,9 +28,9 @@ public class Controller{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                // game.playSelectedCards()
-                view.playSelectedCards();
+               // view.playSelectedCards();
 
-                onPlaySelectedCards(view.selectedIndices);                
+                onPlaySelectedCards();
             }
         });
     }
@@ -52,37 +52,14 @@ public class Controller{
                 if (view.cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
                     game.setSelectedCards(i, true);
                 }
-            }
-            // playSelectedCards();
 
-            //Send input to controler
-
-           /* for (int i = 0; i < game.getUser().getHand().size(); i++){
-                Sprite card = cardSprites.get(i);
-                if(card.getBoundingRectangle().contains(cords.x, cords.y)){
-                    boolean bool = game.getUser().getBoolSelectedCards().get(i);
-                    game.getUser().setCardAsSelectedBool(i, !bool);
-                    //selected.set(i, !selected.get(i));
-                }
-            } */
         }
+    }}
+
+    public void onPlaySelectedCards(){
+        game.playCards();
     }
 
-    public void onPlaySelectedCards(ArrayList<Integer> cards){
-        ArrayList<Card> hand = this.game.user.getHand();
-        ArrayList<Card> temp = new ArrayList<>();
-        for(int i : cards){
-            temp.add(hand.get(i));
-        }
-        this.game.playCards(temp);
-        updateView(temp);
-        opponentAnimation();
-    }
 
-    public void updateView(ArrayList<Card> cards){
-        view.createSpriteList();
-    }
-    public void opponentAnimation(){
-        view.oppAnimation();
-    }
+
 }

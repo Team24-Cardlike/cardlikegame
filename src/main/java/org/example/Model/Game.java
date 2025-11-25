@@ -32,16 +32,40 @@ public class Game {
         this.selectedCards = new ArrayList<>(Collections.nCopies(user.getHand().size(),false));
         observers = new GameObservers(this);
         playerTurn = true;
-        this.tm = new turnManager(true);
-
+        // this.tm = new turnManager(true); maybe remove idk
 
     }
     public turnManager getTurnManager(){
         return tm;
     }
-    public void gameLoop() {
 
+
+    public void gameLoop1() {
+
+        if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) {
+            deck.refill(user.hand);}
+        observers.notifyHandChanged(user.getHand());
+
+        if (playerTurn) {
+
+            // Wait for player to make turn
+        }
+        else {
+            opponentTurn();
+        }
+
+        //round ends
+        if ( user.health <= 0 || opponent.health <= 0) {
+
+        }
+
+    }
+
+
+    public void gameLoop() {
         while(this.opponent.health>0 && this.user.health>0){
+
+
             System.out.println("-------------");
             for (Card c : user.hand) {
                 System.out.print(c.rank + " ");
@@ -59,7 +83,7 @@ public class Game {
                 // TODO: add logic to choose cards from hand to play
                 // Connect with frontend
                 //this.playCards(new ArrayList<Card>((this.user.hand.getFirst(), this.user.hand.getLast())));
-                playCards(user.getSelectedCards());
+                playCards();
             }
             else {
                 damage(user, opponent);
@@ -97,32 +121,53 @@ public class Game {
      *   <li>this.damage()</li>
      *   <li>user.drawCards()</li>
      * </ul>
-     * @param playedCards cards played from the front end
+     * @param //playedCards cards played from the front end
      */
-    public void playCards(ArrayList<Card> playedCards){
+    public void playCards(){
         //Gör att det blir motståndarens runda
+        ArrayList<Card> playedCards = getSelectedCards();
         int damage = user.playCards(playedCards);
         this.opponent.takeDamage(damage);
         System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
-        // controller.updateView(playedCards); // TODO: REMOVE
-        tm.swapTurn();
-        if(!tm.getCurrentPlayer()){
-            this.user.takeDamage(opponent.getDamage());
-            System.out.println("Du tog "+opponent.getDamage()+" skada! Du har "+ this.user.health+ " hp kvar");
-            // controller.opponentAnimation();
-
-            //tm.swapTurn();
-        }
-        /**this.user.playCards(playedCards);
-        damage(opponent, user);
-        this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
-        this.user.selectedCards.clear();*/
-        observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
+       playerTurn = false;
+       observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
+       observers.notifyPlayerTurn(false);
     }
 
+
+
+    private void opponentTurn() {
+        this.user.takeDamage(opponent.getDamage());
+        System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " hp kvar");
+        playerTurn = true;
+        observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
+        observers.notifyPlayerTurn(true);
+    }
+
+    private ArrayList<Card>  getSelectedCards() {
+        ArrayList<Card> temp = new ArrayList<>();
+
+        for (int i = selectedCards.size() - 1; i >= 0 ; i --) {
+            if ((boolean) selectedCards.get(i)) {
+            temp.add(user.hand.get(i));
+            user.hand.remove(i);
+
+            observers.notifyCardSelect(i, false);
+            }
+        }
+        selectedCards = new ArrayList<>(Collections.nCopies(user.hand.size(), false));
+        observers.notifyHandChanged(user.getHand());
+        return temp;
+
+
+    }
+
+
+
     public void setSelectedCards(int index, boolean b) {
-        selectedCards.set(index,b);
-        observers.notifyCardSelect(index,b);
+        boolean newValue = !((boolean) selectedCards.get(index));
+         selectedCards.set(index, newValue);
+        observers.notifyCardSelect(index,newValue);
 
     }
 

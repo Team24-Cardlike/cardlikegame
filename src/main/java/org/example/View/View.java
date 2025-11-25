@@ -334,6 +334,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
     @Override
     public void onPlayerTurn(boolean playerTurn) {
         this.playerTurn = playerTurn;
+        if (!playerTurn) {
+            oppAnimation();}
     }
 
     @Override

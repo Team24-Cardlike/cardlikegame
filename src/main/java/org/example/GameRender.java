@@ -24,6 +24,7 @@ public class GameRender extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
         view.updateOpponentAnimation(delta);  // <<< Lägg till detta
 
+        game.gameLoop1();
         controller.input();
 
         //playSelectedCards(); // Move cards up
