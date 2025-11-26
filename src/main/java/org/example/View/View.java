@@ -340,6 +340,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     @Override
     public void resize(int width, int height) {
+                    
         viewport.update(width, height, true); // true centers the camera
 
         // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
@@ -348,4 +349,5 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         // Resize your application here. The parameters represent the new window size.
     }
+
 }

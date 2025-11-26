@@ -39,6 +39,11 @@ public class GameRender extends ApplicationAdapter {
 
     }
 
+    @Override
+    public void resize(int width, int height) {                    
+        
+        view.resize(width, height);        
+    }
 }
 
 // package org.example;
