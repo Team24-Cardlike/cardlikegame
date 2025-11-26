@@ -59,6 +59,7 @@ public class User extends Player {
     @Override
     public int getDamage() {
         int damage = getHiVal(this.selectedCards) + combos.checkCombo(this.selectedCards).value;
+        System.out.println(damage);
         return damage;
     }
 

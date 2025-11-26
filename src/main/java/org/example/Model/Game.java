@@ -42,8 +42,10 @@ public class Game {
 
     public void gameLoop1() {
 
-        if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) {
-            deck.refill(user.hand);}
+        // System.out.println(this.gameDeck.size() + this.user.hand.size());    
+        // System.out.println(selectedCards.size());    
+        if (gameDeck.size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
+        while (user.hand.size() < user.cardsPerHand) user.hand.add(gameDeck.pop());
         observers.notifyHandChanged(user.getHand());
 
         if (playerTurn) {
@@ -73,7 +75,7 @@ public class Game {
             System.out.println();
             System.out.println("-------------");
 
-            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) {
+            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) { 
                 deck.refill(user.hand);
             }
 
@@ -155,7 +157,8 @@ public class Game {
             observers.notifyCardSelect(i, false);
             }
         }
-        selectedCards = new ArrayList<>(Collections.nCopies(user.hand.size(), false));
+        // selectedCards = new ArrayList<>(Collections.nCopies(user.hand.size(), false));
+        selectedCards = new ArrayList<>(Collections.nCopies(user.cardsPerHand, false));
         observers.notifyHandChanged(user.getHand());
         return temp;
 
