@@ -1,7 +1,6 @@
 package org.example.Model;
 
 
-import org.example.Controller.Controller;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -16,15 +15,14 @@ public class Game {
     public User user;
     public Opponent opponent;
     Stack<Card> gameDeck;   
-    int turn = 0;
-    Controller controller;
+    int turn = 0;    
     //Stage stage;
     turnManager tm;
 
     public Game(Opponent opponent){
         this.deck = new Deck();
         //this.upgrades = new Upgrades();
-        this.user = new User(100);
+        this.user     = new User(100);
         this.opponent = opponent;
         this.deck.createInGameDeck();
         this.gameDeck = this.deck.getInGameDeck();
@@ -32,7 +30,6 @@ public class Game {
         observers = new GameObservers(this);
         this.tm = new turnManager(true);
     }
-
     public turnManager getTurnManager(){
         return tm;
     }
@@ -82,9 +79,6 @@ public class Game {
         }
     }
 
-    public void setController(Controller controller){
-        this.controller = controller;
-    }
 
     void damage(Player defender, Player attacker){
         defender.takeDamage(attacker.getDamage());
@@ -104,12 +98,12 @@ public class Game {
         int damage = user.playCards(playedCards);
         this.opponent.takeDamage(damage);
         System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
-        controller.updateView(playedCards);
+        // controller.updateView(playedCards); // TODO: REMOVE
         tm.swapTurn();
         if(!tm.getCurrentPlayer()){
             this.user.takeDamage(opponent.getDamage());
             System.out.println("Du tog "+opponent.getDamage()+" skada! Du har "+ this.user.health+ " hp kvar");
-            controller.opponentAnimation();
+            // controller.opponentAnimation();
 
             //tm.swapTurn();
         }
