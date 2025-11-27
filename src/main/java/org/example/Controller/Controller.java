@@ -31,6 +31,14 @@ public class Controller{
                 onPlaySelectedCards(view.selectedIndices);                
             }
         });
+
+        view.discardButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                view.throwCards();
+                discardCards(view.removedIndices);
+            }
+        });
     }
 
     public void input() {
@@ -47,7 +55,7 @@ public class Controller{
 
         if (Gdx.input.justTouched()) {
             for (int i = 0; i < view.cardSprites.size(); i ++) {
-                if (view.cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
+                if (view.cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y) && (getNumberOfSelected(view.boolSelectedCards) < 5)){
                     view.boolSelectedCards.set(i,!view.boolSelectedCards.get(i));
                 }
             }
@@ -66,12 +74,29 @@ public class Controller{
         }
     }
 
-    public void onPlaySelectedCards(ArrayList<Integer> cards){
-        ArrayList<Card> hand = this.game.user.getHand();
-        ArrayList<Card> temp = new ArrayList<>();
-        for(int i : cards){
-            temp.add(hand.get(i));
+    private int getNumberOfSelected(ArrayList<Boolean> cardsBool){
+        int i = 0;
+        for(Boolean bool : cardsBool){
+            if(bool)i++;
         }
+        return i;
+    }
+
+    public ArrayList<Card> getSelectedCardsAsCards(ArrayList<Integer> cards){
+            ArrayList<Card> hand = this.game.user.getHand();
+            ArrayList<Card> temp = new ArrayList<>();
+            for(int i : cards) {
+                temp.add(hand.get(i));
+            }
+            return temp;
+    }
+
+    public void discardCards(ArrayList<Integer> cards){
+        this.game.discard(cards);
+    }
+
+    public void onPlaySelectedCards(ArrayList<Integer> cards){
+        ArrayList<Card> temp = getSelectedCardsAsCards(cards);
         this.game.playCards(temp);
         updateView(temp);
         opponentAnimation();

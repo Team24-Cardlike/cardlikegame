@@ -113,6 +113,10 @@ public class Game {
         this.user.selectedCards.clear();*/
 
     }
+
+    public void discard(ArrayList<Integer> indices){
+        user.removeCards(indices);
+    }
 /*
     public void playCards(ArrayList<Integer> selectedCards) {
         int totalDamage = 0;

@@ -30,6 +30,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     Texture background;
     public Image startButton;
+    public Image discardButton;
 
     private List<String> handImages = new ArrayList<>();
     public ArrayList<Sprite> cardSprites;
@@ -53,7 +54,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private float opponentStartY = 3f;      // original Y
     private float opponentDropY = 1.8f;
     int a = 0;
-    public ArrayList<Integer> selectedIndices;    
+    public ArrayList<Integer> selectedIndices;
+    public ArrayList<Integer> removedIndices;
 
     public void setGame(Game game) {
         this.game = game;
@@ -70,6 +72,12 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         hoveredCards = new ArrayList<>();
         boolSelectedCards = new ArrayList<>();
+
+        discardButton = new Image(new Texture("assets/images/discardTest.png"));
+        discardButton.setPosition(6,2);
+        discardButton.setSize(0.8f, 1);
+        stage.addActor(discardButton);
+
 
         startButton = new Image(new Texture("assets/images/enemyEvil.png"));
         startButton.setPosition(0,2);
@@ -241,6 +249,19 @@ public class View extends ApplicationAdapter  implements GameObserver{
         animatingOpponent = true;
         falling = true;
         animationTime = 0;
+    }
+
+    public void throwCards(){
+        removedIndices = new ArrayList<>();
+
+        for (int i = cardSprites.size()-1; i >= 0; i--) {
+            if (boolSelectedCards.get(i)) {
+                removedIndices.add(i);
+
+                cardSprites.remove(i);
+                boolSelectedCards.remove(i);
+            }
+        }
     }
 
     public void updateOpponentAnimation(float delta) {

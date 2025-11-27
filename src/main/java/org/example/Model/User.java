@@ -75,17 +75,18 @@ public class User extends Player {
      * @param indices indices of cards that you selected
      */
 
-    public ArrayList<Card> removeCards(ArrayList<Integer> indices) {
-        ArrayList<Card> played = new ArrayList<>();
+    public void removeCards(ArrayList<Integer> indices) {
+        //ArrayList<Card> played = new ArrayList<>();
 
         // Sortera indices fallande så remove() funkar
-        indices.sort(Collections.reverseOrder());
+        //indices.sort(Collections.reverseOrder());
 
         for (int index : indices) {
-            played.add(hand.remove(index));
+            //played.add(hand.remove(index));
+            hand.remove(index);
         }
 
-        return played;
+        //return played;
     }
 
     int playCards(ArrayList<Card> cardsPlayed){
