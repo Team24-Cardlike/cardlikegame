@@ -56,9 +56,13 @@ public class User extends Player {
      *
      * @return the value of the highest card + the value of the best combo, in the cards played.
      */
+    public Combo getComboPlayedCards(){
+        return combos.checkCombo(this.selectedCards);
+    }
+
     @Override
     public int getDamage() {
-        int damage = getHiVal(this.selectedCards) + combos.checkCombo(this.selectedCards).value;
+        int damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
         return damage;
     }
 
