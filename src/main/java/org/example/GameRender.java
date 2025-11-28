@@ -23,8 +23,8 @@ public class GameRender extends ApplicationAdapter {
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
         view.updateOpponentAnimation(delta);  // <<< Lägg till detta
-
         controller.input();
+
 
         //playSelectedCards(); // Move cards up
         //input();
@@ -36,6 +36,11 @@ public class GameRender extends ApplicationAdapter {
         view.create();
         controller.create();
 
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        view.resize(width, height);
     }
 
 }

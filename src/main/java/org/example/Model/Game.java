@@ -15,9 +15,12 @@ public class Game {
     public User user;
     public Opponent opponent;
     Stack<Card> gameDeck;   
-    int turn = 0;    
+    int turn = 0;
+    public int totalDamageToOpponent;
+    public int totalDamageToPlayer;
     //Stage stage;
     turnManager tm;
+    public boolean gameState;
 
     public Game(Opponent opponent){
         this.deck = new Deck();
@@ -29,6 +32,7 @@ public class Game {
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         observers = new GameObservers(this);
         this.tm = new turnManager(true);
+        gameState = true;
     }
     public turnManager getTurnManager(){
         return tm;
@@ -94,14 +98,20 @@ public class Game {
      * @param playedCards cards played from the front end
      */
     public void playCards(ArrayList<Card> playedCards){
-        //Gör att det blir motståndarens runda
         int damage = user.playCards(playedCards);
         this.opponent.takeDamage(damage);
+        totalDamageToOpponent = totalDamageToPlayer + damage;
+
+        if(chekDeadOpponent()){
+            gameState = false;
+            return;
+        }
+
         System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
-        // controller.updateView(playedCards); // TODO: REMOVE
         tm.swapTurn();
         if(!tm.getCurrentPlayer()){
             this.user.takeDamage(opponent.getDamage());
+            totalDamageToPlayer = totalDamageToPlayer + opponent.getDamage();
             System.out.println("Du tog "+opponent.getDamage()+" skada! Du har "+ this.user.health+ " hp kvar");
             // controller.opponentAnimation();
 
@@ -112,6 +122,19 @@ public class Game {
         this.user.drawCards(this.gameDeck, this.user.selectedCards.size());
         this.user.selectedCards.clear();*/
 
+    }
+
+    public boolean chekDeadOpponent(){
+        return opponent.health <= 0;
+    }
+
+    public String bestCombo(ArrayList<Card> cards){
+        user.setSelectedCards(cards);
+        return user.getComboPlayedCards().name;
+    }
+
+    public void discard(ArrayList<Integer> indices){
+        user.removeCards(indices);
     }
 /*
     public void playCards(ArrayList<Integer> selectedCards) {
