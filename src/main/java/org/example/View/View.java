@@ -3,10 +3,14 @@ package org.example.View;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import org.example.Model.*;
 
 import java.util.ArrayList;
@@ -24,7 +30,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class View extends ApplicationAdapter  implements GameObserver{
-    public FitViewport viewport;
+    public FitViewport viewport;    
     private SpriteBatch spriteBatch;
     private ShapeRenderer sr;
 
@@ -42,6 +48,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
     public ArrayList<Boolean> hoveredCards;
     public ArrayList<Boolean> boolSelectedCards;
     private ArrayList<Sprite> centerSelectedCard;
+    public Vector3 coords;
 
     private boolean animatingOpponent = false;
     private boolean falling = true;
@@ -61,7 +68,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     int a = 0;
     public ArrayList<Integer> selectedIndices;
-    private ArrayList<Integer> rotatedCards;    
+    
+    
 
    /* public void setGame(Game game) {
         this.game = game;
@@ -72,10 +80,15 @@ public class View extends ApplicationAdapter  implements GameObserver{
         centerSelectedCard = new ArrayList<>();
         sr = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
-        viewport = new FitViewport(8, 5);
+        
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.setToOrtho(false, 8, 5); 
+        camera.position.set(4, 2.5f, 0); // center camera
+        camera.update();
+        viewport = new FitViewport(8, 5, camera);
+        
         stage = new Stage(viewport, spriteBatch);
-        cardSprites = new ArrayList<>();
-        rotatedCards = new ArrayList<>();
+        cardSprites = new ArrayList<>();        
 
         hoveredCards = new ArrayList<>();
         boolSelectedCards = new ArrayList<>();
@@ -160,6 +173,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
             
 
             cardSprite.setOriginCenter();   
+            // TODO: fix hitbox with rotation
             cardSprite.setRotation(5 * (handImages.size()/2 - i)); 
 
             cardSprites.add(cardSprite);
@@ -194,12 +208,32 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     //Check if user hovers over card
     public void getHoverdCards() {
-        Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.getCamera().unproject(cords);
+        // Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        // viewport.getCamera().unproject(coords);
         for (int a = 0; a < cardSprites.size(); a++){            
+            
+            // AI-generated solution for getting the correct hitbox now that the
+            // cards are rotated
+            Sprite sprite = cardSprites.get(a);            
+            float[] vertices = new float[]{
+                0, 0,
+                sprite.getWidth(), 0,
+                sprite.getWidth(), sprite.getHeight(),
+                0, sprite.getHeight()
+            };
+            Polygon poly = new Polygon(vertices);
+            
+            poly.setOrigin(sprite.getOriginX(), sprite.getOriginY());
 
-            if (cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y)) {
-                // hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));      
+            poly.setPosition(sprite.getX(), sprite.getY());
+            poly.setRotation(sprite.getRotation());
+            poly.setScale(sprite.getScaleX(), sprite.getScaleY());
+            
+
+            // Check if card is hovered over
+            if (poly.contains(coords.x, coords.y)) {
+            // if (cardSprites.get(a).getBoundingRectangle().contains(coords.x,coords.y)) {            
+                // hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
                 hoveredCards.set(a, true);
                 for (int i = 0; i < cardSprites.size(); i ++) {
                     if (i != a) hoveredCards.set(i, false);
@@ -212,9 +246,10 @@ public class View extends ApplicationAdapter  implements GameObserver{
         }
     }
 
-    public void draw() {
+    public void draw() {        
+
         centerSelectedCard.clear();
-        getHoverdCards();
+        getHoverdCards();        
 
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
@@ -366,12 +401,13 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     @Override
     public void resize(int width, int height) {
-                    
-        viewport.update(width, height, true); // true centers the camera
+                                           
 
-        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
-        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
         if(width <= 0 || height <= 0) return;
+        viewport.update(width, height, true); // true centers the camera        
+                
+        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
+        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.    
 
         // Resize your application here. The parameters represent the new window size.
     }

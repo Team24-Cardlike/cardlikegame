@@ -25,7 +25,7 @@ public class GameRender extends ApplicationAdapter {
         view.updateOpponentAnimation(delta);  // <<< Lägg till detta
 
         game.gameLoop1();
-        controller.input();
+        controller.input();        
 
         //playSelectedCards(); // Move cards up
         //input();
