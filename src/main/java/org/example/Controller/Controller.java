@@ -93,7 +93,7 @@ public class Controller{
         }
 
         String combo = game.bestCombo(getSelectedCardsAsCards(intList));
-        view.showCombo();
+        view.showCombo(combo);
     }
 
     private int getNumberOfSelected(ArrayList<Boolean> cardsBool){

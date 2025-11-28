@@ -94,6 +94,7 @@ public class User extends Player {
     }
 
     int playCards(ArrayList<Card> cardsPlayed){
+        this.selectedCards.clear();
         for(Card card : cardsPlayed){
             this.selectedCards.add(card);
             this.hand.remove(card);

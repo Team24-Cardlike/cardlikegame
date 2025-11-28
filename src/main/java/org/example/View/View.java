@@ -53,6 +53,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
     public ArrayList<Boolean> hoveredCards;
     public ArrayList<Boolean> boolSelectedCards;
     private ArrayList<Sprite> centerSelectedCard;
+    private Label currentComboLabel;
 
     private boolean animatingOpponent = false;
     private boolean falling = true;
@@ -310,8 +311,15 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     }
 
-    public void showCombo(){
+    public void showCombo(String comboName){
+        if (currentComboLabel != null) {
+            currentComboLabel.remove();
+        }
 
+        currentComboLabel = new Label(comboName, style);
+        currentComboLabel.setPosition(200,200);
+        System.out.println(currentComboLabel);
+        stage.addActor(currentComboLabel);
     }
 
     public void updateOpponentAnimation(float delta) {

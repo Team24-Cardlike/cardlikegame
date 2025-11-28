@@ -129,7 +129,7 @@ public class Game {
     }
 
     public String bestCombo(ArrayList<Card> cards){
-        //user.setSelectedCards(cards);
+        user.setSelectedCards(cards);
         return user.getComboPlayedCards().name;
     }
 
