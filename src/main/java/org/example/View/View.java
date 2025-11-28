@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class View extends ApplicationAdapter  implements GameObserver{
-    public ScreenViewport viewport;
+    public FitViewport viewport;
     private SpriteBatch spriteBatch;
     private ShapeRenderer sr;
 
@@ -86,7 +86,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         spriteBatch = new SpriteBatch();
 
         //viewport = new FitViewport(8, 5);
-        viewport = new ScreenViewport();
+        viewport = new FitViewport(800, 600);
         stage = new Stage(viewport, spriteBatch);
         cardSprites = new ArrayList<>();
 
@@ -115,7 +115,10 @@ public class View extends ApplicationAdapter  implements GameObserver{
         opponentTexture = new Texture("assets/images/enemyCorrect.png");
         opponentSprite = new Sprite(opponentTexture);
         opponentSprite.setSize(250, 150);
-        opponentSprite.setPosition((float) Gdx.graphics.getWidth() /2-(125), 400);
+        opponentSprite.setPosition(
+                viewport.getWorldWidth() / 2f - opponentSprite.getWidth()/2f,
+                viewport.getWorldHeight() - 250
+        );
         background = new Texture("assets/images/bräde.png");
 
         
@@ -215,7 +218,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         // store the worldWidth and worldHeight as local variables for brevity
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
-        spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // draw the background
+        spriteBatch.draw(background, 0, 0,  viewport.getWorldWidth(), viewport.getWorldHeight()); // draw the background
         //ArrayList<Sprite> cards = user.getHand();
 
         for (int i = 0; i < centerSelectedCard.size(); i++) {
@@ -238,23 +241,6 @@ public class View extends ApplicationAdapter  implements GameObserver{
             card.setColor(hoveredCards.get(i) ? Color.LIGHT_GRAY : Color.WHITE);
             card.draw(spriteBatch);
         }
-        /*
-        for (int i = 0; i < cardSprites.size(); i++) {
-            Sprite card = cardSprites.get(i);
-            Sprite selectedCard = centerSelectedCard.get(i);
-
-
-            if (boolSelectedCards.get(i)){
-                card.setColor(Color.GOLD);
-            }
-            else if (hoveredCards.get(i)) {
-                // lightgrey highlight = hover
-                card.setColor(Color.LIGHT_GRAY);
-            }
-            else
-                card.setColor(Color.WHITE);
-            card.draw(spriteBatch);
-        }*/
         opponentSprite.draw(spriteBatch);
         spriteBatch.end();
         drawHealthBars();
@@ -385,14 +371,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
     public void onGameEnded(String resultMessage) {
 
     }
-    @Override
+
     public void resize(int width, int height) {
-        viewport.update(width, height, true); // true centers the camera
-
-        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
-        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
-        if(width <= 0 || height <= 0) return;
-
-        // Resize your application here. The parameters represent the new window size.
+        viewport.update(width, height, true);
     }
 }
