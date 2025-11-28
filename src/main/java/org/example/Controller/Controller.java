@@ -48,11 +48,24 @@ public class Controller{
         } */// TODO Remove from here, moved to view
 
         if (Gdx.input.justTouched()) {
-            for (int i = 0; i < view.cardSprites.size(); i ++) {
-                if (view.cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
-                    game.setSelectedCards(i, true);
+            // for (int i = 0; i < view.cardSprites.size(); i ++) {
+            //     if (view.cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
+            //         game.setSelectedCards(i, true);
+            //     }
+            // }
+            for (int a = view.cardSprites.size() - 1; a >= 0; a--){            
+                if (view.cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y)) {
+                    // hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));      
+                    game.setSelectedCards(a, true);
+                    break;
+                    // for (int i = 0; i < view.cardSprites.size(); i ++) {
+                    //     // if (i != a) game.setSelectedCards(i, false);
+                    // }
+                    
                 }
-
+                // else {
+                //     game.setSelectedCards(a, false);
+                // }            
         }
     }}
 

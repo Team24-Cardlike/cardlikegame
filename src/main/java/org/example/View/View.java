@@ -60,7 +60,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private boolean playerTurn;
 
     int a = 0;
-    public ArrayList<Integer> selectedIndices;    
+    public ArrayList<Integer> selectedIndices;
+    private ArrayList<Integer> rotatedCards;    
 
    /* public void setGame(Game game) {
         this.game = game;
@@ -74,6 +75,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         viewport = new FitViewport(8, 5);
         stage = new Stage(viewport, spriteBatch);
         cardSprites = new ArrayList<>();
+        rotatedCards = new ArrayList<>();
 
         hoveredCards = new ArrayList<>();
         boolSelectedCards = new ArrayList<>();
@@ -154,6 +156,12 @@ public class View extends ApplicationAdapter  implements GameObserver{
             Sprite cardSprite = new Sprite(new Texture("assets/images/" + handImages.get(i)));
             cardSprite.setSize(0.75f,1.25f);
             cardSprite.setPosition(0.05f + i*0.9f, 0.1f);
+            cardSprite.setPosition(0.8f + i*0.6f, 0.8f - 0.075f * (float)Math.pow(Math.abs(i - handImages.size()/2), 1.2f));
+            
+
+            cardSprite.setOriginCenter();   
+            cardSprite.setRotation(5 * (handImages.size()/2 - i)); 
+
             cardSprites.add(cardSprite);
 
             boolSelectedCards.add(false);
@@ -172,7 +180,10 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
                 Sprite card = cardSprites.get(i);
                 card.setY(card.getY() + lift);
-                boolSelectedCards.set(i, false);
+                boolSelectedCards.set(i, false);   
+                
+                
+                
             }
         }
         System.out.println(selectedIndices + "" + this.selectedIndices);
@@ -185,10 +196,21 @@ public class View extends ApplicationAdapter  implements GameObserver{
     public void getHoverdCards() {
         Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.getCamera().unproject(cords);
-        for (int i = 0; i < cardSprites.size(); i ++) {
-         for (int a = 0; a < cardSprites.size(); a++){
-        hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
-    }}}
+        for (int a = 0; a < cardSprites.size(); a++){            
+
+            if (cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y)) {
+                // hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));      
+                hoveredCards.set(a, true);
+                for (int i = 0; i < cardSprites.size(); i ++) {
+                    if (i != a) hoveredCards.set(i, false);
+                }
+                
+            }
+            else {
+                hoveredCards.set(a, false);
+            }            
+        }
+    }
 
     public void draw() {
         centerSelectedCard.clear();
@@ -196,8 +218,12 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
-                centerSelectedCard.add(cardSprites.get(i));
-            }
+                centerSelectedCard.add(cardSprites.get(i));  
+                
+                cardSprites.get(i).setRotation(0);
+                // cardSprites.get(i).setRotation((float) (10 * (0.5f - Math.random())));
+                //  + (float) (10 * (0.5f - Math.random())));
+            }            
         }
 
         ScreenUtils.clear(Color.BLACK);
@@ -216,8 +242,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
             Sprite selectedCard = centerSelectedCard.get(i);
 
             // temporär position under render
-            float cx = 1.5f + i * 0.9f;
-            float cy = 2f;
+            float cx = 1.5f + i * 0.9f;            
+            float cy = 2f;            
 
             selectedCard.setPosition(cx, cy);
             selectedCard.setColor(Color.GOLD);
