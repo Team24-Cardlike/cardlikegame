@@ -294,7 +294,6 @@ public class View extends ApplicationAdapter  implements GameObserver{
         nextButton.setSize(80, 100);
 
         stage.addActor(nextButton);
-
     }
 
     public void showCombo(String comboName){
