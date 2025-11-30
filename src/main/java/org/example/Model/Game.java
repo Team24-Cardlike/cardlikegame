@@ -129,7 +129,7 @@ public class Game {
     public void playCards(ArrayList<Card> playedCards){        
         int damage = user.playCards(playedCards);
         this.opponent.takeDamage(damage);
-        totalDamageToOpponent = totalDamageToPlayer + damage;
+        totalDamageToOpponent = totalDamageToOpponent + damage;        
 
         if(checkDeadOpponent()){
             gameState = false;
@@ -145,7 +145,10 @@ public class Game {
 
 
     private void opponentTurn() {
-        this.user.takeDamage(opponent.getDamage());
+        int oppDamage = opponent.getDamage();
+        user.takeDamage(oppDamage);
+        totalDamageToPlayer += oppDamage;
+
         System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " hp kvar");
         playerTurn = true;
         observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
