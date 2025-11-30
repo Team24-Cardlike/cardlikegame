@@ -56,10 +56,13 @@ public class User extends Player {
      *
      * @return the value of the highest card + the value of the best combo, in the cards played.
      */
+    public Combo getComboPlayedCards(){
+        return combos.checkCombo(this.selectedCards);
+    }
+
     @Override
     public int getDamage() {
-        int damage = getHiVal(this.selectedCards) + combos.checkCombo(this.selectedCards).value;
-        System.out.println(damage);
+        int damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
         return damage;
     }
 
@@ -76,20 +79,22 @@ public class User extends Player {
      * @param indices indices of cards that you selected
      */
 
-    public ArrayList<Card> removeCards(ArrayList<Integer> indices) {
-        ArrayList<Card> played = new ArrayList<>();
+    public void removeCards(ArrayList<Integer> indices) {
+        //ArrayList<Card> played = new ArrayList<>();
 
         // Sortera indices fallande så remove() funkar
-        indices.sort(Collections.reverseOrder());
+        //indices.sort(Collections.reverseOrder());
 
         for (int index : indices) {
-            played.add(hand.remove(index));
+            //played.add(hand.remove(index));
+            hand.remove(index);
         }
 
-        return played;
+        //return played;
     }
 
     int playCards(ArrayList<Card> cardsPlayed){
+        this.selectedCards.clear();
         for(Card card : cardsPlayed){
             this.selectedCards.add(card);
             this.hand.remove(card);

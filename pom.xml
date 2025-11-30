@@ -14,6 +14,7 @@
         <gdx.version>1.12.1</gdx.version>
     </properties>
 
+
     <dependencies>
         <!-- LibGDX core -->
         <dependency>

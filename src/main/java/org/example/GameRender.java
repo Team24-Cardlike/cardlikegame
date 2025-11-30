@@ -27,7 +27,8 @@ public class GameRender extends ApplicationAdapter {
         game.gameLoop1();
         controller.input();        
 
-        //playSelectedCards(); // Move cards up
+
+        // view.playSelectedCards(); // Move cards up
         //input();
         view.draw();         // grafik
     }

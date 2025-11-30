@@ -15,25 +15,28 @@ public class Game {
     public User user;
     public Opponent opponent;
     Stack<Card> gameDeck;   
-    int turn = 0;    
+    int turn = 0;
+    public int totalDamageToOpponent;
+    public int totalDamageToPlayer;
     //Stage stage;
     boolean playerTurn;
     turnManager tm;
-    ArrayList selectedCards;
+    public boolean gameState;
+
+    private ArrayList selectedCards;
 
     public Game(Opponent opponent){
         this.deck = new Deck();
         //this.upgrades = new Upgrades();
-        this.user     = new User(100);
+        this.user     = new User(1000);
         this.opponent = opponent;
         this.deck.createInGameDeck();
         this.gameDeck = this.deck.getInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         this.selectedCards = new ArrayList<>(Collections.nCopies(user.getHand().size(),false));
         observers = new GameObservers(this);
-        playerTurn = true;
-        // this.tm = new turnManager(true); maybe remove idk
-
+        this.tm = new turnManager(true);
+        gameState = true;
     }
     public turnManager getTurnManager(){
         return tm;
@@ -48,11 +51,11 @@ public class Game {
         while (user.hand.size() < user.cardsPerHand) user.hand.add(gameDeck.pop());
         observers.notifyHandChanged(user.getHand());
 
-        if (playerTurn) {
+        if (playerTurn) {            
 
             // Wait for player to make turn
         }
-        else {
+        else {            
             opponentTurn();
         }
 
@@ -85,7 +88,7 @@ public class Game {
                 // TODO: add logic to choose cards from hand to play
                 // Connect with frontend
                 //this.playCards(new ArrayList<Card>((this.user.hand.getFirst(), this.user.hand.getLast())));
-                playCards();
+                //playCards(user.getSelectedCards());
             }
             else {
                 damage(user, opponent);
@@ -112,7 +115,7 @@ public class Game {
     }
 
 
-    void damage(Player defender, Player attacker){
+    void damage(Player defender, Player attacker){        
         defender.takeDamage(attacker.getDamage());
     }
 
@@ -125,11 +128,16 @@ public class Game {
      * </ul>
      * @param //playedCards cards played from the front end
      */
-    public void playCards(){
-        //Gör att det blir motståndarens runda
-        ArrayList<Card> playedCards = getSelectedCards();
+    public void playCards(ArrayList<Card> playedCards){        
         int damage = user.playCards(playedCards);
         this.opponent.takeDamage(damage);
+        totalDamageToOpponent = totalDamageToPlayer + damage;
+
+        if(checkDeadOpponent()){
+            gameState = false;
+            return;
+        }
+
         System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
        playerTurn = false;
        observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
@@ -165,11 +173,27 @@ public class Game {
 
     }
 
+    public boolean checkDeadOpponent(){        
+        return opponent.health <= 0;
+    }
+
+    public String bestCombo(ArrayList<Card> cards){
+        user.setSelectedCards(cards);
+        return user.getComboPlayedCards().name;
+    }
+
+    public void discard(ArrayList<Integer> indices){
+        user.removeCards(indices);
+    }
+
+    // public void playCards(ArrayList<Integer> selectedCards) {
+    //     int totalDamage = 0;
+
 
 
     public void setSelectedCards(int index, boolean b) {
         boolean newValue = !((boolean) selectedCards.get(index));
-         selectedCards.set(index, newValue);
+        selectedCards.set(index, newValue);
         observers.notifyCardSelect(index,newValue);
 
     }
