@@ -17,10 +17,12 @@ public class DesktopLauncher {
         Opponent opp = new Opponent(20, 25, 3, "enemyEvil");
         Game game = new Game(opp);
         View view = new View();
-        Controller controller = new Controller(view, game);
+        Controller controller = new Controller(game);
         GameRender gameRender = new GameRender(game, view, controller);
                 
         view.setGame(game);
+        view.setController(controller);
+        
         game.observers.addObserver(view);
         game.observers.notifyGameInit();
         new Lwjgl3Application(gameRender, config);

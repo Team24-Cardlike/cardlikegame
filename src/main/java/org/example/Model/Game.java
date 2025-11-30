@@ -2,8 +2,6 @@ package org.example.Model;
 
 
 
-import java.util.ArrayList;
-import java.util.Stack;
 import java.util.*;
 
 public class Game {
@@ -197,6 +195,25 @@ public class Game {
         observers.notifyCardSelect(index,newValue);
 
     }
+
+
+    public ArrayList<Card> getSelectedCardsAsCards(ArrayList<Integer> cards){
+            ArrayList<Card> hand = user.getHand();
+            ArrayList<Card> temp = new ArrayList<>();
+            for(int i : cards) {
+                temp.add(hand.get(i));
+            }
+            return temp;
+    }
+
+
+    public int getNumberOfSelected(ArrayList<Boolean> cardsBool){
+        int i = 0;
+        for(Boolean bool : cardsBool){
+            if(bool)i++;
+        }
+        return i;
+    }    
 
 
 }

@@ -26,6 +26,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import org.example.Controller.Controller;
 import org.example.Model.*;
 
 import java.util.ArrayList;
@@ -80,13 +82,17 @@ public class View extends ApplicationAdapter  implements GameObserver{
     public ArrayList<Integer> selectedIndices;
     public ArrayList<Integer> removedIndices;
     private Game game;
+    private Controller controller;
 
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
     
-    public void create() {
-    // public View() {
+    public void create() {        
 
         BitmapFont font = new BitmapFont(); // standard font
         style = new Label.LabelStyle();
@@ -139,11 +145,98 @@ public class View extends ApplicationAdapter  implements GameObserver{
         );
         background = new Texture("assets/images/bräde.png");
 
-        
+
+        startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // game.playSelectedCards()
+                playSelectedCards();
+
+                onPlaySelectedCards(selectedIndices);
+            }
+        });
+
+        discardButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                throwCards();
+                controller.discardCards(removedIndices);
+            }
+        });        
     }
 
 
 
+    public void bestCombo(ArrayList<Boolean> boolList){
+        ArrayList<Integer> intList = new ArrayList<>();
+        int i = 0;
+        for(Boolean bool : boolList){
+            if(bool)intList.add(i);
+            i++;
+        }
+
+        String combo = game.bestCombo(game.getSelectedCardsAsCards(intList));
+        showCombo(combo);
+    }
+
+
+
+    public void input() {    
+
+        coords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);        
+        viewport.unproject(coords);        
+
+        if (Gdx.input.justTouched()) {
+            
+            for (int a = cardSprites.size() - 1; a >= 0; a--){   
+                                
+                Polygon poly = generateHitbox(a);            
+
+            //Send input to controller                
+                if (poly.contains(coords.x, coords.y) && (game.getNumberOfSelected(boolSelectedCards) < 5)) {                                        
+                    controller.selectCard(a, true);
+
+                    boolSelectedCards.set(a, !boolSelectedCards.get(a));                                                            
+                    
+                    if(game.getNumberOfSelected(boolSelectedCards) > 2){                        
+                        bestCombo(boolSelectedCards);
+                    }                    
+                    break;
+                                        
+                }                            
+            }
+        }
+    }
+
+
+
+    public void onPlaySelectedCards(ArrayList<Integer> cards){
+        ArrayList<Card> temp = game.getSelectedCardsAsCards(cards);        
+        controller.playCards(temp);
+
+        if(game.gameState){
+            updateView(temp);
+            opponentAnimation();
+        }
+        else{            
+            endGame(game.totalDamageToPlayer, game.totalDamageToOpponent);
+            nextButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    //View.nextView();? Eller ska nytt objekt
+                    controller.nextRound();
+                }
+            });
+        }
+    }
+
+
+    public void updateView(ArrayList<Card> cards){
+        createSpriteList();
+    }
+    public void opponentAnimation(){
+        oppAnimation();
+    }
 
     public void drawHealthBars(){        
         sr.setProjectionMatrix(viewport.getCamera().combined);
@@ -199,7 +292,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
 
             cardSprite.setOriginCenter();   
-            // TODO: fix hitbox with rotation
+            // TODO: selected cards shouldn't affect hitbox
             cardSprite.setRotation(5 * (handImages.size()/2 - i)); 
 
             cardSprites.add(cardSprite);
@@ -211,8 +304,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     //Animation moving card forward
     public void playSelectedCards(){
-        float lift = viewport.getWorldHeight() * 10; // t.ex. 10% uppåt
-        // ArrayList<Integer> selectedIndices = new ArrayList<>();        
+        float lift = viewport.getWorldHeight() * 10; // t.ex. 10% uppåt             
         selectedIndices = new ArrayList<>();
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
@@ -221,9 +313,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 Sprite card = cardSprites.get(i);
                 card.setY(card.getY() + lift);
                 boolSelectedCards.set(i, false);   
-                
-                
-                
+                                            
             }
         }
         // System.out.println(selectedIndices + "" + this.selectedIndices);
@@ -231,30 +321,36 @@ public class View extends ApplicationAdapter  implements GameObserver{
     }
 
 
-    //Check if user hovers over card
-    public void getHoverdCards() {
-        // Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        // viewport.getCamera().unproject(coords);
-        for (int a = 0; a < cardSprites.size(); a++){            
-            
-            // AI-generated solution for getting the correct hitbox now that the
-            // cards are rotated
-            Sprite sprite = cardSprites.get(a);            
+    private Polygon generateHitbox(int index) {
+
+        // AI-generated solution for getting the correct hitbox now that the
+        // cards are rotated
+
+        Sprite sprite = cardSprites.get(index);            
             float[] vertices = new float[]{
                 0, 0,
                 sprite.getWidth(), 0,
                 sprite.getWidth(), sprite.getHeight(),
                 0, sprite.getHeight()
             };
-            Polygon poly = new Polygon(vertices);
-            
-            poly.setOrigin(sprite.getOriginX(), sprite.getOriginY());
 
-            poly.setPosition(sprite.getX(), sprite.getY());
-            poly.setRotation(sprite.getRotation());
-            poly.setScale(sprite.getScaleX(), sprite.getScaleY());
+        Polygon poly = new Polygon(vertices);
             
+        poly.setOrigin(sprite.getOriginX(), sprite.getOriginY());
 
+        poly.setPosition(sprite.getX(), sprite.getY());
+        poly.setRotation(sprite.getRotation());
+        poly.setScale(sprite.getScaleX(), sprite.getScaleY());
+    
+        return poly;
+    }
+
+    //Check if user hovers over card
+    public void getHoverdCards() {        
+        for (int a = 0; a < cardSprites.size(); a++){            
+                
+            Polygon poly = generateHitbox(a);
+            
             // Check if card is hovered over
             if (poly.contains(coords.x, coords.y)) {
             // if (cardSprites.get(a).getBoundingRectangle().contains(coords.x,coords.y)) {            
@@ -301,9 +397,6 @@ public class View extends ApplicationAdapter  implements GameObserver{
         for (int i = 0; i < centerSelectedCard.size(); i++) {
             Sprite selectedCard = centerSelectedCard.get(i);
 
-            // temporär position under render
-            // float cx = 150 + i * 90;            
-            // float cy = 200;            
             float cx = 150 + i * 90;
             float cy = 200;
 
@@ -437,8 +530,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
     @Override
     // Getting notified to update healthPercentage
     public void onHealthChanged(float userHealth, float opponentHealth) {
-    userHealthPercentage= userHealth;
-    opponentHealthPercentage = opponentHealth;
+        userHealthPercentage= userHealth;
+        opponentHealthPercentage = opponentHealth;
     }
 
     @Override

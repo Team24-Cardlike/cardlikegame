@@ -25,8 +25,6 @@ public class GameObservers {
         notifyHealthChanged(game.user.getHealthRatio(),game.opponent.getHealthRatio());
         notifyPlayerTurn(true);
 
-
-        
     }
 
     // Hand changed sending updated hand to view in a list of strings
@@ -34,8 +32,8 @@ public class GameObservers {
         List<String> handToString = new ArrayList<>();
 
         for (Card c : hand ){
-
             handToString.add(c.pic);}
+
         for (GameObserver o : observers) {
             o.onHandChanged(handToString);}
     }
