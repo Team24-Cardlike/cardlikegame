@@ -13,4 +13,8 @@ public abstract class Player {
         this.health-=damage;
     }
 
+    public float getHealthRatio(){
+        return (float) health/maxHealth;
+    }
+
 }

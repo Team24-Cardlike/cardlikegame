@@ -3,12 +3,16 @@ package org.example.View;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,6 +26,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import org.example.Controller.Controller;
 import org.example.Model.*;
 
 import java.util.ArrayList;
@@ -29,7 +35,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class View extends ApplicationAdapter  implements GameObserver{
-    public FitViewport viewport;
+    public FitViewport viewport;    
     private SpriteBatch spriteBatch;
     private ShapeRenderer sr;
 
@@ -48,12 +54,13 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private Sprite opponentSprite;
     // Seving hand if LibGDX not yet initialized
     private List<String> tempHand;
-    private Game game;
+   //   private Game game; TODO REMOVE
     private Stage stage;
     public ArrayList<Boolean> hoveredCards;
     public ArrayList<Boolean> boolSelectedCards;
     private ArrayList<Sprite> centerSelectedCard;
     private Label currentComboLabel;
+    public Vector3 coords;
 
     private boolean animatingOpponent = false;
     private boolean falling = true;
@@ -64,16 +71,29 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     private float opponentStartY = 300;      // original Y
     private float opponentDropY = 180;
+
+
+
+    private float opponentHealthPercentage;
+    private float userHealthPercentage;
+    private boolean playerTurn;
+
     int a = 0;
     public ArrayList<Integer> selectedIndices;
     public ArrayList<Integer> removedIndices;
+    private Game game;
+    private Controller controller;
 
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
     
-    public void create() {
-    // public View() {
+    public void create() {        
+
         BitmapFont font = new BitmapFont(); // standard font
         style = new Label.LabelStyle();
         style.font = font;
@@ -84,11 +104,15 @@ public class View extends ApplicationAdapter  implements GameObserver{
         centerSelectedCard = new ArrayList<>();
         sr = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
-
-        //viewport = new FitViewport(8, 5);
-        viewport = new FitViewport(800, 600);
+        
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.setToOrtho(false, 8, 5); 
+        camera.position.set(4, 2.5f, 0); // center camera
+        camera.update();
+        viewport = new FitViewport(800, 600, camera);
+        
         stage = new Stage(viewport, spriteBatch);
-        cardSprites = new ArrayList<>();
+        cardSprites = new ArrayList<>();        
 
         hoveredCards = new ArrayList<>();
         boolSelectedCards = new ArrayList<>();
@@ -114,17 +138,107 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         opponentTexture = new Texture("assets/images/enemyCorrect.png");
         opponentSprite = new Sprite(opponentTexture);
-        opponentSprite.setSize(250, 150);
-        opponentSprite.setPosition(
+        opponentSprite.setSize(250f, 150f);
+         opponentSprite.setPosition(
                 viewport.getWorldWidth() / 2f - opponentSprite.getWidth()/2f,
                 viewport.getWorldHeight() - 250
         );
         background = new Texture("assets/images/bräde.png");
 
-        
+
+        startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // game.playSelectedCards()
+                playSelectedCards();
+
+                onPlaySelectedCards(selectedIndices);
+            }
+        });
+
+        discardButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                throwCards();
+                controller.discardCards(removedIndices);
+            }
+        });        
     }
 
-    public void drawHealthBars(){
+
+
+    public void bestCombo(ArrayList<Boolean> boolList){
+        ArrayList<Integer> intList = new ArrayList<>();
+        int i = 0;
+        for(Boolean bool : boolList){
+            if(bool)intList.add(i);
+            i++;
+        }
+
+        String combo = game.bestCombo(game.getSelectedCardsAsCards(intList));
+        showCombo(combo);
+    }
+
+
+
+    public void input() {    
+
+        coords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);        
+        viewport.unproject(coords);        
+
+        if (Gdx.input.justTouched()) {
+            
+            for (int a = cardSprites.size() - 1; a >= 0; a--){   
+                                
+                Polygon poly = generateHitbox(a);            
+
+            //Send input to controller                
+                if (poly.contains(coords.x, coords.y) && (game.getNumberOfSelected(boolSelectedCards) < 5)) {                                        
+                    controller.selectCard(a, true);
+
+                    boolSelectedCards.set(a, !boolSelectedCards.get(a));                                                            
+                    
+                    if(game.getNumberOfSelected(boolSelectedCards) > 2){                        
+                        bestCombo(boolSelectedCards);
+                    }                    
+                    break;
+                                        
+                }                            
+            }
+        }
+    }
+
+
+
+    public void onPlaySelectedCards(ArrayList<Integer> cards){
+        ArrayList<Card> temp = game.getSelectedCardsAsCards(cards);        
+        controller.playCards(temp);
+
+        if(game.gameState){
+            updateView(temp);
+            opponentAnimation();
+        }
+        else{            
+            endGame(game.totalDamageToPlayer, game.totalDamageToOpponent);
+            nextButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    //View.nextView();? Eller ska nytt objekt
+                    controller.nextRound();
+                }
+            });
+        }
+    }
+
+
+    public void updateView(ArrayList<Card> cards){
+        createSpriteList();
+    }
+    public void opponentAnimation(){
+        oppAnimation();
+    }
+
+    public void drawHealthBars(){        
         sr.setProjectionMatrix(viewport.getCamera().combined);
 
         // USER HEALTH BAR (bottom-left)
@@ -133,11 +247,11 @@ public class View extends ApplicationAdapter  implements GameObserver{
         float width = 250;
         float height = 30;
 
-        float healthPercent = (float) game.user.health / game.user.maxHealth;
+        //float healthPercent = (float) game.user.health / game.user.maxHealth; TODO REMOVE
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        float greenWidthUser = width * healthPercent;
+        float greenWidthUser = width * userHealthPercentage;
         float redWidthUser = width - greenWidthUser;
 
         // RED background
@@ -152,9 +266,9 @@ public class View extends ApplicationAdapter  implements GameObserver{
         float ex = 520;
         float ey = 550;
 
-        float enemyPercent = (float) game.opponent.health / game.opponent.maxHealth;
+       //  float enemyPercent = (float) game.opponent.health / game.opponent.maxHealth; TODO REMOVE
 
-        float greenWidthOpp = width * enemyPercent;
+        float greenWidthOpp = width * opponentHealthPercentage;
         float redWidthOpp = width - greenWidthOpp;
         // RED
         sr.setColor(Color.RED);
@@ -169,12 +283,18 @@ public class View extends ApplicationAdapter  implements GameObserver{
     
 
     public void createSpriteList(){
-        cardSprites.clear();        
-        
-        for (int i = 0; i < game.getUser().getHand().size(); i++) {                        
-            Sprite cardSprite = new Sprite(new Texture("assets/images/" + game.getUser().getHand().get(i).pic));
-            cardSprite.setSize(75,125);
-            cardSprite.setPosition(10 + i*90, 25);
+        cardSprites.clear();                
+
+        for (int i = 0; i < handImages.size(); i++) {
+            Sprite cardSprite = new Sprite(new Texture("assets/images/" + handImages.get(i)));
+            cardSprite.setSize(75,125);        
+            cardSprite.setPosition(80 + i*60, 80 - 7.5f * (float)Math.pow(Math.abs(i - handImages.size()/2), 1.20f));            
+
+
+            cardSprite.setOriginCenter();   
+            // TODO: selected cards shouldn't affect hitbox
+            cardSprite.setRotation(5 * (handImages.size()/2 - i)); 
+
             cardSprites.add(cardSprite);
 
             boolSelectedCards.add(false);
@@ -184,8 +304,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     //Animation moving card forward
     public void playSelectedCards(){
-        float lift = viewport.getWorldHeight() * 10; // t.ex. 10% uppåt
-        // ArrayList<Integer> selectedIndices = new ArrayList<>();
+        float lift = viewport.getWorldHeight() * 10; // t.ex. 10% uppåt             
         selectedIndices = new ArrayList<>();
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
@@ -193,20 +312,74 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
                 Sprite card = cardSprites.get(i);
                 card.setY(card.getY() + lift);
-                boolSelectedCards.set(i, false);
+                boolSelectedCards.set(i, false);   
+                                            
             }
         }
-        System.out.println(selectedIndices + "" + this.selectedIndices);
+        // System.out.println(selectedIndices + "" + this.selectedIndices);
         // this.selectedIndices = selectedIndices;
     }
 
-    public void draw() {
+
+    private Polygon generateHitbox(int index) {
+
+        // AI-generated solution for getting the correct hitbox now that the
+        // cards are rotated
+
+        Sprite sprite = cardSprites.get(index);            
+            float[] vertices = new float[]{
+                0, 0,
+                sprite.getWidth(), 0,
+                sprite.getWidth(), sprite.getHeight(),
+                0, sprite.getHeight()
+            };
+
+        Polygon poly = new Polygon(vertices);
+            
+        poly.setOrigin(sprite.getOriginX(), sprite.getOriginY());
+
+        poly.setPosition(sprite.getX(), sprite.getY());
+        poly.setRotation(sprite.getRotation());
+        poly.setScale(sprite.getScaleX(), sprite.getScaleY());
+    
+        return poly;
+    }
+
+    //Check if user hovers over card
+    public void getHoverdCards() {        
+        for (int a = 0; a < cardSprites.size(); a++){            
+                
+            Polygon poly = generateHitbox(a);
+            
+            // Check if card is hovered over
+            if (poly.contains(coords.x, coords.y)) {
+            // if (cardSprites.get(a).getBoundingRectangle().contains(coords.x,coords.y)) {            
+                // hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
+                hoveredCards.set(a, true);
+                for (int i = 0; i < cardSprites.size(); i ++) {
+                    if (i != a) hoveredCards.set(i, false);
+                }
+                
+            }
+            else {
+                hoveredCards.set(a, false);
+            }            
+        }
+    }
+
+    public void draw() {        
+
         centerSelectedCard.clear();
+        getHoverdCards();        
 
         for (int i = 0; i < cardSprites.size(); i++) {
             if (boolSelectedCards.get(i)) {
-                centerSelectedCard.add(cardSprites.get(i));
-            }
+                centerSelectedCard.add(cardSprites.get(i));  
+                
+                cardSprites.get(i).setRotation(0);
+                // cardSprites.get(i).setRotation((float) (10 * (0.5f - Math.random())));
+                //  + (float) (10 * (0.5f - Math.random())));
+            }            
         }
 
         ScreenUtils.clear(Color.BLACK);
@@ -224,7 +397,6 @@ public class View extends ApplicationAdapter  implements GameObserver{
         for (int i = 0; i < centerSelectedCard.size(); i++) {
             Sprite selectedCard = centerSelectedCard.get(i);
 
-            // temporär position under render
             float cx = 150 + i * 90;
             float cy = 200;
 
@@ -244,9 +416,9 @@ public class View extends ApplicationAdapter  implements GameObserver{
         opponentSprite.draw(spriteBatch);
         spriteBatch.end();
         drawHealthBars();
-       stage.act(Gdx.graphics.getDeltaTime());
+        stage.act(Gdx.graphics.getDeltaTime());
 
-       if(game.getTurnManager().getCurrentPlayer() || !game.gameState){
+        if(game.getTurnManager().getCurrentPlayer() || !game.gameState){
            stage.draw();
        }
     }
@@ -334,7 +506,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 animatingOpponent = false;
                 opponentSprite.setY(opponentStartY);
 
-                game.getTurnManager().swapTurn(); // animation klar → byt tur
+                 // game.getTurnManager().swapTurn(); // animation klar → byt tur TODO Remove, should be updated in model
                 return;
             }
 
@@ -356,13 +528,16 @@ public class View extends ApplicationAdapter  implements GameObserver{
     }
 
     @Override
-
-    public void onHealthChanged(int userHealth, int opponentHealth) {
-
+    // Getting notified to update healthPercentage
+    public void onHealthChanged(float userHealth, float opponentHealth) {
+        userHealthPercentage= userHealth;
+        opponentHealthPercentage = opponentHealth;
     }
 
     @Override
     public void onCardSelected(int index, boolean selected) {
+        // boolSelectedCards.set(index,selected);
+
 
     }
 
@@ -371,7 +546,24 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     }
 
-    public void resize(int width, int height) {
-        viewport.update(width, height, true);
+    @Override
+    public void onPlayerTurn(boolean playerTurn) {
+        this.playerTurn = playerTurn;
+        if (!playerTurn) {
+            oppAnimation();}
     }
+
+    @Override
+    public void resize(int width, int height) {
+                                           
+
+        if(width <= 0 || height <= 0) return;
+        viewport.update(width, height, true); // true centers the camera        
+                
+        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
+        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.    
+
+        // Resize your application here. The parameters represent the new window size.
+    }
+
 }

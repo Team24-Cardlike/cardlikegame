@@ -22,8 +22,9 @@ public class GameObservers {
 
     public void notifyGameInit() {
         notifyHandChanged(game.getUser().getHand());
-        notifyHealthChanged(game.user.health,game.opponent.health);
-        
+        notifyHealthChanged(game.user.getHealthRatio(),game.opponent.getHealthRatio());
+        notifyPlayerTurn(true);
+
     }
 
     // Hand changed sending updated hand to view in a list of strings
@@ -31,13 +32,13 @@ public class GameObservers {
         List<String> handToString = new ArrayList<>();
 
         for (Card c : hand ){
-
             handToString.add(c.pic);}
+
         for (GameObserver o : observers) {
             o.onHandChanged(handToString);}
     }
 
-    public void notifyHealthChanged(int playerHealth,int opponentHealth) {
+    public void notifyHealthChanged(float playerHealth,float opponentHealth) {
         for (GameObserver o : observers) {
             o.onHealthChanged(playerHealth,opponentHealth);
         }
@@ -46,6 +47,17 @@ public class GameObservers {
     public void notifyGameEnded() {
         for (GameObserver o : observers) {
             o.onGameEnded("game ended ?? ");
+        }
+    }
+
+    public void notifyCardSelect(int index, boolean b) {
+        for (GameObserver o : observers) {
+            o.onCardSelected(index,b);
+        }
+    }
+    public void notifyPlayerTurn(boolean playerTurn) {
+        for (GameObserver o : observers) {
+            o.onPlayerTurn(playerTurn);
         }
     }
 }
