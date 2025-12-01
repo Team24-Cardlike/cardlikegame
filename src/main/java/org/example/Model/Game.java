@@ -36,6 +36,7 @@ public class Game {
         this.tm = new turnManager(true);
         gameState = true;
     }
+
     public turnManager getTurnManager(){
         return tm;
     }
@@ -61,7 +62,6 @@ public class Game {
         if ( user.health <= 0 || opponent.health <= 0) {
 
         }
-
     }
 
 
@@ -128,7 +128,7 @@ public class Game {
      */
     public void playCards(ArrayList<Card> playedCards){        
         int damage = user.playCards(playedCards);
-        this.opponent.takeDamage(damage);
+        this.opponent.takeDamage(damage*100);
         totalDamageToOpponent = totalDamageToOpponent + damage;        
 
         if(checkDeadOpponent()){
@@ -218,6 +218,17 @@ public class Game {
         return i;
     }    
 
+    public void nextRound(){
+        this.user.resetUser();
+        this.deck = new Deck();
+        this.deck.createInGameDeck();
 
+        //factory method på nu opp
+
+        this.gameDeck = this.deck.getInGameDeck();
+        user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
+        this.selectedCards = new ArrayList<>(Collections.nCopies(user.getHand().size(),false));
+        this.playerTurn = true;
+    }
 }
 

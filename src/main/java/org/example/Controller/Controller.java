@@ -15,7 +15,7 @@ public class Controller{
     }    
 
     public void nextRound(){
-
+        game.nextRound();
     }
 
 

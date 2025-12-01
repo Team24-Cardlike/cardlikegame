@@ -131,5 +131,11 @@ public class User extends Player {
         return this.hoveredCards;
     }
 
-
+    public void resetUser(){
+        this.health = maxHealth;
+        this.hand = new ArrayList<>();
+        this.selectedCards = new ArrayList<>();
+        this.hoveredCards = new ArrayList<>();
+        this.boolSelectedCards = new ArrayList<>();
+    }
 }

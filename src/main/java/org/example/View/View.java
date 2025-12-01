@@ -225,6 +225,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
                 public void clicked(InputEvent event, float x, float y){
                     //View.nextView();? Eller ska nytt objekt
                     controller.nextRound();
+                    nextRound();
                 }
             });
         }
@@ -517,6 +518,23 @@ public class View extends ApplicationAdapter  implements GameObserver{
         }
     }
 
+    public void resetView() {
+        if (stage != null) stage.dispose();
+        if (spriteBatch != null) spriteBatch.dispose();
+        if (sr != null) sr.dispose();
+        if (vicTxt != null) vicTxt.dispose();
+        if (nextButtonTexture != null) nextButtonTexture.dispose();
+        if (opponentTexture != null) opponentTexture.dispose();
+        if (background != null) background.dispose();
+        if (discardButton != null) discardButton.remove();
+        if (startButton != null) startButton.remove();
+    }
+
+    public void nextRound(){
+        resetView();
+        create();
+    }
+
     @Override
     //Draw updated hand
     public void onHandChanged(List<String> hand) {
@@ -555,15 +573,8 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
     @Override
     public void resize(int width, int height) {
-                                           
-
         if(width <= 0 || height <= 0) return;
-        viewport.update(width, height, true); // true centers the camera        
-                
-        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
-        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.    
-
-        // Resize your application here. The parameters represent the new window size.
+        viewport.update(width, height, true); // true centers the camera
     }
 
 }
