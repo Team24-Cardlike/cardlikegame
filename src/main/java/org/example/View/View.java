@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class View extends ApplicationAdapter  implements GameObserver{
+public class View extends ApplicationAdapter implements GameObserver{
     public FitViewport viewport;    
     private SpriteBatch spriteBatch;
     private ShapeRenderer sr;
@@ -54,7 +54,6 @@ public class View extends ApplicationAdapter  implements GameObserver{
     private Sprite opponentSprite;
     // Seving hand if LibGDX not yet initialized
     private List<String> tempHand;
-   //   private Game game; TODO REMOVE
     private Stage stage;
     public ArrayList<Boolean> hoveredCards;
     public ArrayList<Boolean> boolSelectedCards;
@@ -368,8 +367,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         }
     }
 
-    public void draw() {        
-
+    public void draw() {
         centerSelectedCard.clear();
         getHoverdCards();        
 

@@ -190,15 +190,12 @@ public class Game {
     // public void playCards(ArrayList<Integer> selectedCards) {
     //     int totalDamage = 0;
 
-
-
     public void setSelectedCards(int index, boolean b) {
         boolean newValue = !((boolean) selectedCards.get(index));
         selectedCards.set(index, newValue);
-        observers.notifyCardSelect(index,newValue);
+        observers.notifyCardSelect(index, newValue);
 
     }
-
 
     public ArrayList<Card> getSelectedCardsAsCards(ArrayList<Integer> cards){
             ArrayList<Card> hand = user.getHand();
