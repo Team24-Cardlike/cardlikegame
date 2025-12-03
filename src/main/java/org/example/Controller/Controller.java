@@ -15,9 +15,8 @@ public class Controller{
     }    
 
     public void nextRound(){
-
+        game.nextRound();
     }
-
 
     public void selectCard(int a, boolean bool) {
         game.setSelectedCards(a, bool);

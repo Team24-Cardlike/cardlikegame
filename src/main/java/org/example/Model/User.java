@@ -70,7 +70,8 @@ public class User extends Player {
         ArrayList<Integer> ranks = new ArrayList<>();
         for (Card c : cards) {
             ranks.add(c.rank);
-        }        
+        }
+        Collections.sort(ranks);
         return ranks.getLast();
     }
     /**
@@ -131,5 +132,11 @@ public class User extends Player {
         return this.hoveredCards;
     }
 
-
+    public void resetUser(){
+        this.health = maxHealth;
+        this.hand = new ArrayList<>();
+        this.selectedCards = new ArrayList<>();
+        this.hoveredCards = new ArrayList<>();
+        this.boolSelectedCards = new ArrayList<>();
+    }
 }

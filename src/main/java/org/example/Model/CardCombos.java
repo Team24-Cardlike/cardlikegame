@@ -27,7 +27,6 @@ public class CardCombos {
         this.royal_straight_flush = new Combo("Royal-Straight-Flush", 1500, "A straight-flush with the highest card being an ace.");
     }
 
-
     /**
      *
      * @param cards an ArrayList filled with cards.
