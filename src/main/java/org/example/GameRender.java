@@ -34,8 +34,7 @@ public class GameRender extends ApplicationAdapter {
 
     @Override
     public void create() {
-        view.create();        
-
+        view.create();
     }
 
     @Override

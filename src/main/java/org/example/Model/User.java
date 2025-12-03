@@ -70,7 +70,8 @@ public class User extends Player {
         ArrayList<Integer> ranks = new ArrayList<>();
         for (Card c : cards) {
             ranks.add(c.rank);
-        }        
+        }
+        Collections.sort(ranks);
         return ranks.getLast();
     }
     /**
