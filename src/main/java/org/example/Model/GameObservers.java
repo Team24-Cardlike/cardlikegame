@@ -23,6 +23,7 @@ public class GameObservers {
     public void notifyGameInit() {
         notifyHandChanged(game.getUser().getHand());
         notifyHealthChanged(game.user.health,game.opponent.health);
+        
     }
 
     // Hand changed sending updated hand to view in a list of strings

@@ -9,33 +9,46 @@ import org.example.View.View;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Controller{
     private View view;
     public Game game;
 
-    public Controller(View _view, Game _game){
-        this.view = _view;
-        this.game = _game;
+    public Controller(View view, Game game){
+        this.view = view;
+        this.game = game;
+
     }
 
-    public static void input(ArrayList<Sprite> cardSprites, FitViewport viewport, ArrayList<Boolean> hoveredCards, ArrayList<Boolean> boolSelectedCards) {
+    public void create() {
+        view.startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {                
+                view.playSelectedCards();
+                onPlaySelectedCards(view.selectedIndices);                
+            }
+        });
+    }
+
+    public void input() {
         //float speed = 4f;
         //float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
 
         Vector3 cords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.getCamera().unproject(cords);
+        view.viewport.getCamera().unproject(cords);
 
         //Check if user hovers over card
-        for (int a = 0; a < cardSprites.size(); a++){
-            hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
+        for (int a = 0; a < view.cardSprites.size(); a++){
+            view.hoveredCards.set(a,view.cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
         }
 
         if (Gdx.input.justTouched()) {
-            for (int i = 0; i < cardSprites.size(); i ++) {
-                if (cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
-                    boolSelectedCards.set(i,!boolSelectedCards.get(i));
+            for (int i = 0; i < view.cardSprites.size(); i ++) {
+                if (view.cardSprites.get(i).getBoundingRectangle().contains(cords.x,cords.y)) {
+                    view.boolSelectedCards.set(i,!view.boolSelectedCards.get(i));
                 }
             }
             // playSelectedCards();
@@ -60,6 +73,8 @@ public class Controller{
             temp.add(hand.get(i));
         }
         this.game.playCards(temp);
+        updateView(temp);
+        opponentAnimation();
     }
 
     public void updateView(ArrayList<Card> cards){
