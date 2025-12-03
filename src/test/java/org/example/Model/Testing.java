@@ -17,11 +17,11 @@ public class Testing {
             assertTrue(deck.suits.contains(card.suit));
             assertTrue(deck.ranks.contains(card.rank));
             assertEquals(card.name, card.rank + " of " + card.suit);
-            assertEquals(card.pic, card.rank + card.suit +".png");
+            assertEquals(card.pic, "cardPics/" + card.suit+"/" + card.rank + card.suit + ".png");
         }
         Card card = new Card("sun", 13);
         assertEquals("13 of sun", card.name);
-        assertEquals("13sun.png", card.pic);
+        assertEquals("cardPics/sun/13sun.png", card.pic);
     }
 
     @Test
@@ -41,12 +41,22 @@ public class Testing {
         User user = new User(100);
         Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(new Card("sun", 10),
-                new Card("sun", 11))
+                new Card("sun", 11), new Card("sun", 13), new Card("moon", 3), new Card("sun", 2))
         );
         user.getHand().addAll(cards);
         user.getSelectedCards().addAll(user.getHand());
         opp.health -= user.getDamage();
-        assertEquals(2000 - (0 + 11), opp.health);
+        assertEquals(2000 - (0 + 13), opp.health);
+    }
+
+    @Test
+    public void test_cardCombo_single2(){
+        CardCombos combos = new CardCombos();
+        ArrayList<Card> cards = new ArrayList<>(Arrays.asList(new Card("sun", 10),
+                new Card("sun", 11), new Card("sun", 13), new Card("moon", 3), new Card("sun", 2))
+        );
+        Combo combo = combos.checkCombo(cards);
+        assertEquals("Single", combo.name);
     }
 
     @Test
