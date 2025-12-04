@@ -2,9 +2,11 @@ package org.example.Model;
 
 
 
+import java.util.ArrayList;
+import java.util.Stack;
 import java.util.*;
 
-public class Game {
+public class Round {
 
     public GameObservers observers;
 
@@ -23,7 +25,7 @@ public class Game {
 
     private ArrayList selectedCards;
 
-    public Game(Opponent opponent){
+    public Round(Opponent opponent){
         this.deck = new Deck();
         //this.upgrades = new Upgrades();
         this.user     = new User(1000);
@@ -36,7 +38,6 @@ public class Game {
         this.tm = new turnManager(true);
         gameState = true;
     }
-
     public turnManager getTurnManager(){
         return tm;
     }
@@ -62,6 +63,7 @@ public class Game {
         if ( user.health <= 0 || opponent.health <= 0) {
 
         }
+
     }
 
 
@@ -190,12 +192,15 @@ public class Game {
     // public void playCards(ArrayList<Integer> selectedCards) {
     //     int totalDamage = 0;
 
+
+
     public void setSelectedCards(int index, boolean b) {
         boolean newValue = !((boolean) selectedCards.get(index));
         selectedCards.set(index, newValue);
         observers.notifyCardSelect(index, newValue);
 
     }
+
 
     public ArrayList<Card> getSelectedCardsAsCards(ArrayList<Integer> cards){
             ArrayList<Card> hand = user.getHand();

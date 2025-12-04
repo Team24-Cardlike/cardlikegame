@@ -19,16 +19,20 @@ public class DesktopLauncher{
         config.setWindowedMode(800,600);
 
         Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
-        Game game = new Game(opp);
-        View view = new View();
-        Controller controller = new Controller(game);
-        GameRender gameRender = new GameRender(game, view, controller);
-                
-        view.setGame(game);
-        view.setController(controller);
+        Round round = new Round(opp);
+        RoundView rview = new RoundView();
+        rview.setRound(round);
+        MainMenuView mview = new MainMenuView();
+        GameRender gameRender = new GameRender(round, rview,mview);
+        Controller controller = new Controller(round, gameRender);
+
+        gameRender.setController(controller);
+
+        rview.setController(controller);
+        mview.setController(controller);
         
-        game.observers.addObserver(view);
-        game.observers.notifyGameInit();
+        round.observers.addObserver(rview);
+        round.observers.notifyGameInit();
         new Lwjgl3Application(gameRender, config);
     }
 

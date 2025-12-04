@@ -10,26 +10,56 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import org.example.Views.MainMenuView;
 
-public class GameRender extends ApplicationAdapter {
+public class GameRender extends Game {
 
-    private Game game;
-    private View view;
+    private Round round;
+    private RoundView rview;
+    private MainMenuView mview;
+    private Boolean viewState;
     private Controller controller;
+    private Screen current;
 
-    GameRender(Game game, View view, Controller controller) {
-        this.game = game;
-        this.view = view;
-        this.controller = controller;
+    GameRender(Round round, RoundView rview, MainMenuView mview) {
+        this.round = round;
+        this.rview = rview;
+        this.mview = mview;
+        viewState = false;
     }
 
     @Override
+    public void create() {
+        setScreen(mview);
+    }
+
+    public void setController(Controller controller){
+        this.controller = controller;
+    }
+
+    public void switchView(){
+        if (getScreen() == mview) {
+            setScreen(rview);
+        } else {
+            setScreen(mview);
+        }
+    }}
+/*
+    @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
-        view.updateOpponentAnimation(delta);  // <<< Lägg till detta
+        //rview.updateOpponentAnimation(delta);  // <<< Lägg till detta
 
-        game.gameLoop1();
-        view.input();        
-        view.draw();         // graphics
+
+        if(getScreen() == rview){
+            round.gameLoop1();
+            rview.input();
+            rview.draw();
+        }
+        else{
+            mview.render(delta);
+        }
+
+
+        // graphics
 
 
         // view.playSelectedCards(); // Move cards up        
@@ -37,14 +67,14 @@ public class GameRender extends ApplicationAdapter {
 
     @Override
     public void create() {
-        view.create();        
-
+        mview.show();
+        rview.create();
     }
 
     @Override
-    public void resize(int width, int height) {                    
-        
-        view.resize(width, height);        
+    public void resize(int width, int height) {
+        mview.resize(width, height);
+        rview.resize(width,height);
     }
 
 }*/
