@@ -1,10 +1,9 @@
 package org.example.Model;
-import org.w3c.dom.Node;
 
 
 import java.util.*;
 public class GameMap {
-    Graph<Game> map;
+    Graph<Round> map;
     ArrayList<Opponent> opponents;
     Opponent heimdall;
     Opponent balder;
@@ -26,15 +25,15 @@ public class GameMap {
     }
 
     void createMap(){
-        this.map.addVertex(new Game(this.opponents.getFirst()));
-        this.map.addVertex(new Game(this.opponents.getLast()));
+        this.map.addVertex(new Round(this.opponents.getFirst()));
+        this.map.addVertex(new Round(this.opponents.getLast()));
         for(int i = 0; i<opponents.size(); i++) {
             if(!(i+1 > opponents.size()))
-                this.map.addEdge(new Game(this.opponents.get(i)), new Game(this.opponents.get(i+1)), false);
+                this.map.addEdge(new Round(this.opponents.get(i)), new Round(this.opponents.get(i+1)), false);
         }
     }
 
-    public Graph<Game> getMap() {
+    public Graph<Round> getMap() {
         return this.map;
     }
 }

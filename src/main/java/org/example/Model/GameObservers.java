@@ -7,9 +7,9 @@ import java.util.List;
 public class GameObservers {
     //List with observers who is observing game state
     final private ArrayList<GameObserver> observers = new ArrayList<>();
-    Game game;
+    Round round;
 
-    public GameObservers(Game g) {this.game = g;}
+    public GameObservers(Round g) {this.round = g;}
 
     //Add observer to observer's list
     public void addObserver(GameObserver observer) {
@@ -32,6 +32,7 @@ public class GameObservers {
         List<String> handToString = new ArrayList<>();
 
         for (Card c : hand ){
+
             handToString.add(c.pic);}
 
         for (GameObserver o : observers) {

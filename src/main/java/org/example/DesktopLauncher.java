@@ -4,11 +4,15 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import org.example.Controller.Controller;
-import org.example.Model.Game;
+import org.example.Model.Round;
 import org.example.Model.Opponent;
-import org.example.View.View;
+import org.example.Views.RoundView;
+import org.example.Views.MainMenuView;
 
-public class DesktopLauncher {
+//Du är mer av ett problem nu än problemet själv -Kristoffer under roleplaying workshop till Axel :)
+//Holy words
+
+public class DesktopLauncher{
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(("Maven LibGDX test"));
@@ -27,4 +31,5 @@ public class DesktopLauncher {
         game.observers.notifyGameInit();
         new Lwjgl3Application(gameRender, config);
     }
+
 }
