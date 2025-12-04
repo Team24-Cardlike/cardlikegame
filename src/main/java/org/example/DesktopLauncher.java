@@ -3,10 +3,10 @@ package org.example;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
-import org.example.Controller.Controller;
-import org.example.Model.Game;
-import org.example.Model.Opponent;
-import org.example.View.View;
+import org.example.Controller.RoundController;
+import org.example.Model.GameManager;
+import org.example.Model.RoundObserver;
+import org.example.View.RoundView;
 
 public class DesktopLauncher {
     public static void main(String[] args) {
@@ -14,17 +14,18 @@ public class DesktopLauncher {
         config.setTitle(("Maven LibGDX test"));
         config.setWindowedMode(800,600);
 
-        Opponent opp = new Opponent(200, 25, 3, "enemyEvil");
-        Game game = new Game(opp);
-        View view = new View();
-        Controller controller = new Controller(game);
-        GameRender gameRender = new GameRender(game, view, controller);
-                
-        view.setGame(game);
-        view.setController(controller);
+
+        RoundView view = new RoundView();
+        GameManager  manager = new GameManager( view);
+        view.setRound(manager.currentRound);
+
+        RoundController roundController = new RoundController(manager.currentRound);
+        GameRender gameRender = new GameRender( view, roundController,manager);
+
+        view.setController(roundController);
         
-        game.observers.addObserver(view);
-        game.observers.notifyGameInit();
+
         new Lwjgl3Application(gameRender, config);
+
     }
 }

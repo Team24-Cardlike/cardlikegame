@@ -1,46 +1,50 @@
 package org.example;
 
-import org.example.Controller.Controller;
-import org.example.Model.Game;
-import org.example.View.View;
+import org.example.Controller.RoundController;
+import org.example.Model.GameManager;
+import org.example.Model.GameMap;
+import org.example.Model.Round;
+import org.example.View.RoundView;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 
 public class GameRender extends ApplicationAdapter {
 
-    private Game game;
-    private View view;
-    private Controller controller;
+    private GameManager maneger;
+    private RoundView roundView;
+    private RoundController roundController;
 
-    GameRender(Game game, View view, Controller controller) {
-        this.game = game;
-        this.view = view;
-        this.controller = controller;
+    GameRender(RoundView roundView, RoundController roundController, GameManager maneger) {
+        this.maneger = maneger;
+        this.roundView = roundView;
+        this.roundController = roundController;
     }
 
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
-        view.updateOpponentAnimation(delta);  // <<< Lägg till detta
-
-        game.gameLoop1();
-        view.input();        
-        view.draw();         // graphics
+        roundView.updateOpponentAnimation(delta);  // <<< Lägg till detta
+        roundView.input();
+        maneger.gameLoop();
 
 
-        // view.playSelectedCards(); // Move cards up        
+        roundView.draw();         // graphics
+
+
+        // roundView.playSelectedCards(); // Move cards up
     }
 
     @Override
     public void create() {
-        view.create();        
+        roundView.create();
+        maneger.initRound();
 
     }
 
     @Override
     public void resize(int width, int height) {                    
         
-        view.resize(width, height);        
+        roundView.resize(width, height);
     }
 }
