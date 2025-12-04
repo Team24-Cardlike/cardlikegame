@@ -4,11 +4,17 @@ package org.example.Model;
 
 public abstract class Player {
     public int maxHealth;
-    public int health;
+    private int health;
     abstract int getDamage();
-    int getHealth(Player player){
-        return player.health;
+
+    int getHealth(){
+        return health;
     }
+
+    void setHealth(int health) {
+        this.health = health;
+    }
+
     void takeDamage(int damage){
         this.health-=damage;
     }

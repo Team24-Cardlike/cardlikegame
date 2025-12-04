@@ -2,17 +2,21 @@ package org.example.Model;
 
 import java.util.*;
 
+
+/**
+ * Class includes all cards that exist in the game, and also the gameDeck that 
+ * you draw from in a round.
+ */
 public class Deck {
 
-    ArrayList<Card> cards = new ArrayList<>();
-    Stack<Card> gameDeck = new Stack<>();
+    ArrayList<Card> cards = new ArrayList<>(); // All cards that exist in the game
+    Stack<Card> gameDeck = new Stack<>(); // In-game deck that you draw from
     public final ArrayList<String> suits = new ArrayList<>(Arrays.asList("sun", "moon", "water", "tree"));
     public final ArrayList<Integer> ranks = new ArrayList<>(Arrays.asList(2, 3, 4, 5 ,6 ,7 ,8, 9, 10, 11, 12, 13, 14));
 
     public Deck(){
         generateDeck();
-    }
-
+    }    
     public void generateDeck(){
         for(String suit : this.suits) {
             for (int rank : this.ranks) {
@@ -38,7 +42,7 @@ public class Deck {
             j++;
         }
     }
-
+    
     public ArrayList<Card> getCards(){
         return this.cards;
     }

@@ -23,8 +23,8 @@ public class DesktopLauncher {
         view.setGame(game);
         view.setController(controller);
         
-        game.observers.addObserver(view);
-        game.observers.notifyGameInit();
+        game.getGameObservers().addObserver(view);
+        game.getGameObservers().notifyGameInit();
         new Lwjgl3Application(gameRender, config);
     }
 }

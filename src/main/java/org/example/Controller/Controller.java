@@ -1,14 +1,12 @@
 package org.example.Controller;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 
 import org.example.Model.Card;
 import org.example.Model.Game;
-import com.badlogic.gdx.math.Vector3;
 
 public class Controller{    
-    public Game game;    
+    private Game game;    
 
     public Controller(Game game){        
         this.game = game;
