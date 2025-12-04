@@ -25,9 +25,8 @@ public class GameRender extends ApplicationAdapter {
         view.updateOpponentAnimation(delta);  // <<< Lägg till detta
 
         game.gameLoop1();
-        view.input();        
+        view.input();
         view.draw();         // graphics
-
 
         // view.playSelectedCards(); // Move cards up        
     }
@@ -38,8 +37,7 @@ public class GameRender extends ApplicationAdapter {
     }
 
     @Override
-    public void resize(int width, int height) {                    
-        
-        view.resize(width, height);        
+    public void resize(int width, int height) {
+        view.resize(width, height);
     }
 }

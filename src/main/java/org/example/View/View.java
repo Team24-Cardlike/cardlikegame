@@ -122,7 +122,7 @@ public class View extends ApplicationAdapter implements GameObserver{
         stage.addActor(discardButton);
 
 
-        startButton = new Image(new Texture("assets/images/enemyEvil.png"));
+        startButton = new Image(new Texture("assets/images/endTurn.png"));
         startButton.setPosition(0,200);
         startButton.setSize(150, 100);
         stage.addActor(startButton);
@@ -197,7 +197,7 @@ public class View extends ApplicationAdapter implements GameObserver{
 
                     boolSelectedCards.set(a, !boolSelectedCards.get(a));                                                            
                     
-                    if(game.getNumberOfSelected(boolSelectedCards) > 2){                        
+                    if(game.getNumberOfSelected(boolSelectedCards) > 0){
                         bestCombo(boolSelectedCards);
                     }                    
                     break;
