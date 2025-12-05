@@ -1,8 +1,5 @@
 package org.example.Model;
 
-// import java.util.ArrayList;
-
-import com.badlogic.gdx.graphics.Texture;
 
 public class Opponent extends Player {
     private final String name;
@@ -14,7 +11,7 @@ public class Opponent extends Player {
         this.maxHealth = startHealth;
         this.damage = damage;
         this.turns = turns;
-        this.health = maxHealth;
+        this.setHealth(maxHealth);
         this.name = name;
         this.image = name+".png";
     }

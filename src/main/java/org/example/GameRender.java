@@ -10,13 +10,12 @@ import com.badlogic.gdx.Gdx;
 public class GameRender extends ApplicationAdapter {
 
     private Game game;
-    private View view;
-    private Controller controller;
+    private View view;    
 
-    GameRender(Game game, View view, Controller controller) {
+    GameRender(Game game, View view) {
         this.game = game;
         this.view = view;
-        this.controller = controller;
+
     }
 
     @Override

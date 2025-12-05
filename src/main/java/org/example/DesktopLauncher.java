@@ -18,13 +18,13 @@ public class DesktopLauncher {
         Game game = new Game(opp);
         View view = new View();
         Controller controller = new Controller(game);
-        GameRender gameRender = new GameRender(game, view, controller);
+        GameRender gameRender = new GameRender(game, view);
                 
         view.setGame(game);
         view.setController(controller);
         
-        game.observers.addObserver(view);
-        game.observers.notifyGameInit();
+        game.getGameObservers().addObserver(view);
+        game.getGameObservers().notifyGameInit();
         new Lwjgl3Application(gameRender, config);
     }
 }

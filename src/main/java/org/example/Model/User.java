@@ -1,9 +1,6 @@
 package org.example.Model;
 
-import com.badlogic.gdx.utils.Array;
-
 import java.util.ArrayList;
-// import java.util.Collections;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -23,7 +20,7 @@ public class User extends Player {
     public User(int startHealth){
         this.maxHealth = startHealth;
         this.hand = new ArrayList<>();
-        this.health = maxHealth;
+        this.setHealth(maxHealth);
         this.gold = 0;
         this.selectedCards = new ArrayList<>();
         this.hoveredCards = new ArrayList<>();
@@ -132,7 +129,7 @@ public class User extends Player {
         return this.hoveredCards;
     }
 
-    public void resetUser(){
+    public void resetUser(){        
         this.health = maxHealth;
         this.hand = new ArrayList<>();
         this.selectedCards = new ArrayList<>();
