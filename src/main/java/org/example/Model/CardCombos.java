@@ -20,13 +20,12 @@ public class CardCombos {
         this.two_pair = new Combo("Two-pair", 40, "Two different pairs. (see pair)");
         this.three_of_a_kind = new Combo("Three-of-a-kind", 80, "Three cards of the same rank.");
         this.straight = new Combo("Straight", 100, "Five cards of sequential rank, can have any suit.");
-        this.flush = new Combo("FLush", 125, "Five cards of the same suit, can have any rank.");
+        this.flush = new Combo("Flush", 125, "Five cards of the same suit, can have any rank.");
         this.full_house = new Combo("Full House", 175, "A three-of-a-kind and a pair in the same hand.");
         this.four_of_a_kind = new Combo("Four-of-a-kind", 400, "Four cards with the same rank.");
         this.straight_flush = new Combo("Straight-Flush", 600, "Five cards with the same suit that are also a straight.");
         this.royal_straight_flush = new Combo("Royal-Straight-Flush", 1500, "A straight-flush with the highest card being an ace.");
     }
-
 
     /**
      *
@@ -44,7 +43,7 @@ public class CardCombos {
         }
         Collections.sort(ranks);
 
-        boolean sameSuit = suits.stream().allMatch(s -> s.equals(suits.getFirst()));
+        boolean sameSuit = suits.stream().allMatch(s -> s.equals(suits.get(0)));
 
         boolean sequential = false;
         if (ranks.size() >= 5) {
@@ -73,19 +72,20 @@ public class CardCombos {
                 return this.single;
 
             case 2:
-                if (freq.getFirst() == 2) return this.pair;
-                break;
+                if (freq.get(0) == 2) return this.pair;
+                else return this.single;
 
             case 3:
-                if (freq.getFirst() == 3) return this.three_of_a_kind;
-                if (freq.getFirst() == 2) return this.pair;
-                break;
+                if (freq.get(0) == 3) return this.three_of_a_kind;
+                if (freq.get(0) == 2) return this.pair;
+                else return this.single;
 
             case 4:
-                if (freq.getFirst() == 4) return this.four_of_a_kind;
-                if (freq.getFirst() == 3) return this.three_of_a_kind;
-                if (freq.getFirst() == 2 && freq.size() == 2) return this.two_pair;
-                break;
+                if (freq.get(0) == 4) return this.four_of_a_kind;
+                if (freq.get(0) == 3) return this.three_of_a_kind;
+                if (freq.get(0) == 2 && freq.size() == 2) return this.two_pair;
+                if (freq.get(0) == 2) return this.pair;
+                else return this.single;
 
             case 5:
                 int maxRank = Collections.max(ranks);
@@ -119,6 +119,6 @@ public class CardCombos {
 
                 return this.single;
         }
-        return new Combo("INVALID COMBO", 0, "Invalid card-input.");
+        return this.single;
     }
 }

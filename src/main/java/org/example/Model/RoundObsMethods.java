@@ -24,15 +24,15 @@ public class RoundObsMethods {
 
 
     // Hand changed sending updated hand to view in a list of strings
-    public void notifyHandChanged() {
+    public void notifyHandChanged(ArrayList<Card> hand) {
         for (RoundObserver o : observers) {
-            o.onHandChanged(handToString(round.user.getHand()));}
+            o.onHandChanged(handToString(hand));}
     }
 
     // Selected cards changed, update view in list of strings
-    public void notifySelectedChanged() {
+    public void notifySelectedChanged(ArrayList<Card> selectedCards) {
         for (RoundObserver o : observers) {
-            o.onSelectedChanged(handToString(round.user.getSelectedCards()));
+            o.onSelectedChanged(handToString(selectedCards));
         }
     }
 
@@ -51,9 +51,9 @@ public class RoundObsMethods {
     }
 
     // Notifys if a round has ended
-    public void notifyGameEnded(String message) {
+    public void notifyGameEnded(String message, int dmgToOp, int dmgToUser) {
         for (RoundObserver o : observers) {
-            o.onGameEnded( message, round.totalDamageToOpponent, round.totalDamageToPlayer);
+            o.onGameEnded( message, dmgToOp, dmgToUser);
         }
     }
 

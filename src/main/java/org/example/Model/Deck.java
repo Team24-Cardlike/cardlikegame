@@ -21,24 +21,6 @@ public class Deck {
         }
     }
 
-    public void generateTEMPORARYdeck(){
-        int i = 0;
-        int j = 0;
-        int x = 0;
-        while(x<4){
-            this.cards.add(new Card("lightning", 3));
-            x++;
-        }
-        while(i<4){
-            this.cards.add(new Card("moon", 3));
-            i++;
-        }
-        while(j<4){
-            this.cards.add(new Card("sun", 3));
-            j++;
-        }
-    }
-
     public ArrayList<Card> getCards(){
         return this.cards;
     }

@@ -27,7 +27,7 @@ public class RoundController {
     }
     public void discardCards(ArrayList<Integer> cards){
 
-        this.round.discard(cards);
+        this.round.discard();
     }
 
     public void playCards() {

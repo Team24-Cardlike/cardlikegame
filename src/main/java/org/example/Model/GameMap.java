@@ -32,12 +32,12 @@ public class GameMap {
     }
 
     void createMap(){
-        this.map.addVertex(new Round(user,heimdall, maneger.obs));
+        this.map.addVertex(new Round(user,heimdall, maneger.roundObs));
 
-        this.map.addVertex(new Round(user,oden, maneger.obs));
+        this.map.addVertex(new Round(user,oden, maneger.roundObs));
         for(int i = 0; i<opponents.size(); i++) {
             if(!(i+1 > opponents.size()-1))
-                this.map.addEdge(new Round(user,opponents.get(i), maneger.obs), new Round(user,opponents.get(i+1), maneger.obs), false);
+                this.map.addEdge(new Round(user,opponents.get(i), maneger.roundObs), new Round(user,opponents.get(i+1), maneger.roundObs), false);
         }
 
     }
