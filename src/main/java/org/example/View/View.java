@@ -121,7 +121,6 @@ public class View extends ApplicationAdapter implements GameObserver{
         discardButton.setSize(80, 100);
         stage.addActor(discardButton);
 
-
         startButton = new Image(new Texture("assets/images/endTurn.png"));
         startButton.setPosition(0,200);
         startButton.setSize(150, 100);
