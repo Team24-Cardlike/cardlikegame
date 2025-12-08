@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -13,27 +14,42 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.Model.Upgrades.DamageUpgrade;
 import org.example.Model.Upgrades.Upgrade;
+import org.example.Model.Upgrades.UpgradeLibrary;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShopView implements Screen {
-    private List<DamageUpgrade> items;
+    private List<Upgrade> items;
+    private UpgradeLibrary upgradeLibrary;
     private Stage stage;
     private Table table;
+    private SpriteBatch batch;
 
-    public ShopView(List<DamageUpgrade> items) {
-        this.items = items;
+    public ShopView(UpgradeLibrary upgradeLibrary) {
+        this.upgradeLibrary = upgradeLibrary;
+        createList();
+    }
+
+    private void createList(){
+        items = new ArrayList<>();
+        for(int x = 0; x < 10; x++){
+            Upgrade random = upgradeLibrary.getRandomUpgrade();
+            if(items.isEmpty() || !items.contains(random)){
+                items.add(random);
+            }
+        }
     }
 
     @Override
     public void show() {
-        SpriteBatch batch = new SpriteBatch();
-
+        batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport(), batch);
 
         table = new Table();
@@ -47,7 +63,9 @@ public class ShopView implements Screen {
     private void shopGrid(){
         int columns = 5;
         int count = 0;
-
+        Texture bg = new Texture("assets/images/background.png");
+        Image background = new Image(bg);
+        table.add(background).size(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         for(Upgrade item: items){
             Texture tex = new Texture("assets/images/3sun.png");
 
@@ -57,7 +75,6 @@ public class ShopView implements Screen {
             itemButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("Table coords: " + table.getX() + ", " + table.getY());
                     itemPopup(item);
                 }
             });
@@ -88,11 +105,11 @@ public class ShopView implements Screen {
 
         BitmapFont font = new BitmapFont();
         Label.LabelStyle ls = new Label.LabelStyle(font, Color.WHITE);
-        Label title = new Label("Name placeholder", ls);
+        Label title = new Label(item.getName(), ls);
         title.setPosition(20, background.getHeight() - 40);
         popup.addActor(title);
 
-        Label desc = new Label("Beskrivning", ls);
+        Label desc = new Label(item.getDesc(), ls);
         desc.setPosition(20, background.getHeight() -40);
         popup.addActor(desc);
 
@@ -102,7 +119,7 @@ public class ShopView implements Screen {
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Köpte: " + "namn");
+                System.out.println("Köpte: " + item.getName());
                 popup.remove();
                 table.setTouchable(Touchable.enabled);
             }
@@ -124,10 +141,15 @@ public class ShopView implements Screen {
 
         ScreenUtils.clear(0, 0, 0, 1);
         stage.act(delta);
+        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.draw();
     }
 
-    @Override public void resize(int w, int h){ stage.getViewport().update(w,h,true); }
+    @Override public void resize(int w, int h){
+        if(w <= 0 || h <= 0) return;
+        stage.getViewport().update(w,h,true);
+
+    }
 
 
     @Override
