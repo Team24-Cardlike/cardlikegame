@@ -8,6 +8,7 @@ import org.example.Model.Game;
 import org.example.Model.Opponent;
 import org.example.Model.Upgrades.DamageUpgrade;
 import org.example.Model.Upgrades.Upgrade;
+import org.example.Model.Upgrades.UpgradeLibrary;
 import org.example.View.ShopView;
 import org.example.View.View;
 
@@ -23,14 +24,9 @@ public class DesktopLauncher {
         Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
         Game game = new Game(opp);
         View view = new View();
-        List<DamageUpgrade> list = new ArrayList<>();
-        list.add(new DamageUpgrade("Test", "test", 2));
-        list.add(new DamageUpgrade("Test", "test", 2));
-        list.add(new DamageUpgrade("Test", "test", 2));
-        list.add(new DamageUpgrade("Test", "test", 2));
-        list.add(new DamageUpgrade("Test", "test", 2));
-        list.add(new DamageUpgrade("Test", "test", 2));
-        ShopView shopView = new ShopView(list);
+
+        UpgradeLibrary ul = new UpgradeLibrary();
+        ShopView shopView = new ShopView(ul);
 
         Controller controller = new Controller(game);
         GameRender gameRender = new GameRender(game, view, shopView, controller);

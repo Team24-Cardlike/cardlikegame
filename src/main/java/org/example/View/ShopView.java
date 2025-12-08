@@ -135,10 +135,6 @@ public class ShopView implements Screen {
     public void render(float delta) {
         Gdx.input.setInputProcessor(stage);
 
-        if (Gdx.input.getInputProcessor() != stage) {
-            System.out.println("WARNING: ShopView stage is NOT the current input processor!");
-        }
-
         ScreenUtils.clear(0, 0, 0, 1);
         stage.act(delta);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
