@@ -116,7 +116,7 @@ public class View extends ApplicationAdapter implements GameObserver{
         hoveredCards = new ArrayList<>();
         boolSelectedCards = new ArrayList<>();
 
-        discardButton = new Image(new Texture("assets/images/discardTest.png"));
+        discardButton = new Image(new Texture("assets/images/discard.png"));
         discardButton.setPosition(600,200);
         discardButton.setSize(80, 100);
         stage.addActor(discardButton);
