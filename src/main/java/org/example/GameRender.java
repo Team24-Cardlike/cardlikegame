@@ -8,7 +8,7 @@ import org.example.View.View;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 
-public class GameRender extends ApplicationAdapter {
+public class GameRender extends com.badlogic.gdx.Game {
 
     private Game game;
     private View view;
@@ -23,9 +23,9 @@ public class GameRender extends ApplicationAdapter {
 
     @Override
     public void render() {
-        float delta = Gdx.graphics.getDeltaTime();
+        //float delta = Gdx.graphics.getDeltaTime();
         //view.updateOpponentAnimation(delta);  // <<< Lägg till detta
-        sv.render(delta);
+        //super.render();
         //sv.show();
         //game.gameLoop1();
         //view.input();
@@ -36,7 +36,8 @@ public class GameRender extends ApplicationAdapter {
 
     @Override
     public void create() {
-        sv.show();
+        setScreen(sv);
+        //sv.show();
         //view.create();
     }
 
