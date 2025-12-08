@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import org.example.Model.ShopController;
 import org.example.Model.Upgrades.DamageUpgrade;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
@@ -31,9 +32,10 @@ public class ShopView implements Screen {
     private Stage stage;
     private Table table;
     private SpriteBatch batch;
-
-    public ShopView(UpgradeLibrary upgradeLibrary) {
+    private ShopController shopController;
+    public ShopView(UpgradeLibrary upgradeLibrary, ShopController sc) {
         this.upgradeLibrary = upgradeLibrary;
+        shopController = sc;
         createList();
     }
 
@@ -52,6 +54,11 @@ public class ShopView implements Screen {
         batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport(), batch);
 
+        Texture bg = new Texture("assets/images/background.png");
+        Image background = new Image(bg);
+        background.setFillParent(true);
+        stage.addActor(background);
+
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -63,9 +70,7 @@ public class ShopView implements Screen {
     private void shopGrid(){
         int columns = 5;
         int count = 0;
-        Texture bg = new Texture("assets/images/background.png");
-        Image background = new Image(bg);
-        table.add(background).size(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         for(Upgrade item: items){
             Texture tex = new Texture("assets/images/3sun.png");
 
@@ -110,7 +115,7 @@ public class ShopView implements Screen {
         popup.addActor(title);
 
         Label desc = new Label(item.getDesc(), ls);
-        desc.setPosition(20, background.getHeight() -40);
+        desc.setPosition(20, background.getHeight() -80);
         popup.addActor(desc);
 
         Image buyButton = new Image(new Texture("assets/images/endTurn.png"));
@@ -120,6 +125,7 @@ public class ShopView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Köpte: " + item.getName());
+                shopController.upgradeBaught(item);
                 popup.remove();
                 table.setTouchable(Touchable.enabled);
             }
@@ -137,7 +143,6 @@ public class ShopView implements Screen {
 
         ScreenUtils.clear(0, 0, 0, 1);
         stage.act(delta);
-        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.draw();
     }
 

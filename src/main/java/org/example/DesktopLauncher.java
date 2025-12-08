@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import org.example.Controller.Controller;
 import org.example.Model.Game;
 import org.example.Model.Opponent;
+import org.example.Model.ShopController;
 import org.example.Model.Upgrades.DamageUpgrade;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
@@ -26,7 +27,8 @@ public class DesktopLauncher {
         View view = new View();
 
         UpgradeLibrary ul = new UpgradeLibrary();
-        ShopView shopView = new ShopView(ul);
+        ShopController sc = new ShopController(game);
+        ShopView shopView = new ShopView(ul, sc);
 
         Controller controller = new Controller(game);
         GameRender gameRender = new GameRender(game, view, shopView, controller);

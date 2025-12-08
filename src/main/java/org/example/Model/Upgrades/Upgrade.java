@@ -17,6 +17,15 @@ public abstract class Upgrade {
         this.category = category;
     }
 
+    public String getName(){
+        return this.name;
+    }
+    public String getDesc(){
+        return this.desc;
+    }
+    public int getCost(){
+        return this.cost;
+    }
     // Called when the augment is purchased (for permanent stat changes)
     public void onBuy(User user){}
 

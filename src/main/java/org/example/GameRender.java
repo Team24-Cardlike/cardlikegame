@@ -25,7 +25,7 @@ public class GameRender extends com.badlogic.gdx.Game {
     public void render() {
         //float delta = Gdx.graphics.getDeltaTime();
         //view.updateOpponentAnimation(delta);  // <<< Lägg till detta
-        //super.render();
+        super.render();
         //sv.show();
         //game.gameLoop1();
         //view.input();
@@ -44,6 +44,6 @@ public class GameRender extends com.badlogic.gdx.Game {
     @Override
     public void resize(int width, int height) {
         //view.resize(width, height);
-        sv.resize(width,height);
+        //sv.resize(width,height);
     }
 }

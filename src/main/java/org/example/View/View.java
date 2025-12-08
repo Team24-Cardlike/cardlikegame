@@ -179,8 +179,7 @@ public class View extends ApplicationAdapter implements GameObserver{
 
 
 
-    public void input() {    
-
+    public void input() {
         coords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);        
         viewport.unproject(coords);        
 
