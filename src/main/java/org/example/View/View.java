@@ -110,13 +110,13 @@ public class View extends ApplicationAdapter  implements GameObserver{
 
         discardButton = new Image(new Texture("assets/images/discardTest.png"));
         discardButton.setPosition(600,200);
-        discardButton.setSize(80, 100);
+        discardButton.setSize(100, 60);
         stage.addActor(discardButton);
 
 
         startButton = new Image(new Texture("assets/images/endTurn.png"));
-        startButton.setPosition(0,200);
-        startButton.setSize(150, 100);
+        startButton.setPosition(5,200);
+        startButton.setSize(130, 60);
         stage.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
         //if onHandChanged is caled before libGDX inits
@@ -127,7 +127,7 @@ public class View extends ApplicationAdapter  implements GameObserver{
         }
         createSpriteList();
 
-        opponentTexture = new Texture("assets/images/enemyCorrect.png");
+        opponentTexture = new Texture("assets/images/bossHeimdall.png");
         opponentSprite = new Sprite(opponentTexture);
         opponentSprite.setSize(250f, 150f);
          opponentSprite.setPosition(
