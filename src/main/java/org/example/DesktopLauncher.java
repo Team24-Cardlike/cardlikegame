@@ -22,7 +22,7 @@ public class DesktopLauncher {
         //Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
 
         RoundView rview = new RoundView();
-        GameManager manager = new GameManager(rview);
+        GameManager manager = new GameManager( rview);
         rview.setRound(manager.currentRound);
 
         //Round round = new Round(opp, ob);

@@ -20,20 +20,19 @@ public class Round {
 
     private String currentBestCombo;
 
-    public Round(User user, Opponent opponent, RoundObserver ob ){
+    public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
         this.opponent = opponent;
         this.deck.createInGameDeck();
         o.addObserver(ob);
     }
 
-    public Round(Opponent opponent , RoundObsMethods ob){
+    public Round(Opponent opponent , RoundObserver ob){
         this.user = new User(1000);
         this.opponent = opponent;
         this.deck.createInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
-
-
+        o.addObserver(ob);
     }
 
     // Check states

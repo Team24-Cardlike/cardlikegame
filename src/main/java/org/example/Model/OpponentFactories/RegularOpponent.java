@@ -2,9 +2,11 @@ package org.example.Model.OpponentFactories;
 
 public class RegularOpponent implements OpponentInterface{
     private final String name;
+    private final int maxHealth;
     public int damage;
     public int turns;
     public String image;
+    private int health;
 
     public RegularOpponent(int startHealth, int damage, int turns, String name){
         this.maxHealth = startHealth;
