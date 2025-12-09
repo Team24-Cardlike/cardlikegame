@@ -471,7 +471,7 @@ public class View extends ApplicationAdapter implements GameObserver{
         }
 
         currentComboLabel = new Label(comboName, style);
-        currentComboLabel.setPosition(200,200);
+        currentComboLabel.setPosition(200,150);
         System.out.println(currentComboLabel);
         stage.addActor(currentComboLabel);
     }

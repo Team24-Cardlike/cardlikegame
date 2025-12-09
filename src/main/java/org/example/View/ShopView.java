@@ -36,14 +36,19 @@ public class ShopView implements Screen {
     public ShopView(UpgradeLibrary upgradeLibrary, ShopController sc) {
         this.upgradeLibrary = upgradeLibrary;
         shopController = sc;
-        createList();
+        items = new ArrayList<>();
+        updateList();
     }
 
-    private void createList(){
-        items = new ArrayList<>();
-        for(int x = 0; x < 10; x++){
+    private void updateList(){
+        for(int i = items.size(); i < 10; i++){
             Upgrade random = upgradeLibrary.getRandomUpgrade();
-            if(items.isEmpty() || !items.contains(random)){
+            if(shopController.getUserUpgrades() != null){
+                if((items.isEmpty() || !items.contains(random)) && !shopController.getUserUpgrades().contains(random.getName())){
+                    items.add(random);
+                }
+            }
+            else if(items.isEmpty() || !items.contains(random)){
                 items.add(random);
             }
         }
@@ -127,6 +132,8 @@ public class ShopView implements Screen {
                 System.out.println("Köpte: " + item.getName());
                 shopController.upgradeBaught(item);
                 popup.remove();
+                items.remove(item);
+                updateList();
                 table.setTouchable(Touchable.enabled);
             }
         });
@@ -134,7 +141,6 @@ public class ShopView implements Screen {
 
         stage.addActor(popup);
         popup.setZIndex(Integer.MAX_VALUE); // säkerställ att det ligger överst
-
     }
 
     @Override

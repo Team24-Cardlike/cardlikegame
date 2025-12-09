@@ -65,6 +65,7 @@ public class User extends Player {
     @Override
     public int getDamage() {
         int damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
+        //Beräkna beroende på aktiva upgrades
         return damage;
     }
 
