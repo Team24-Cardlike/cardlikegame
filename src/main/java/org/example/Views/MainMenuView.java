@@ -16,18 +16,20 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.example.Controller.Controller;
-import org.example.Model.GameObserver;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import org.example.Controller.RoundController;
+import org.example.Model.GameManager;
 
 public class MainMenuView implements Screen {
     public Image menuButton;
     Stage stage;
     Texture background;
     Viewport viewport;
-    Controller controller;
+    RoundController controller;
+    GameManager gameManager;
 
-    public void setController(Controller controller) {
+    public void setController(RoundController controller) {
         this.controller = controller;
     }
 
@@ -51,7 +53,7 @@ public class MainMenuView implements Screen {
         menuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.switchGameView();
+                gameManager.initRound();
             }
         });
     }

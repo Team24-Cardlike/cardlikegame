@@ -1,123 +1,66 @@
 package org.example.Model;
 
-
-
-import java.util.ArrayList;
-import java.util.Stack;
+import org.example.Model.Upgrades.Upgrade;
 import java.util.*;
 
 public class Round {
+    private RoundObsMethods o = new RoundObsMethods(this);
+    private Deck deck = new Deck();
+    Upgrade upgrades;
+    private User user;
+    private Opponent opponent;
 
-    public GameObservers observers;
+    private int totalDamageToOpponent = 0;
+    private int totalDamageToPlayer = 0;
+    private boolean playerTurn = true;
+    public boolean roundFinished = false;
 
-    Deck deck;
-    //Upgrades upgrades;
-    public User user;
-    public Opponent opponent;
-    Stack<Card> gameDeck;   
-    int turn = 0;
-    public int totalDamageToOpponent;
-    public int totalDamageToPlayer;
-    //Stage stage;
-    boolean playerTurn;
-    turnManager tm;
-    public boolean gameState;
+    private float userHealth = 1;
+    private float opponentHealth = 1;
 
-    private ArrayList selectedCards;
+    private String currentBestCombo;
 
-    public Round(Opponent opponent){
-        this.deck = new Deck();
-        //this.upgrades = new Upgrades();
-        this.user     = new User(1000);
+    public Round(User user, Opponent opponent, RoundObserver ob ){
+        this.user = user;
         this.opponent = opponent;
         this.deck.createInGameDeck();
-        this.gameDeck = this.deck.getInGameDeck();
+        o.addObserver(ob);
+    }
+
+    public Round(Opponent opponent , RoundObsMethods ob){
+        this.user = new User(1000);
+        this.opponent = opponent;
+        this.deck.createInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
-        this.selectedCards = new ArrayList<>(Collections.nCopies(user.getHand().size(),false));
-        observers = new GameObservers(this);
-        this.tm = new turnManager(true);
-        gameState = true;
-    }
-    public turnManager getTurnManager(){
-        return tm;
+
+
     }
 
+    // Check states
+    public void roundUpdate() {
+        if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
 
-    public void gameLoop1() {
-
-        // System.out.println(this.gameDeck.size() + this.user.hand.size());    
-        // System.out.println(selectedCards.size());    
-        if (gameDeck.size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
-        while (user.hand.size() < user.cardsPerHand) user.hand.add(gameDeck.pop());
-        observers.notifyHandChanged(user.getHand());
-
-        if (playerTurn) {            
-
+        if (playerTurn) {
             // Wait for player to make turn
+            currentBestCombo = bestCombo(user.getSelectedCards());
+            o.notifyBestCombo(currentBestCombo);
         }
-        else {            
+        else {
             opponentTurn();
-        }
 
+        }
         //round ends
-        if ( user.health <= 0 || opponent.health <= 0) {
-
-        }
-
-    }
-
-
-    public void gameLoop() {
-        while(this.opponent.health>0 && this.user.health>0){
-
-
-            System.out.println("-------------");
-            for (Card c : user.hand) {
-                System.out.print(c.rank + " ");
-            }
-            System.out.println();
-            System.out.println("-------------");
-
-            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) { 
-                deck.refill(user.hand);
-            }
-
-
-            turn++;
-            if (this.opponent.turns != turn) {
-                // TODO: add logic to choose cards from hand to play
-                // Connect with frontend
-                //this.playCards(new ArrayList<Card>((this.user.hand.getFirst(), this.user.hand.getLast())));
-                //playCards(user.getSelectedCards());
-            }
+        if ( user.health <= 0 || checkDeadOpponent()) {
+            roundFinished = true;
+            if(opponentHealth < userHealth) {
+            o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
             else {
-                damage(user, opponent);
-                turn = 0;
+                o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
             }
-            System.out.println("Your health: " + user.health + ", Opponent's health: " + opponent.health);
-            System.out.println(gameDeck.size());
         }
+
     }
 
-
-    public User getUser(){return user;}
-
-    String getGameEndContext(){
-        if(this.opponent.health<=0){
-            return("You won! :D");
-        }
-        else if(this.user.health<=0){
-            return("You lost! :(");
-        }
-        else{
-            return("IDK man...");
-        }
-    }
-
-
-    void damage(Player defender, Player attacker){        
-        defender.takeDamage(attacker.getDamage());
-    }
 
     /**
      *  <b>Does the following:</b>
@@ -128,20 +71,21 @@ public class Round {
      * </ul>
      * @param //playedCards cards played from the front end
      */
-    public void playCards(ArrayList<Card> playedCards){        
-        int damage = user.playCards(playedCards);
-        this.opponent.takeDamage(damage*100);
-        totalDamageToOpponent = totalDamageToOpponent + damage;        
+    public void playCards(){
+        int damage = user.playCards();
+        this.opponent.takeDamage(damage);
+        opponentHealth = opponent.getHealthRatio();
+        totalDamageToOpponent = totalDamageToOpponent + damage;
+        while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
 
-        if(checkDeadOpponent()){
-            gameState = false;
-            return;
-        }
 
         System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
-       playerTurn = false;
-       observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
-       observers.notifyPlayerTurn(false);
+        playerTurn = false;
+
+        o.notifyHealthChanged(userHealth,opponentHealth); // Notify observer of health changed
+        o.notifyPlayerTurn(playerTurn); // Notify observer of changed player turn
+        o.notifySelectedChanged(user.getSelectedCards()); // Notify observer of reset selected
+        o.notifyHandChanged(user.getHand()); // Notify observer of new hand
     }
 
 
@@ -149,88 +93,75 @@ public class Round {
     private void opponentTurn() {
         int oppDamage = opponent.getDamage();
         user.takeDamage(oppDamage);
+        userHealth = user.getHealthRatio();
         totalDamageToPlayer += oppDamage;
 
         System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " hp kvar");
         playerTurn = true;
-        observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
-        observers.notifyPlayerTurn(true);
+
+        o.notifyHealthChanged(userHealth,opponentHealth);// Notify observer of health changed
+        o.notifyPlayerTurn(playerTurn); // notify player turn changed
     }
 
-    private ArrayList<Card>  getSelectedCards() {
-        ArrayList<Card> temp = new ArrayList<>();
 
-        for (int i = selectedCards.size() - 1; i >= 0 ; i --) {
-            if ((boolean) selectedCards.get(i)) {
-            temp.add(user.hand.get(i));
-            user.hand.remove(i);
-
-            observers.notifyCardSelect(i, false);
-            }
-        }
-        // selectedCards = new ArrayList<>(Collections.nCopies(user.hand.size(), false));
-        selectedCards = new ArrayList<>(Collections.nCopies(user.cardsPerHand, false));
-        observers.notifyHandChanged(user.getHand());
-        return temp;
-
-
-    }
-
-    public boolean checkDeadOpponent(){        
+    private boolean checkDeadOpponent(){
         return opponent.health <= 0;
     }
 
-    public String bestCombo(ArrayList<Card> cards){
+    private String bestCombo(ArrayList<Card> cards){
         user.setSelectedCards(cards);
+        if (user.getComboPlayedCards() == null ) {return "";}
         return user.getComboPlayedCards().name;
     }
 
-    public void discard(ArrayList<Integer> indices){
-        user.removeCards(indices);
+    public void discard(){
+        removeSelectedCards();
+        user.drawCards(deck.getInGameDeck(),10 - user.getHand().size());
+        o.notifySelectedChanged(user.getSelectedCards());
+        o.notifyHandChanged(user.getHand());
     }
 
-    // public void playCards(ArrayList<Integer> selectedCards) {
-    //     int totalDamage = 0;
-
-
-
-    public void setSelectedCards(int index, boolean b) {
-        boolean newValue = !((boolean) selectedCards.get(index));
-        selectedCards.set(index, newValue);
-        observers.notifyCardSelect(index, newValue);
-
+    private void removeSelectedCards() {
+        user.setSelectedCards(new ArrayList<>());
+        o.notifySelectedChanged(user.getSelectedCards());
     }
 
 
-    public ArrayList<Card> getSelectedCardsAsCards(ArrayList<Integer> cards){
-            ArrayList<Card> hand = user.getHand();
-            ArrayList<Card> temp = new ArrayList<>();
-            for(int i : cards) {
-                temp.add(hand.get(i));
-            }
-            return temp;
+    // Removing selected card from hand and adding it to selected cards
+    public void addSelectedCards(int index) {
+        ArrayList<Card> tempHand = new ArrayList<>(user.getHand());
+        Card c = tempHand.get(index);
+        user.removeCardFromHand(index); // Remove form hand
+        user.addSelectedCard(c); // Added to selected cards
+        //Notify hand changed
+        o.notifyHandChanged(user.getHand());
+        o.notifySelectedChanged(user.getSelectedCards());
+    }
+
+    //Removing card from selected and returning it back to the hand.
+    public void unselectCard(int index) {
+        ArrayList<Card> temp = user.getSelectedCards();
+        user.hand.add(temp.get(index));
+        temp.remove(index);
+        user.setSelectedCards(temp);
+
+        o.notifySelectedChanged(user.getSelectedCards());
+        o.notifyHandChanged(user.getHand());
+    }
+
+    // Round ended
+    public void endRound() {
+        this.roundFinished = true;
     }
 
 
-    public int getNumberOfSelected(ArrayList<Boolean> cardsBool){
-        int i = 0;
-        for(Boolean bool : cardsBool){
-            if(bool)i++;
-        }
-        return i;
-    }    
-
-    public void nextRound(){
-        this.user.resetUser();
-        this.deck = new Deck();
-        this.deck.createInGameDeck();
-
-        //factory method på nu opp
-
-        this.gameDeck = this.deck.getInGameDeck();
-        user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
-        this.selectedCards = new ArrayList<>(Collections.nCopies(user.getHand().size(),false));
-        this.playerTurn = true;
+    public void init() {
+        o.notifyHandChanged(user.getHand());
+        o.notifySelectedChanged(user.getSelectedCards());
+        o.notifyBestCombo(currentBestCombo);
+        o.notifyHealthChanged(userHealth, opponentHealth);
+        o.notifyPlayerTurn(playerTurn);
     }
+
 }
 

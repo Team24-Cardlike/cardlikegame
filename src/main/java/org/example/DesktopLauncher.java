@@ -3,37 +3,47 @@ package org.example;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
-import org.example.Controller.Controller;
-import org.example.Model.Round;
-import org.example.Model.Opponent;
+import org.example.Controller.RoundController;
+import org.example.Model.*;
 import org.example.Views.RoundView;
 import org.example.Views.MainMenuView;
 
 //Du är mer av ett problem nu än problemet själv -Kristoffer under roleplaying workshop till Axel :)
 //Holy words
+import org.example.Controller.RoundController;
+//import org.example.GameRender;
 
-public class DesktopLauncher{
+public class DesktopLauncher {
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(("Maven LibGDX test"));
         config.setWindowedMode(800,600);
 
-        Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
-        Round round = new Round(opp);
+        //Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
+
         RoundView rview = new RoundView();
-        rview.setRound(round);
+        GameManager manager = new GameManager(rview);
+        rview.setRound(manager.currentRound);
+
+        //Round round = new Round(opp, ob);
+        //RoundView rview = new RoundView();
+        //rview.setRound(round);
         MainMenuView mview = new MainMenuView();
-        GameRender gameRender = new GameRender(round, rview,mview);
-        Controller controller = new Controller(round, gameRender);
+        RoundController roundController = new RoundController(manager.currentRound);
 
-        gameRender.setController(controller);
+        GameRender gameRender = new GameRender(rview,mview, roundController, manager);
 
-        rview.setController(controller);
-        mview.setController(controller);
-        
-        round.observers.addObserver(rview);
-        round.observers.notifyGameInit();
+        mview.setController(roundController);
+        rview.setController(roundController);
+        //mview.setController(controller);
+
+
+
+
+        rview.setController(roundController);
+
+        //round.observers.addObserver(rview);
+        //round.observers.notifyGameInit();
         new Lwjgl3Application(gameRender, config);
     }
-
 }

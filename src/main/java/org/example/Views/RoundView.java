@@ -28,15 +28,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import org.example.Controller.RoundController;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import org.example.Controller.Controller;
 import org.example.Model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class RoundView implements GameObserver, Screen {
+public class RoundView extends ApplicationAdapter implements RoundObserver, Screen {
     public FitViewport viewport;
     private SpriteBatch spriteBatch;
     private ShapeRenderer sr;
@@ -51,17 +51,18 @@ public class RoundView implements GameObserver, Screen {
 
     public Texture nextButtonTexture;
     public Texture vicTxt;
-    private List<String> handImages = new ArrayList<>();
-    public ArrayList<Sprite> cardSprites;
+
+    //ArrayList containing card-sprites for selected cards and hand
+    public ArrayList<Sprite> cardSprites = new ArrayList<>();
+    public ArrayList<Sprite> selectedCardSprites = new ArrayList<>();
+
     private Texture opponentTexture;
     private Sprite opponentSprite;
+
     // Seving hand if LibGDX not yet initialized
     private List<String> tempHand;
-    //private Round round;
     private Stage stage;
-    public ArrayList<Boolean> hoveredCards;
-    public ArrayList<Boolean> boolSelectedCards;
-    private ArrayList<Sprite> centerSelectedCard;
+    public ArrayList<Boolean> hoveredCards = new ArrayList<>();;
     private Label currentComboLabel;
     public Vector3 coords;
 
@@ -76,22 +77,29 @@ public class RoundView implements GameObserver, Screen {
     private float opponentDropY = 180;
 
 
+
     private float opponentHealthPercentage;
     private float userHealthPercentage;
     private boolean playerTurn;
+    private boolean gameEnded = false;
+
 
     int a = 0;
     public ArrayList<Integer> selectedIndices;
     public ArrayList<Integer> removedIndices;
     private Round round;
-    private Controller controller;
+    private RoundController roundController;
+    private String currentBestCombo;
+    private int totalDamageToOpponent;
+    private int totalDamageToUser;
+
 
     public void setRound(Round round) {
         this.round = round;
     }
 
-    public void setController(Controller controller) {
-        this.controller = controller;
+    public void setController(RoundController roundController) {
+        this.roundController = roundController;
     }
 
     @Override
@@ -104,7 +112,6 @@ public class RoundView implements GameObserver, Screen {
         vicTxt = new Texture("assets/images/victoryPlaceholder.png");
         nextButtonTexture = new Texture("assets/images/nextPlaceholder.png");
 
-        centerSelectedCard = new ArrayList<>();
         sr = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
 
@@ -117,8 +124,6 @@ public class RoundView implements GameObserver, Screen {
         stage = new Stage(viewport, spriteBatch);
         cardSprites = new ArrayList<>();
 
-        hoveredCards = new ArrayList<>();
-        boolSelectedCards = new ArrayList<>();
 
         menuButton = new Image(new Texture("assets/images/victoryPlaceholder.png"));
         menuButton.setPosition(0.2f, 3.5f);
@@ -136,13 +141,7 @@ public class RoundView implements GameObserver, Screen {
         startButton.setSize(150, 100);
         stage.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
-        //if onHandChanged is caled before libGDX inits
 
-        if (tempHand != null) {
-            this.handImages = new ArrayList<>(tempHand);
-            tempHand = null;
-        }
-        createSpriteList();
 
         opponentTexture = new Texture("assets/images/enemyCorrect.png");
         opponentSprite = new Sprite(opponentTexture);
@@ -157,79 +156,64 @@ public class RoundView implements GameObserver, Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // game.playSelectedCards()
-                playSelectedCards();
-
-                onPlaySelectedCards(selectedIndices);
+                onPlaySelectedCards();
             }
         });
 
         discardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                throwCards();
-                controller.discardCards(removedIndices);
+                //throwCards();
+                roundController.discardCards(removedIndices);
             }
         });
         input();
     }
-
-
-    public void bestCombo(ArrayList<Boolean> boolList) {
-        ArrayList<Integer> intList = new ArrayList<>();
-        int i = 0;
-        for (Boolean bool : boolList) {
-            if (bool) intList.add(i);
-            i++;
-        }
-
-        String combo = round.bestCombo(round.getSelectedCardsAsCards(intList));
-        showCombo(combo);
-    }
-
 
     public void input() {
         coords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(coords);
 
         if (Gdx.input.justTouched()) {
-
             for (int a = cardSprites.size() - 1; a >= 0; a--) {
-
-                Polygon poly = generateHitbox(a);
-
-                //Send input to controller
-                if (poly.contains(coords.x, coords.y) && (round.getNumberOfSelected(boolSelectedCards) < 5)) {
-                    controller.selectCard(a, true);
-
-                    boolSelectedCards.set(a, !boolSelectedCards.get(a));
-
-                    if (round.getNumberOfSelected(boolSelectedCards) > 2) {
-                        bestCombo(boolSelectedCards);
-                    }
+                Polygon poly = generateHitbox(a, selectedCardSprites);
+                //Send input to roundController
+                if (poly.contains(coords.x, coords.y) && (selectedCardSprites.size() < 5)) {
+                    roundController.selectCard(a);
                     break;
-
                 }
+            }
+
+            //SelectLoop
+            for (int a = selectedCardSprites.size() -1; a >= 0; a--) {
+                Polygon poly = generateHitbox(a,selectedCardSprites);
+                //Send input to roundController
+                if (poly.contains(coords.x, coords.y)) {
+                    System.out.println(true);
+                    roundController.unselectCard(a);
+                    break;
+                }
+
             }
         }
     }
 
 
-    public void onPlaySelectedCards(ArrayList<Integer> cards) {
-        ArrayList<Card> temp = round.getSelectedCardsAsCards(cards);
-        controller.playCards(temp);
 
-        if (round.gameState) {
-            updateView(temp);
+    public void onPlaySelectedCards(){
+        roundController.playCards();
+
+        if(playerTurn){
             opponentAnimation();
-        } else {
-            endGame(round.totalDamageToPlayer, round.totalDamageToOpponent);
-            nextButton.addListener(new ClickListener() {
+        }
+        if (gameEnded) {
+            //Display match stats
+            endGame();
+            // Adding next button
+            nextButton.addListener(new ClickListener(){
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    //View.nextView();? Eller ska nytt objekt
-                    controller.nextRound();
-                    nextRound();
+                public void clicked(InputEvent event, float x, float y){
+                    roundController.nextRound();
                 }
             });
         }
@@ -257,7 +241,7 @@ public class RoundView implements GameObserver, Screen {
         float width = 250;
         float height = 30;
 
-        //float healthPercent = (float) game.user.health / game.user.maxHealth; TODO REMOVE
+        //float healthPercent = (float) round.user.health / round.user.maxHealth; TODO REMOVE
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -276,7 +260,7 @@ public class RoundView implements GameObserver, Screen {
         float ex = 520;
         float ey = 550;
 
-        //  float enemyPercent = (float) game.opponent.health / game.opponent.maxHealth; TODO REMOVE
+       //  float enemyPercent = (float) game.opponent.health / game.opponent.maxHealth; TODO REMOVE
 
         float greenWidthOpp = width * opponentHealthPercentage;
         float redWidthOpp = width - greenWidthOpp;
@@ -290,78 +274,37 @@ public class RoundView implements GameObserver, Screen {
 
         sr.end();
     }
+    
+    // Creates
+    public void createSpriteList( ){
 
-
-    public void createSpriteList() {
-        cardSprites.clear();
-
-        for (int i = 0; i < handImages.size(); i++) {
-            Sprite cardSprite = new Sprite(new Texture("assets/images/" + handImages.get(i)));
-            cardSprite.setSize(75, 125);
-            cardSprite.setPosition(80 + i * 60, 80 - 7.5f * (float) Math.pow(Math.abs(i - handImages.size() / 2), 1.20f));
-
-
-            cardSprite.setOriginCenter();
-            // TODO: selected cards shouldn't affect hitbox
-            cardSprite.setRotation(5 * (handImages.size() / 2 - i));
-
-            cardSprites.add(cardSprite);
-
-            boolSelectedCards.add(false);
-            hoveredCards.add(false);
-        }
-    }
-
-    //Animation moving card forward
-    public void playSelectedCards() {
-        float lift = viewport.getWorldHeight() * 10; // t.ex. 10% uppåt
-        selectedIndices = new ArrayList<>();
-        for (int i = 0; i < cardSprites.size(); i++) {
-            if (boolSelectedCards.get(i)) {
-                selectedIndices.add(i);
-
-                Sprite card = cardSprites.get(i);
-                card.setY(card.getY() + lift);
-                boolSelectedCards.set(i, false);
-
-            }
-        }
-        // System.out.println(selectedIndices + "" + this.selectedIndices);
-        // this.selectedIndices = selectedIndices;
 
     }
 
 
-    private Polygon generateHitbox(int index) {
-
+    private Polygon generateHitbox(int index,ArrayList<Sprite> cards) {
         // AI-generated solution for getting the correct hitbox now that the
         // cards are rotated
-
-        Sprite sprite = cardSprites.get(index);
+        Sprite sprite = cards.get(index);
         float[] vertices = new float[]{
                 0, 0,
                 sprite.getWidth(), 0,
                 sprite.getWidth(), sprite.getHeight(),
                 0, sprite.getHeight()
         };
-
         Polygon poly = new Polygon(vertices);
 
         poly.setOrigin(sprite.getOriginX(), sprite.getOriginY());
-
         poly.setPosition(sprite.getX(), sprite.getY());
         poly.setRotation(sprite.getRotation());
         poly.setScale(sprite.getScaleX(), sprite.getScaleY());
-
         return poly;
     }
 
     //Check if user hovers over card
     public void getHoverdCards() {
-        for (int a = 0; a < cardSprites.size(); a++) {
-
-            Polygon poly = generateHitbox(a);
-
+        for (int a = 0; a < cardSprites.size(); a++){
+            Polygon poly = generateHitbox(a, cardSprites);
             // Check if card is hovered over
             if (poly.contains(coords.x, coords.y)) {
                 // if (cardSprites.get(a).getBoundingRectangle().contains(coords.x,coords.y)) {
@@ -378,24 +321,11 @@ public class RoundView implements GameObserver, Screen {
     }
 
     public void draw() {
-        centerSelectedCard.clear();
         getHoverdCards();
-
-        for (int i = 0; i < cardSprites.size(); i++) {
-            if (boolSelectedCards.get(i)) {
-                centerSelectedCard.add(cardSprites.get(i));
-
-                cardSprites.get(i).setRotation(0);
-                // cardSprites.get(i).setRotation((float) (10 * (0.5f - Math.random())));
-                //  + (float) (10 * (0.5f - Math.random())));
-            }
-        }
-
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();
-
 
         // store the worldWidth and worldHeight as local variables for brevity
         float worldWidth = viewport.getWorldWidth();
@@ -403,10 +333,24 @@ public class RoundView implements GameObserver, Screen {
         spriteBatch.draw(background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight()); // draw the background
         //ArrayList<Sprite> cards = user.getHand();
 
-        for (int i = 0; i < centerSelectedCard.size(); i++) {
-            Sprite selectedCard = centerSelectedCard.get(i);
+        drawCardSprites();
+        showCombo(currentBestCombo);
+        opponentSprite.draw(spriteBatch);
+        spriteBatch.end();
 
-            // temporär position under render
+        drawHealthBars();
+        stage.act(Gdx.graphics.getDeltaTime());
+
+        if(playerTurn){
+           stage.draw();
+       }
+    }
+
+    public void drawCardSprites() {
+
+        for (int i = 0; i < selectedCardSprites.size(); i++) {
+            Sprite selectedCard = selectedCardSprites.get(i);
+
             float cx = 150 + i * 90;
             float cy = 200;
 
@@ -415,20 +359,13 @@ public class RoundView implements GameObserver, Screen {
             selectedCard.draw(spriteBatch);
         }
         for (int i = 0; i < cardSprites.size(); i++) {
+
             Sprite card = cardSprites.get(i);
-
-            if (boolSelectedCards.get(i))
-                continue;   // valda kort ritas i mitten istället
-
             card.setColor(hoveredCards.get(i) ? Color.LIGHT_GRAY : Color.WHITE);
             card.draw(spriteBatch);
         }
-        opponentSprite.draw(spriteBatch);
-        spriteBatch.end();
-        drawHealthBars();
-        stage.act(Gdx.graphics.getDeltaTime());
 
-        if (round.getTurnManager().getCurrentPlayer() || !round.gameState) {
+        if (playerTurn || gameEnded) {
             stage.draw();
         }
     }
@@ -441,44 +378,32 @@ public class RoundView implements GameObserver, Screen {
 
     public void throwCards() {
         removedIndices = new ArrayList<>();
-
-        for (int i = cardSprites.size() - 1; i >= 0; i--) {
-            if (boolSelectedCards.get(i)) {
-                removedIndices.add(i);
-
-                cardSprites.remove(i);
-                boolSelectedCards.remove(i);
-            }
-        }
     }
 
-    public void endGame(int totToPlayer, int totToOpp) {
+    public void endGame(){
         Image panel = new Image(new TextureRegionDrawable(vicTxt));
         panel.setSize(600, 400);
-        panel.setPosition(100, 50);
+        panel.setPosition(100,50);
         stage.addActor(panel);
 
-        Label label1 = new Label("Post-game statistics", style);
-        label1.setPosition(200, 200);
-        Label label2 = new Label("You did: " + totToOpp + " damage to your enemy!", style);
-        label2.setPosition(200, 150);
-        Label label3 = new Label("You took: " + totToPlayer + " damage", style);
-        label3.setPosition(200, 100);
-
+        Label label1 = new Label("Post-round statistics", style);
+        label1.setPosition(200,200);
+        Label label2 = new Label("You did: " + totalDamageToOpponent+" damage to your enemy!", style);
+        label2.setPosition(200,150);
+        Label label3 = new Label("You took: "+ totalDamageToUser+" damage", style);
+        label3.setPosition(200,100);
 
         stage.addActor(label1);
         stage.addActor(label2);
         stage.addActor(label3);
 
-
         nextButton = new Image(nextButtonTexture);
-        nextButton.setPosition(600, 200);
+        nextButton.setPosition(600,200);
         nextButton.setSize(80, 100);
-
         stage.addActor(nextButton);
     }
 
-    public void showCombo(String comboName) {
+    public void showCombo(String comboName){
         if (currentComboLabel != null) {
             currentComboLabel.remove();
         }
@@ -493,7 +418,6 @@ public class RoundView implements GameObserver, Screen {
         if (!animatingOpponent) return;
 
         animationTime += delta;
-
         if (falling) {
             // Ease-out fall: snabbt → långsamt
             float t = animationTime / fallDuration;
@@ -516,10 +440,9 @@ public class RoundView implements GameObserver, Screen {
                 animatingOpponent = false;
                 opponentSprite.setY(opponentStartY);
 
-                // game.getTurnManager().swapTurn(); // animation klar → byt tur TODO Remove, should be updated in model
+                 // game.getTurnManager().swapTurn(); // animation klar → byt tur TODO Remove, should be updated in model
                 return;
             }
-
             // t^2 ger långsam start, snabb slut
             float eased = (float) Math.pow(t, 2);
             float newY = opponentDropY + (opponentStartY - opponentDropY) * eased;
@@ -545,7 +468,45 @@ public class RoundView implements GameObserver, Screen {
     }
 
     @Override
-    //Draw updated hand
+    public void onHandChanged(ArrayList<String> hand) {
+        this.cardSprites.clear(); // Clear current sprites before update
+
+        for (int i = 0; i < hand.size(); i++) {
+            //Iterating ocher hand to get card png
+            Sprite cardSprite = new Sprite(new Texture("assets/images/" + hand.get(i)));
+            cardSprite.setSize(75,125);
+            // Sets the card's position: x is centered based on the number of cards,
+            // y is adjusted to create a slight curved spread before rotation.
+            float y = 80 - 7.5f * (float)Math.pow(Math.abs(i - hand.size()/2), 1.20f);
+            // startX is position of card at index 0
+            float startX = 60* i + 80 ;
+
+            cardSprite.setPosition( startX,y );
+            cardSprite.setOriginCenter();
+            cardSprite.setRotation(5 * (hand.size()/2 - i)); // Rotating cars
+
+            cardSprites.add(cardSprite);
+            hoveredCards.add(false); //Resetting hovered if marked.
+        }
+    }
+
+    @Override
+    public void onSelectedChanged(ArrayList<String> selected) {
+        ArrayList<String> temp = selected;
+
+
+        selectedCardSprites.clear();
+        for (int i = 0; i < temp.size(); i++) {
+            Sprite cardSprite = new Sprite(new Texture("assets/images/" + temp.get(i)));
+            cardSprite.setSize(75, 125);
+
+            cardSprite.setPosition(80 + i * 60, 200);
+            cardSprite.setOriginCenter();
+            selectedCardSprites.add(cardSprite);
+        }
+
+        //Draw updated hand
+    /*@Override
     public void onHandChanged(List<String> hand) {
         if (spriteBatch == null) { // If LibGDX not initialized shave hand
             tempHand = new ArrayList<>(hand);
@@ -553,25 +514,29 @@ public class RoundView implements GameObserver, Screen {
             this.handImages = new ArrayList<>(hand); //Save updated hand
             createSpriteList();
         }
+    }*/
     }
 
     @Override
-    // Getting notified to update healthPercentage
+    public void onBestComboChanged(String bestCombo) {
+        this.currentBestCombo = bestCombo;
+
+    }
+
+    @Override
     public void onHealthChanged(float userHealth, float opponentHealth) {
         userHealthPercentage = userHealth;
         opponentHealthPercentage = opponentHealth;
-    }
-
-    @Override
-    public void onCardSelected(int index, boolean selected) {
-        // boolSelectedCards.set(index,selected);
-
+        this.opponentHealthPercentage = opponentHealth;
+        this.userHealthPercentage = userHealth;
 
     }
 
     @Override
-    public void onGameEnded(String resultMessage) {
-
+    public void onGameEnded(String resultMessage, int totalDamageToOpponent, int totalDamageToUser) {
+        this.gameEnded = true;
+        this.totalDamageToOpponent = totalDamageToOpponent;
+        this.totalDamageToUser = totalDamageToUser;
     }
 
     @Override
@@ -594,7 +559,7 @@ public class RoundView implements GameObserver, Screen {
     }
 
     @Override
-    public void resize ( int width, int height){
+    public void resize (int width, int height){
         if (width <= 0 || height <= 0) return;
         viewport.update(width, height, true); // true centers the camera
 
@@ -624,5 +589,4 @@ public class RoundView implements GameObserver, Screen {
     public void dispose () {
 
     }
-
 }

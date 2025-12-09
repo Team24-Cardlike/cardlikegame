@@ -1,4 +1,5 @@
 package org.example.Model;
+import org.w3c.dom.Node;
 
 
 import java.util.*;
@@ -10,8 +11,11 @@ public class GameMap {
     Opponent freja;
     Opponent tor;
     Opponent oden;
+    Round currentRound;
+    User user;
+    GameManager maneger;
 
-    GameMap(int dif){
+    GameMap(int dif, User user , GameManager maneger){
         this.map  = new Graph<>();
         this.opponents = new ArrayList<>();
         this.heimdall = new Opponent(300*dif, 10, 3, "Heimdall");
@@ -21,16 +25,22 @@ public class GameMap {
         this.oden = new Opponent(1500*dif, 40, 2, "Oden");
         this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
 
+        this.user = user;
+        this.maneger = maneger;
         createMap();
+
+
     }
 
     void createMap(){
-        this.map.addVertex(new Round(this.opponents.getFirst()));
-        this.map.addVertex(new Round(this.opponents.getLast()));
+        this.map.addVertex(new Round(user,heimdall, maneger.roundObs));
+
+        this.map.addVertex(new Round(user,oden, maneger.roundObs));
         for(int i = 0; i<opponents.size(); i++) {
-            if(!(i+1 > opponents.size()))
-                this.map.addEdge(new Round(this.opponents.get(i)), new Round(this.opponents.get(i+1)), false);
+            if(!(i+1 > opponents.size()-1))
+                this.map.addEdge(new Round(user,opponents.get(i), maneger.roundObs), new Round(user,opponents.get(i+1), maneger.roundObs), false);
         }
+
     }
 
     public Graph<Round> getMap() {

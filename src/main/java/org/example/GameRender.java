@@ -2,38 +2,35 @@ package org.example;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
-import org.example.Controller.Controller;
 import org.example.Model.Round;
 import org.example.Views.RoundView;
-
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
+import org.example.Controller.RoundController;
+import org.example.Model.GameManager;
 import org.example.Views.MainMenuView;
 
 public class GameRender extends Game {
 
-    private Round round;
     private RoundView rview;
     private MainMenuView mview;
     private Boolean viewState;
-    private Controller controller;
     private Screen current;
+    private GameManager manager;
+    private RoundView roundView;
+    private RoundController roundController;
 
-    GameRender(Round round, RoundView rview, MainMenuView mview) {
-        this.round = round;
+    GameRender(RoundView rview, MainMenuView mview,  RoundController roundController, GameManager manager) {
+        //this.round = round;
+        this.manager = manager;
         this.rview = rview;
         this.mview = mview;
         viewState = false;
+        this.roundController = roundController;
     }
-
     @Override
     public void create() {
         setScreen(mview);
     }
 
-    public void setController(Controller controller){
-        this.controller = controller;
-    }
 
     public void switchView(){
         if (getScreen() == mview) {
@@ -41,13 +38,17 @@ public class GameRender extends Game {
         } else {
             setScreen(mview);
         }
-    }}
+    }
+}
 /*
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
         //rview.updateOpponentAnimation(delta);  // <<< Lägg till detta
 
+        roundView.updateOpponentAnimation(delta);  // <<< Lägg till detta
+        roundView.input();
+        maneger.gameLoop();
 
         if(getScreen() == rview){
             round.gameLoop1();
@@ -61,14 +62,19 @@ public class GameRender extends Game {
 
         // graphics
 
+        roundView.draw();         // graphics
 
-        // view.playSelectedCards(); // Move cards up        
+
+        // roundView.playSelectedCards(); // Move cards up
     }
 
     @Override
     public void create() {
         mview.show();
         rview.create();
+        roundView.create();
+        maneger.initRound();
+
     }
 
     @Override
@@ -78,6 +84,7 @@ public class GameRender extends Game {
     }
 
 }*/
+
 
 // package org.example;
 
