@@ -87,10 +87,11 @@ public class Round {
         System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth()+ " kvar");
         playerTurn = false;
 
-        o.notifyHealthChanged(userHealth,opponentHealth); // Notify observer of health changed
-        o.notifyPlayerTurn(playerTurn); // Notify observer of changed player turn
-        o.notifySelectedChanged(user.getSelectedCards()); // Notify observer of reset selected
-        o.notifyHandChanged(user.getHand()); // Notify observer of new hand
+            o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed
+            o.notifyPlayerTurn(playerTurn); // Notify observer of changed player turn
+            o.notifySelectedChanged(user.getSelectedCards()); // Notify observer of reset selected
+            o.notifyHandChanged(user.getHand()); // Notify observer of new hand
+        }
     }
 
 
@@ -174,6 +175,7 @@ public class Round {
 
     public void init() {
         o.notifyHandChanged(user.getHand());
+        System.out.println(user.getHand().size());
         o.notifySelectedChanged(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
