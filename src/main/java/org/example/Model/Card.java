@@ -1,10 +1,5 @@
 package org.example.Model;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector3;
-
-import java.util.ArrayList;
 
 public class Card {
     public final String suit;
@@ -19,7 +14,6 @@ public class Card {
         this.pic = ("cardPics/" + suit+"/" + rank+suit+".png"); //named as suit+rank in files later
     }
 
-    public Texture getCardTexture(){return new Texture(pic);}
 
 
 }

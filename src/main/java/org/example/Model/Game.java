@@ -6,20 +6,20 @@ import java.util.*;
 
 public class Game {
 
-    public GameObservers observers;
+    private GameObservers observers;
 
-    Deck deck;
+    private Deck deck; // Object with all possible cards, and the deck you draw from
     //Upgrades upgrades;
-    public User user;
-    public Opponent opponent;
-    Stack<Card> gameDeck;   
-    int turn = 0;
-    public int totalDamageToOpponent;
-    public int totalDamageToPlayer;
+    private User user;  
+    private Opponent opponent;
+    private Stack<Card> gameDeck; // The deck you draw from
+    // private int turn = 0; // Not needed?
+    private int totalDamageToOpponent;
+    private int totalDamageToPlayer;
     //Stage stage;
-    boolean playerTurn;
-    turnManager tm;
-    public boolean gameState;
+    private boolean playerTurn;
+    private turnManager tm;
+    private boolean gameState;
 
     private ArrayList selectedCards;
 
@@ -37,18 +37,48 @@ public class Game {
         gameState = true;
     }
 
+    Opponent getOpponent() {
+        return opponent;
+    }
+
+    Stack<Card> getGameDeck() {
+        return gameDeck;
+    }
+
+
+    public int getTotDamageToOpponent() {
+        return totalDamageToOpponent;
+    }
+
+    public int getTotDamageToPlayer() {
+        return totalDamageToPlayer;
+    }
+
+    public boolean getGameState() {
+        return gameState;
+    }
+
+    public GameObservers getGameObservers() {
+        return observers;
+    }
+
+    Deck getDeck() {
+        return deck;
+    }
+
     public turnManager getTurnManager(){
         return tm;
     }
 
 
     public void gameLoop1() {
-
+        
         // System.out.println(this.gameDeck.size() + this.user.hand.size());    
         // System.out.println(selectedCards.size());    
         if (gameDeck.size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
         while (user.hand.size() < user.cardsPerHand) user.hand.add(gameDeck.pop());
         observers.notifyHandChanged(user.getHand());
+        observers.notifyHealthChanged(user.getHealthRatio(), opponent.getHealthRatio());
 
         if (playerTurn) {            
 
@@ -59,14 +89,14 @@ public class Game {
         }
 
         //round ends
-        if ( user.health <= 0 || opponent.health <= 0) {
+        if ( user.getHealth() <= 0 || opponent.getHealth() <= 0) {
 
         }
     }
 
 
     public void gameLoop() {
-        while(this.opponent.health>0 && this.user.health>0){
+        while(this.opponent.getHealth()>0 && this.user.getHealth()>0){
 
 
             System.out.println("-------------");
@@ -81,30 +111,30 @@ public class Game {
             }
 
 
-            turn++;
-            if (this.opponent.turns != turn) {
-                // TODO: add logic to choose cards from hand to play
-                // Connect with frontend
-                //this.playCards(new ArrayList<Card>((this.user.hand.getFirst(), this.user.hand.getLast())));
-                //playCards(user.getSelectedCards());
-            }
-            else {
-                damage(user, opponent);
-                turn = 0;
-            }
-            System.out.println("Your health: " + user.health + ", Opponent's health: " + opponent.health);
+            // turn++;
+            // if (this.opponent.turns != turn) {
+            //     // TODO: add logic to choose cards from hand to play
+            //     // Connect with frontend
+            //     //this.playCards(new ArrayList<Card>((this.user.hand.getFirst(), this.user.hand.getLast())));
+            //     //playCards(user.getSelectedCards());
+            // }
+            // else {
+            //     damage(user, opponent);
+            //     // turn = 0;
+            // }
+            System.out.println("Your health: " + user.getHealth() + ", Opponent's health: " + opponent.getHealth());
             System.out.println(gameDeck.size());
         }
     }
 
 
-    public User getUser(){return user;}
+    User getUser(){return user;}
 
     String getGameEndContext(){
-        if(this.opponent.health<=0){
+        if(this.opponent.getHealth()<=0){
             return("You won! :D");
         }
-        else if(this.user.health<=0){
+        else if(this.user.getHealth()<=0){
             return("You lost! :(");
         }
         else{
@@ -113,7 +143,7 @@ public class Game {
     }
 
 
-    void damage(Player defender, Player attacker){        
+    private void damage(Player defender, Player attacker){        
         defender.takeDamage(attacker.getDamage());
     }
 
@@ -132,11 +162,11 @@ public class Game {
         totalDamageToOpponent = totalDamageToOpponent + damage;        
 
         if(checkDeadOpponent()){
-            gameState = false;
+            gameState = false;            
             return;
         }
 
-        System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
+        System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth()+ " kvar");
        playerTurn = false;
        observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
        observers.notifyPlayerTurn(false);
@@ -144,18 +174,19 @@ public class Game {
 
 
 
-    private void opponentTurn() {
+    private void opponentTurn() {        
         int oppDamage = opponent.getDamage();
         user.takeDamage(oppDamage);
         totalDamageToPlayer += oppDamage;
 
-        System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " hp kvar");
+
+        System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + user.getHealth() + " hp kvar");
         playerTurn = true;
         observers.notifyHealthChanged(user.getHealthRatio(),opponent.getHealthRatio());
         observers.notifyPlayerTurn(true);
     }
 
-    private ArrayList<Card>  getSelectedCards() {
+    public ArrayList<Card> getSelectedCards() {
         ArrayList<Card> temp = new ArrayList<>();
 
         for (int i = selectedCards.size() - 1; i >= 0 ; i --) {
@@ -174,8 +205,8 @@ public class Game {
 
     }
 
-    public boolean checkDeadOpponent(){        
-        return opponent.health <= 0;
+    private boolean checkDeadOpponent(){        
+        return opponent.getHealth() <= 0;
     }
 
     public String bestCombo(ArrayList<Card> cards){
@@ -219,6 +250,10 @@ public class Game {
         this.user.resetUser();
         this.deck = new Deck();
         this.deck.createInGameDeck();
+        opponent = new Opponent(2000, 25, 3, "enemyEvil");
+        totalDamageToOpponent = 0;
+        totalDamageToPlayer = 0;
+        gameState = true;
 
         //factory method på nu opp
 

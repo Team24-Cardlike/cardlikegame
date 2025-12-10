@@ -22,7 +22,7 @@ public class GameObservers {
 
     public void notifyGameInit() {
         notifyHandChanged(game.getUser().getHand());
-        notifyHealthChanged(game.user.getHealthRatio(),game.opponent.getHealthRatio());
+        notifyHealthChanged(game.getUser().getHealthRatio(),game.getOpponent().getHealthRatio());
         notifyPlayerTurn(true);
 
     }

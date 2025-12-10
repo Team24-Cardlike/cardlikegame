@@ -8,62 +8,54 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import org.example.Controller.Controller;
 import org.example.Model.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
-public class View extends ApplicationAdapter implements GameObserver{
-    public FitViewport viewport;    
+public class View extends ApplicationAdapter  implements GameObserver{
+    private FitViewport viewport;    
     private SpriteBatch spriteBatch;
     private ShapeRenderer sr;
 
-    Texture background;
+    private Texture background;
 
-    public Image victoryWindow;
-    public Image startButton;
-    public Image discardButton;
-    public Image nextButton;
+    private Image victoryWindow;
+    private Image startButton;
+    private Image discardButton;
+    private Image nextButton;
 
-    public Texture nextButtonTexture;
-    public Texture vicTxt;
+    private Texture nextButtonTexture;
+    private Texture vicTxt;
     private List<String> handImages = new ArrayList<>();
-    public ArrayList<Sprite> cardSprites;
+    private ArrayList<Sprite> cardSprites;
     private Texture opponentTexture;
     private Sprite opponentSprite;
     // Seving hand if LibGDX not yet initialized
-    private List<String> tempHand;
+    private List<String> tempHand;   
     private Stage stage;
-    public ArrayList<Boolean> hoveredCards;
-    public ArrayList<Boolean> boolSelectedCards;
+    private ArrayList<Boolean> hoveredCards;
+    private ArrayList<Boolean> boolSelectedCards;
     private ArrayList<Sprite> centerSelectedCard;
     private Label currentComboLabel;
-    public Vector3 coords;
+    private Vector3 coords;
 
     private boolean animatingOpponent = false;
     private boolean falling = true;
-    Label.LabelStyle style;
+    private Label.LabelStyle style;
     private float animationTime = 0;
     private float fallDuration = 0.3f;  // snabb fallning
     private float riseDuration = 0.6f;  // långsam uppgång
@@ -78,8 +70,8 @@ public class View extends ApplicationAdapter implements GameObserver{
     private boolean playerTurn;
 
     int a = 0;
-    public ArrayList<Integer> selectedIndices;
-    public ArrayList<Integer> removedIndices;
+    private ArrayList<Integer> selectedIndices;
+    private ArrayList<Integer> removedIndices;
     private Game game;
     private Controller controller;
 
@@ -118,13 +110,13 @@ public class View extends ApplicationAdapter implements GameObserver{
 
         discardButton = new Image(new Texture("assets/images/discardTest.png"));
         discardButton.setPosition(600,200);
-        discardButton.setSize(80, 100);
+        discardButton.setSize(100, 60);
         stage.addActor(discardButton);
 
 
-        startButton = new Image(new Texture("assets/images/enemyEvil.png"));
-        startButton.setPosition(0,200);
-        startButton.setSize(150, 100);
+        startButton = new Image(new Texture("assets/images/endTurn.png"));
+        startButton.setPosition(5,200);
+        startButton.setSize(130, 60);
         stage.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
         //if onHandChanged is caled before libGDX inits
@@ -135,7 +127,7 @@ public class View extends ApplicationAdapter implements GameObserver{
         }
         createSpriteList();
 
-        opponentTexture = new Texture("assets/images/enemyCorrect.png");
+        opponentTexture = new Texture("assets/images/bossHeimdall.png");
         opponentSprite = new Sprite(opponentTexture);
         opponentSprite.setSize(250f, 150f);
          opponentSprite.setPosition(
@@ -166,7 +158,7 @@ public class View extends ApplicationAdapter implements GameObserver{
 
 
 
-    public void bestCombo(ArrayList<Boolean> boolList){
+    private void bestCombo(ArrayList<Boolean> boolList){
         ArrayList<Integer> intList = new ArrayList<>();
         int i = 0;
         for(Boolean bool : boolList){
@@ -197,7 +189,7 @@ public class View extends ApplicationAdapter implements GameObserver{
 
                     boolSelectedCards.set(a, !boolSelectedCards.get(a));                                                            
                     
-                    if(game.getNumberOfSelected(boolSelectedCards) > 2){                        
+                    if(game.getNumberOfSelected(boolSelectedCards) > 0){
                         bestCombo(boolSelectedCards);
                     }                    
                     break;
@@ -213,12 +205,12 @@ public class View extends ApplicationAdapter implements GameObserver{
         ArrayList<Card> temp = game.getSelectedCardsAsCards(cards);        
         controller.playCards(temp);
 
-        if(game.gameState){
+        if(game.getGameState()){
             updateView(temp);
             opponentAnimation();
         }
         else{            
-            endGame(game.totalDamageToPlayer, game.totalDamageToOpponent);
+            endGame(game.getTotDamageToPlayer(), game.getTotDamageToOpponent());
             nextButton.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y){
@@ -231,16 +223,15 @@ public class View extends ApplicationAdapter implements GameObserver{
     }
 
 
-    public void updateView(ArrayList<Card> cards){
+    private void updateView(ArrayList<Card> cards){
         createSpriteList();
     }
-    public void opponentAnimation(){
+    private void opponentAnimation(){
         oppAnimation();
     }
 
-    public void drawHealthBars(){        
-        sr.setProjectionMatrix(viewport.getCamera().combined);
-
+    private void drawHealthBars(){        
+        sr.setProjectionMatrix(viewport.getCamera().combined);        
         // USER HEALTH BAR (bottom-left)
         float x = 50;
         float y = 550;
@@ -282,7 +273,7 @@ public class View extends ApplicationAdapter implements GameObserver{
     }
     
 
-    public void createSpriteList(){
+    private void createSpriteList(){
         cardSprites.clear();                
 
         for (int i = 0; i < handImages.size(); i++) {
@@ -303,7 +294,7 @@ public class View extends ApplicationAdapter implements GameObserver{
     }
 
     //Animation moving card forward
-    public void playSelectedCards(){
+    private void playSelectedCards(){
         float lift = viewport.getWorldHeight() * 10; // t.ex. 10% uppåt             
         selectedIndices = new ArrayList<>();
         for (int i = 0; i < cardSprites.size(); i++) {
@@ -346,7 +337,7 @@ public class View extends ApplicationAdapter implements GameObserver{
     }
 
     //Check if user hovers over card
-    public void getHoverdCards() {        
+    private void getHoverdCards() {        
         for (int a = 0; a < cardSprites.size(); a++){            
                 
             Polygon poly = generateHitbox(a);
@@ -417,18 +408,18 @@ public class View extends ApplicationAdapter implements GameObserver{
         drawHealthBars();
         stage.act(Gdx.graphics.getDeltaTime());
 
-        if(game.getTurnManager().getCurrentPlayer() || !game.gameState){
+        if(game.getTurnManager().getCurrentPlayer() || !game.getGameState()){
            stage.draw();
        }
     }
 
-    public void oppAnimation(){
+    private void oppAnimation(){
         animatingOpponent = true;
         falling = true;
         animationTime = 0;
     }
 
-    public void throwCards(){
+    private void throwCards(){
         removedIndices = new ArrayList<>();
 
         for (int i = cardSprites.size()-1; i >= 0; i--) {
@@ -441,7 +432,7 @@ public class View extends ApplicationAdapter implements GameObserver{
         }
     }
 
-    public void endGame(int totToPlayer, int totToOpp){
+    private void endGame(int totToPlayer, int totToOpp){
         Image panel = new Image(new TextureRegionDrawable(vicTxt));
         panel.setSize(600, 400);
         panel.setPosition(100,50);
@@ -467,7 +458,7 @@ public class View extends ApplicationAdapter implements GameObserver{
         stage.addActor(nextButton);
     }
 
-    public void showCombo(String comboName){
+    private void showCombo(String comboName){
         if (currentComboLabel != null) {
             currentComboLabel.remove();
         }
