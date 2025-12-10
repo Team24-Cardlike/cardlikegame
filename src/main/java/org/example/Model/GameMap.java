@@ -1,18 +1,19 @@
 package org.example.Model;
-import org.w3c.dom.Node;
 
+
+import org.example.Model.GameState.RoundState;
 
 import java.util.*;
 public class GameMap {
-    Graph<Round> map;
+    Graph<Opponent> map;
     ArrayList<Opponent> opponents;
     Opponent heimdall;
     Opponent balder;
     Opponent freja;
     Opponent tor;
     Opponent oden;
-    Round currentRound;
-    User user;
+    Opponent currentOpponent;
+    boolean lvlSelected = false;
     GameManager maneger;
 
     GameMap(int dif, User user , GameManager maneger){
@@ -25,7 +26,6 @@ public class GameMap {
         this.oden = new Opponent(1500*dif, 40, 2, "Oden");
         this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
 
-        this.user = user;
         this.maneger = maneger;
         createMap();
 
@@ -33,17 +33,36 @@ public class GameMap {
     }
 
     void createMap(){
-        this.map.addVertex(new Round(user,heimdall, maneger.roundObs));
+        //Add opponents to nodes
+        map.addVertex(heimdall);
+        map.addVertex(balder);
+        map.addVertex(freja);
+        map.addVertex(tor);
+        map.addVertex(oden);
 
-        this.map.addVertex(new Round(user,oden, maneger.roundObs));
-        for(int i = 0; i<opponents.size(); i++) {
-            if(!(i+1 > opponents.size()-1))
-                this.map.addEdge(new Round(user,opponents.get(i), maneger.roundObs), new Round(user,opponents.get(i+1), maneger.roundObs), false);
-        }
+        //Attach nodes
+        map.addEdge(heimdall, balder, false);
+        map.addEdge(heimdall, freja, false);
+
+        map.addEdge(balder, tor, false);
+        map.addEdge(freja, tor, false);
+
+        map.addEdge(tor, oden, false);
+    }
+
+
+
+    public void setLvlFalse() {
+        this.lvlSelected = false;
+        maneger.setState(new RoundState());
+    }
+
+    public void levelSelect(int index) {
+        // List<Opponent> list = m
 
     }
 
-    public Graph<Round> getMap() {
+    public Graph<Opponent> getMap() {
         return this.map;
     }
 }
