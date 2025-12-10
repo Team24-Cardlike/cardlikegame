@@ -16,7 +16,7 @@ public class User extends Player {
 
     CardCombos combos = new CardCombos();
 
-    public ArrayList<Upgrade> upgrades;
+    public ArrayList<Upgrade> upgrades = new ArrayList<>();
 
     public User(int startHealth){
         this.damage = 0;
@@ -25,7 +25,6 @@ public class User extends Player {
         this.health = maxHealth;
         this.gold = 0;
         this.selectedCards = new ArrayList<>();
-
     }
 
     public void drawCards(Stack<Card> deck, int amount){
@@ -79,8 +78,8 @@ public class User extends Player {
     }
 
     int playCards(){
-        int damage = getDamage();
-        return damage;
+        this.damage = getDamage();
+        return this.damage;
         // TODO: FINISH FUNCTION
     }
 
@@ -121,8 +120,17 @@ public class User extends Player {
         this.upgrades.addAll(upgrades);
     }
 
-    public void buyUpgrade(Upgrade upgrade, int cost){
-        this.gold -= cost;
+    public void addUpgrade(Upgrade upgrade){
         this.upgrades.add(upgrade);
+    }
+
+    public void buyUpgrade(Upgrade upgrade){
+        if(this.gold >= upgrade.getCost()) {
+            this.gold -= upgrade.getCost();
+            this.upgrades.add(upgrade);
+        }
+        else{
+            System.out.println("Too poor!");
+        }
     }
 }

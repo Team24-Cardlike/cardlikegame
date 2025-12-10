@@ -3,6 +3,8 @@ package org.example.Model.Upgrades;
 import org.example.Model.Combo;
 import org.example.Model.Round;
 
+import java.util.Objects;
+
 public class ComboDmgAmp extends Upgrade{
     final Combo ampedCombo;
     final float ampAmount;
@@ -27,11 +29,11 @@ public class ComboDmgAmp extends Upgrade{
 
     @Override
     public boolean checkCondition(Round round) {
-        return round.getUser().getComboPlayedCards() == this.ampedCombo;
+        return Objects.equals(round.getUser().getComboPlayedCards().name, this.ampedCombo.name);
     }
 
     @Override
     public void onTriggered(Round round) {
-        round.getUser().damage = (int) (round.getUser().damage * (float)ampAmount);
+        round.getUser().damage = (int) (round.getUser().damage * ampAmount);
     }
 }

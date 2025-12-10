@@ -1,6 +1,7 @@
 package org.example.Model;
 
 import org.example.Model.Upgrades.Upgrade;
+import org.example.Model.Upgrades.UpgradeLibrary;
 import org.example.Model.Upgrades.UpgradeManager;
 
 import java.util.*;
@@ -21,7 +22,9 @@ public class Round {
 
     private String currentBestCombo;
 
-    private UpgradeManager upgradeManager;
+    private UpgradeManager upgradeManager = new UpgradeManager();
+    private UpgradeLibrary lib = new UpgradeLibrary();
+
     public boolean beenAttacked = false;
     public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
@@ -74,17 +77,20 @@ public class Round {
      * @param //playedCards cards played from the front end
      */
     public void playCards(){
-        int damage = user.playCards();
+        //TODO: REMOVE THESE TEMPORARY ADDS
+        this.user.addUpgrade(lib.getUpgrade("Lone Wolf"));
+        this.user.addUpgrade(lib.getUpgrade("Jhin's Blessing"));
+        this.user.damage = user.playCards();
         for(Upgrade upg : this.user.upgrades){
             checkUpgrade(upg);
         }
-        this.opponent.takeDamage(damage);
+        this.opponent.takeDamage(this.user.damage);
         opponentHealth = opponent.getHealthRatio();
-        totalDamageToOpponent = totalDamageToOpponent + damage;
+        totalDamageToOpponent = totalDamageToOpponent + this.user.damage;
         while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
 
 
-        System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth()+ " kvar");
+        System.out.println("Din motståndare tog "+this.user.damage+" skada! "+ this.opponent.getHealth()+ " kvar");
         playerTurn = false;
 
             o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed
@@ -92,8 +98,6 @@ public class Round {
             o.notifySelectedChanged(user.getSelectedCards()); // Notify observer of reset selected
             o.notifyHandChanged(user.getHand()); // Notify observer of new hand
         }
-    }
-
 
     //TODO: Make user attack first
     private void opponentTurn() {
@@ -103,13 +107,12 @@ public class Round {
         userHealth = user.getHealthRatio();
         totalDamageToPlayer += oppDamage;
 
-        System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " hp kvar");
+        System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " HP kvar");
         playerTurn = true;
 
         o.notifyHealthChanged(userHealth,opponentHealth);// Notify observer of health changed
         o.notifyPlayerTurn(playerTurn); // notify player turn changed
     }
-
 
     private boolean checkDeadOpponent(){
         return opponent.health <= 0;
@@ -132,7 +135,6 @@ public class Round {
         user.setSelectedCards(new ArrayList<>());
         o.notifySelectedChanged(user.getSelectedCards());
     }
-
 
     // Removing selected card from hand and adding it to selected cards
     public void addSelectedCards(int index) {
@@ -161,16 +163,16 @@ public class Round {
         this.roundFinished = true;
     }
 
-    public void checkUpgrade(Upgrade upgrade){
-        upgradeManager.checkUpgrade(upgrade, this);
-    }
-
     public User getUser(){
         return  this.user;
     }
 
     public Opponent getOpponent() {
         return this.opponent;
+    }
+
+    public void checkUpgrade(Upgrade upgrade){
+        this.upgradeManager.checkUpgrade(upgrade, this);
     }
 
     public void init() {
@@ -181,6 +183,5 @@ public class Round {
         o.notifyHealthChanged(userHealth, opponentHealth);
         o.notifyPlayerTurn(playerTurn);
     }
-
 }
 

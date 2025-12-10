@@ -54,7 +54,7 @@ public class UpgradeLibrary {
     }
 
     public Upgrade getUpgrade(String name){
-        for(Upgrade upgrade : ownedUpgrades){
+        for(Upgrade upgrade : allUpgrades){
             if(Objects.equals(upgrade.name, name)){
                 return upgrade;
             }

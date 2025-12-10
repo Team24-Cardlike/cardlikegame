@@ -1,6 +1,9 @@
 package org.example.Model;
 
 
+import org.example.Model.Upgrades.ComboDmgAmp;
+import org.example.Model.Upgrades.Upgrade;
+import org.example.Model.Upgrades.UpgradeLibrary;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -9,7 +12,7 @@ import java.util.Arrays;
 import static org.junit.Assert.*;
 
 public class Testing {
-
+    UpgradeLibrary lib = new UpgradeLibrary();
     @Test
     public void test_deck_cards(){
         Deck deck = new Deck();
@@ -220,4 +223,21 @@ public class Testing {
         assertEquals(2000 - (1500 + 14), opp.health);
     }
     //</editor-fold>
+
+    @Test
+    public void test_comboDmgAmpUpgrade(){
+        User user = new User(500);
+
+        ArrayList<Card> cards = new ArrayList<>(
+                Arrays.asList(new Card("sun", 10), new Card("water", 10), new Card("tree", 10), new Card("moon", 10))
+        );
+        user.setSelectedCards(cards);
+        assertEquals(410, user.getDamage());
+
+        ArrayList<Upgrade> upgrades = new ArrayList<>();
+        upgrades.add(lib.getUpgrade("Jhin's Blessing"));
+
+        user.setUpgrades(upgrades);
+        assertEquals((int)(410*1.4444), user.getDamage());
+    }
 }
