@@ -1,21 +1,25 @@
 package org.example.Model;
+import org.example.Model.Upgrades.Upgrade;
+import org.example.Model.Upgrades.UpgradeLibrary;
+import org.example.Model.Upgrades.UpgradeManager;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
 public class User extends Player {
-
+    public int damage;
     ArrayList<Card> hand;
     int gold;
     public int cardsPerHand = 10;
     ArrayList<Card> selectedCards;
 
-
     CardCombos combos = new CardCombos();
 
-
+    public ArrayList<Upgrade> upgrades;
 
     public User(int startHealth){
+        this.damage = 0;
         this.maxHealth = startHealth;
         this.hand = new ArrayList<>();
         this.health = maxHealth;
@@ -50,7 +54,7 @@ public class User extends Player {
 
     @Override
     public int getDamage() {
-        int damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
+        this.damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
         return damage;
     }
 
@@ -76,7 +80,6 @@ public class User extends Player {
 
     int playCards(){
         int damage = getDamage();
-        selectedCards = new ArrayList<>();
         return damage;
         // TODO: FINISH FUNCTION
     }
@@ -100,5 +103,26 @@ public class User extends Player {
         this.health = maxHealth;
         this.hand = new ArrayList<>();
         this.selectedCards = new ArrayList<>();
+    }
+
+    public int getGold(){
+        return this.gold;
+    }
+
+    public void setGold(int amount){
+        this.gold = amount;
+    }
+
+    public ArrayList<Upgrade> getUpgrades(){
+        return this.upgrades;
+    }
+
+    public void setUpgrades(ArrayList<Upgrade> upgrades){
+        this.upgrades.addAll(upgrades);
+    }
+
+    public void buyUpgrade(Upgrade upgrade, int cost){
+        this.gold -= cost;
+        this.upgrades.add(upgrade);
     }
 }

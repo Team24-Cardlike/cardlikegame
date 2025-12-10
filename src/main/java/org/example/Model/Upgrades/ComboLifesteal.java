@@ -1,21 +1,33 @@
 package org.example.Model.Upgrades;
 
 import org.example.Model.Combo;
+import org.example.Model.Round;
 
-public class ComboLifesteal<T extends Number> extends Upgrade<T>{
-    final Combo combo;
-    final T vampAmount;
-    ComboLifesteal(String name, Combo combo, T vampAmount, int cost) {
+public class ComboLifesteal extends Upgrade{
+    final Combo vampCombo;
+    final float vampAmount;
+    ComboLifesteal(String name, Combo combo, float vampAmount, int cost) {
         super(name,
-                "Gain " + vampAmount + "% lifesteal on " + combo.name + " combos.",
+                "Gain " + vampAmount*100 + "% lifesteal on " + combo.name + " combos.",
                 cost, "Sustain");
-        this.combo = combo;
+        this.vampCombo = combo;
         this.vampAmount = vampAmount;
     }
 
 
-    @Override
+    /*@Override
     public T getNum() {
         return vampAmount;
+    }*/
+
+    @Override
+    public boolean checkCondition(Round round) {
+        return round.getUser().getComboPlayedCards() == this.vampCombo;
+    }
+
+    @Override
+    public void onTriggered(Round round) {
+        int health = (int) ((round.getUser().getDamage() * vampAmount) + round.getUser().getHealth());
+        round.getUser().setHealth(health);
     }
 }

@@ -1,6 +1,8 @@
 package org.example.Model.Upgrades;
 
-public abstract class Upgrade<T extends Number> {
+import org.example.Model.Round;
+
+public abstract class Upgrade {
     String name;
     String desc;
     int cost;
@@ -20,5 +22,25 @@ public abstract class Upgrade<T extends Number> {
         this.category = category;
     }
 
-    public abstract T getNum();
+    public String getName() {
+        return this.name;
+    }
+
+    public int getCost() {
+        return this.cost;
+    }
+
+    public String getDesc() {
+        return this.desc;
+    }
+
+    public String getCategory() {
+        return this.category;
+    }
+
+    //public abstract T getNum();
+
+    public abstract boolean checkCondition(Round round);
+
+    public abstract void onTriggered(Round round);
 }

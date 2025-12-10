@@ -1,12 +1,13 @@
 package org.example.Model;
 
 import org.example.Model.Upgrades.Upgrade;
+import org.example.Model.Upgrades.UpgradeManager;
+
 import java.util.*;
 
 public class Round {
     private RoundObsMethods o = new RoundObsMethods(this);
     private Deck deck = new Deck();
-    Upgrade upgrades;
     private User user;
     private Opponent opponent;
 
@@ -20,6 +21,8 @@ public class Round {
 
     private String currentBestCombo;
 
+    private UpgradeManager upgradeManager;
+    public boolean beenAttacked = false;
     public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
         this.opponent = opponent;
@@ -72,13 +75,16 @@ public class Round {
      */
     public void playCards(){
         int damage = user.playCards();
+        for(Upgrade upg : this.user.upgrades){
+            checkUpgrade(upg);
+        }
         this.opponent.takeDamage(damage);
         opponentHealth = opponent.getHealthRatio();
         totalDamageToOpponent = totalDamageToOpponent + damage;
         while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
 
 
-        System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
+        System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth()+ " kvar");
         playerTurn = false;
 
         o.notifyHealthChanged(userHealth,opponentHealth); // Notify observer of health changed
@@ -88,8 +94,9 @@ public class Round {
     }
 
 
-
+    //TODO: Make user attack first
     private void opponentTurn() {
+        this.beenAttacked = true;
         int oppDamage = opponent.getDamage();
         user.takeDamage(oppDamage);
         userHealth = user.getHealthRatio();
@@ -153,6 +160,17 @@ public class Round {
         this.roundFinished = true;
     }
 
+    public void checkUpgrade(Upgrade upgrade){
+        upgradeManager.checkUpgrade(upgrade, this);
+    }
+
+    public User getUser(){
+        return  this.user;
+    }
+
+    public Opponent getOpponent() {
+        return this.opponent;
+    }
 
     public void init() {
         o.notifyHandChanged(user.getHand());

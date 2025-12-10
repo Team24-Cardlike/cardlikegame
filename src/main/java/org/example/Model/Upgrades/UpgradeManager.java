@@ -1,35 +1,26 @@
 package org.example.Model.Upgrades;
 
-import org.example.Model.GameObserver;
+import org.example.Model.Round;
+import org.example.Model.RoundObserver;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class UpgradeManager implements GameObserver {
+public class UpgradeManager {
     UpgradeLibrary lib = new UpgradeLibrary();
-    @Override
-    public void onHandChanged(List<String> hand) {
 
-    }
-
-    @Override
-    public void onHealthChanged(float userHealth, float opponentHealth) {
-        if(opponentHealth <= (float)lib.getUpgrade("Fatality").getNum()){
-
+    public void checkUpgrade(Upgrade upgrade, Round roundState){
+        if(upgrade.checkCondition(roundState) && roundState.getUser().upgrades.contains(upgrade)){
+            upgrade.onTriggered(roundState);
         }
-    }
 
-    @Override
-    public void onCardSelected(int index, boolean selected) {
 
-    }
-
-    @Override
-    public void onGameEnded(String resultMessage) {
-
-    }
-
-    @Override
-    public void onPlayerTurn(boolean playerTurn) {
-
+        /*if (Objects.equals(upgrade, lib.getUpgrade("Fatality")) && round.getOpponent().getHealthRatio()<=(float)upgrade.getNum()){
+            return true;
+        }
+        else{
+            return false;
+        }*/
     }
 }
