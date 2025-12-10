@@ -1,15 +1,18 @@
 package org.example.Model.Upgrades;
 
-import org.example.Model.Card;
-import org.example.Model.Combo;
-import org.example.Model.User;
-
-public abstract class Upgrade {
+public abstract class Upgrade<T extends Number> {
     String name;
     String desc;
     int cost;
     String category;
 
+    /***
+     *
+     * @param name String name of the upgrade
+     * @param desc String description of the upgrade
+     * @param cost int cost of the upgrade
+     * @param category String name of the category (Sustain, Damage, Economy)
+     */
     Upgrade(String name, String desc, int cost, String category){
         this.name = name;
         this.desc = desc;
@@ -17,16 +20,5 @@ public abstract class Upgrade {
         this.category = category;
     }
 
-    // Called when the augment is purchased (for permanent stat changes)
-    public void onBuy(User user){}
-
-    // Called before evaluating a combo (for dynamic effects)
-    public void beforeCombo(User user, Card[] hand) {}
-
-    // Called after evaluating a combo (for reaction effects)
-    public void afterCombo(User user, Combo combo) {}
-
-    // Optional — for per-turn or per-battle effects
-    public void onTurnStart(User user) {}
-    public void onTurnEnd(User user) {}
+    public abstract T getNum();
 }
