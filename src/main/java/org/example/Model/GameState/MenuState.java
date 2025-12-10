@@ -2,8 +2,8 @@ package org.example.Model.GameState;
 
 import org.example.Model.GameManager;
 
-public class ShopState implements GameState{
-    String name = "shop";
+public class MenuState implements GameState{
+    String name = "menu";
     @Override
     public void update(GameManager maneger) {
 

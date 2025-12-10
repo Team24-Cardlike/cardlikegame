@@ -13,9 +13,6 @@ import org.example.Views.MainMenuView;
 import org.example.Controller.RoundController;
 //import org.example.GameRender;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DesktopLauncher {
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -24,33 +21,23 @@ public class DesktopLauncher {
 
         //Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
 
+        //Creating View, Controler for round
         RoundView rview = new RoundView();
-        GameManager manager = new GameManager( rview);
-        rview.setRound(manager.currentRound);
-
-        //Round round = new Round(opp, ob);
-        //RoundView rview = new RoundView();
-        //rview.setRound(round);
-        MainMenuView mview = new MainMenuView();
+        GameManager manager = new GameManager(rview);
+        rview.setGameManager(manager);
         RoundController roundController = new RoundController(manager.currentRound);
 
-        GameRender gameRender = new GameRender(rview,mview, roundController, manager);
 
-        mview.setController(roundController);
+        MainMenuView mview = new MainMenuView();
+        mview.setGameManager(manager);
+        MenuController menuController = new MenuController(manager);
+
+        GameRender gameRender = new GameRender(rview,mview);
+
+        manager.setStateObs(gameRender);
+        mview.setController(menuController);
         rview.setController(roundController);
-        //mview.setController(controller);
 
-        rview.setController(roundController);
-
-        //round.observers.addObserver(rview);
-        //round.observers.notifyGameInit();
-
-        UpgradeLibrary ul = new UpgradeLibrary();
-        ShopController sc = new ShopController(game);
-        ShopView shopView = new ShopView(ul, sc);
-
-        //game.observers.addObserver(view);
-        //game.observers.notifyGameInit();
         new Lwjgl3Application(gameRender, config);
     }
 }

@@ -50,6 +50,7 @@ public class Round {
         }
         //round ends
         if ( user.health <= 0 || checkDeadOpponent()) {
+
             roundFinished = true;
             if(opponentHealth < userHealth) {
             o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
@@ -70,21 +71,23 @@ public class Round {
      * </ul>
      * @param //playedCards cards played from the front end
      */
-    public void playCards(){
-        int damage = user.playCards();
-        this.opponent.takeDamage(damage);
-        opponentHealth = opponent.getHealthRatio();
-        totalDamageToOpponent = totalDamageToOpponent + damage;
-        while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
+    public void playCards() {
+        if (user.getSelectedCards().size() > 0) {
+            int damage = user.playCards();
+            this.opponent.takeDamage(damage);
+            opponentHealth = opponent.getHealthRatio();
+            totalDamageToOpponent = totalDamageToOpponent + damage;
+            while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
 
 
-        System.out.println("Din motståndare tog "+damage+" skada! "+ this.opponent.getHealth(opponent)+ " kvar");
-        playerTurn = false;
+            System.out.println("Din motståndare tog " + damage + " skada! " + this.opponent.getHealth(opponent) + " kvar");
+            playerTurn = false;
 
-        o.notifyHealthChanged(userHealth,opponentHealth); // Notify observer of health changed
-        o.notifyPlayerTurn(playerTurn); // Notify observer of changed player turn
-        o.notifySelectedChanged(user.getSelectedCards()); // Notify observer of reset selected
-        o.notifyHandChanged(user.getHand()); // Notify observer of new hand
+            o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed
+            o.notifyPlayerTurn(playerTurn); // Notify observer of changed player turn
+            o.notifySelectedChanged(user.getSelectedCards()); // Notify observer of reset selected
+            o.notifyHandChanged(user.getHand()); // Notify observer of new hand
+        }
     }
 
 
@@ -156,6 +159,7 @@ public class Round {
 
     public void init() {
         o.notifyHandChanged(user.getHand());
+        System.out.println(user.getHand().size());
         o.notifySelectedChanged(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);

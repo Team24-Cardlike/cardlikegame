@@ -5,6 +5,7 @@ import org.example.Model.Round;
 import org.example.Model.RoundObserver;
 
 public class RoundState implements GameState{
+    String name = "round";
     Round r;
     @Override
     public void update(GameManager maneger) {
@@ -13,5 +14,10 @@ public class RoundState implements GameState{
         if (r.roundFinished) {maneger.setState(new MapState());
         }
 
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

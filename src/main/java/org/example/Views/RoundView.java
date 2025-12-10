@@ -87,16 +87,17 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     int a = 0;
     public ArrayList<Integer> selectedIndices;
     public ArrayList<Integer> removedIndices;
-    private Round round;
+    private GameManager gameManager;
     private RoundController roundController;
     private String currentBestCombo;
     private int totalDamageToOpponent;
     private int totalDamageToUser;
 
-
-    public void setRound(Round round) {
-        this.round = round;
+    public void setGameManager (GameManager manager ) {
+        this.gameManager = manager;
     }
+
+
 
     public void setController(RoundController roundController) {
         this.roundController = roundController;
@@ -104,6 +105,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void show() {
+
 
         BitmapFont font = new BitmapFont(); // standard font
         style = new Label.LabelStyle();
@@ -175,8 +177,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         viewport.unproject(coords);
 
         if (Gdx.input.justTouched()) {
+
             for (int a = cardSprites.size() - 1; a >= 0; a--) {
-                Polygon poly = generateHitbox(a, selectedCardSprites);
+                Polygon poly = generateHitbox(a, cardSprites);
+
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y) && (selectedCardSprites.size() < 5)) {
                     roundController.selectCard(a);
@@ -189,7 +193,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 Polygon poly = generateHitbox(a,selectedCardSprites);
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y)) {
-                    System.out.println(true);
                     roundController.unselectCard(a);
                     break;
                 }
@@ -336,14 +339,15 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         drawCardSprites();
         showCombo(currentBestCombo);
         opponentSprite.draw(spriteBatch);
-        spriteBatch.end();
 
+        spriteBatch.end();
         drawHealthBars();
         stage.act(Gdx.graphics.getDeltaTime());
 
-        if(playerTurn){
-           stage.draw();
-       }
+
+        if (playerTurn || gameEnded) {
+            stage.draw();
+        }
     }
 
     public void drawCardSprites() {
@@ -365,9 +369,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             card.draw(spriteBatch);
         }
 
-        if (playerTurn || gameEnded) {
-            stage.draw();
-        }
     }
 
     public void oppAnimation() {
@@ -410,7 +411,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         currentComboLabel = new Label(comboName, style);
         currentComboLabel.setPosition(200, 200);
-        System.out.println(currentComboLabel);
         stage.addActor(currentComboLabel);
     }
 
@@ -469,6 +469,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onHandChanged(ArrayList<String> hand) {
+
         this.cardSprites.clear(); // Clear current sprites before update
 
         for (int i = 0; i < hand.size(); i++) {
@@ -487,7 +488,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
             cardSprites.add(cardSprite);
             hoveredCards.add(false); //Resetting hovered if marked.
+
         }
+
     }
 
     @Override
@@ -504,17 +507,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             cardSprite.setOriginCenter();
             selectedCardSprites.add(cardSprite);
         }
-
-        //Draw updated hand
-    /*@Override
-    public void onHandChanged(List<String> hand) {
-        if (spriteBatch == null) { // If LibGDX not initialized shave hand
-            tempHand = new ArrayList<>(hand);
-        } else {
-            this.handImages = new ArrayList<>(hand); //Save updated hand
-            createSpriteList();
-        }
-    }*/
     }
 
     @Override
@@ -525,8 +517,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onHealthChanged(float userHealth, float opponentHealth) {
-        userHealthPercentage = userHealth;
-        opponentHealthPercentage = opponentHealth;
         this.opponentHealthPercentage = opponentHealth;
         this.userHealthPercentage = userHealth;
 
@@ -545,15 +535,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if (!playerTurn) {
             oppAnimation();
         }
+        System.out.println(playerTurn);
     }
 
     @Override
     public void render ( float v){
-        //view.updateOpponentAnimation(delta);  // <<< Lägg till detta
-
-        //controller.input();
-
-        //playSelectedCards(); // Move cards up
+        gameManager.gameLoop();
         input();
         draw();
     }
