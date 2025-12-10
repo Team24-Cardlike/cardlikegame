@@ -3,6 +3,7 @@ package org.example;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
+import org.example.Controller.MenuController;
 import org.example.Controller.RoundController;
 import org.example.Model.*;
 import org.example.Views.RoundView;
@@ -19,31 +20,24 @@ public class DesktopLauncher {
         config.setTitle(("Maven LibGDX test"));
         config.setWindowedMode(800,600);
 
-        //Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
 
+        //Creating View, Controler for round
         RoundView rview = new RoundView();
-        GameManager manager = new GameManager( rview);
-        rview.setRound(manager.currentRound);
-
-        //Round round = new Round(opp, ob);
-        //RoundView rview = new RoundView();
-        //rview.setRound(round);
-        MainMenuView mview = new MainMenuView();
+        GameManager manager = new GameManager(rview);
+        rview.setGameManager(manager);
         RoundController roundController = new RoundController(manager.currentRound);
 
-        GameRender gameRender = new GameRender(rview,mview, roundController, manager);
 
-        mview.setController(roundController);
+        MainMenuView mview = new MainMenuView();
+        mview.setGameManager(manager);
+        MenuController menuController = new MenuController(manager);
+
+        GameRender gameRender = new GameRender(rview,mview);
+
+        manager.setStateObs(gameRender);
+        mview.setController(menuController);
         rview.setController(roundController);
-        //mview.setController(controller);
 
-
-
-
-        rview.setController(roundController);
-
-        //round.observers.addObserver(rview);
-        //round.observers.notifyGameInit();
         new Lwjgl3Application(gameRender, config);
     }
 }

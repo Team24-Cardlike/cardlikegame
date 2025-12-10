@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import org.example.Controller.MenuController;
 import org.example.Controller.RoundController;
 import org.example.Model.GameManager;
 
@@ -25,10 +27,14 @@ public class MainMenuView implements Screen {
     Stage stage;
     Texture background;
     Viewport viewport;
-    RoundController controller;
+    MenuController controller;
     GameManager gameManager;
 
-    public void setController(RoundController controller) {
+    public void setGameManager (GameManager manager ) {
+        this.gameManager = manager;
+    }
+
+    public void setController(MenuController controller) {
         this.controller = controller;
     }
 
@@ -36,6 +42,8 @@ public class MainMenuView implements Screen {
 
     @Override
     public void show() {
+
+
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -52,13 +60,38 @@ public class MainMenuView implements Screen {
         menuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gameManager.initRound();
+                controller.startGame();
             }
         });
-    }
 
+
+    }
+/*
+    public void input() {
+        if (Gdx.input.justTouched()) {
+            // Få muskoordinater
+            float touchX = Gdx.input.getX();
+            float touchY = Gdx.input.getY();
+
+            // Omvandla till Stage-koordinater
+            Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(touchX, touchY));
+
+            // Hämta knappens position och storlek
+            float btnX = menuButton.getX();
+            float btnY = menuButton.getY();
+            float btnWidth = menuButton.getWidth();
+            float btnHeight = menuButton.getHeight();
+
+            // Kolla om musen är över knappen
+            if (stageCoords.x >= btnX && stageCoords.x <= btnX + btnWidth &&
+                    stageCoords.y >= btnY && stageCoords.y <= btnY + btnHeight) {
+                controller.startGame(); // skicka till controller
+            }
+        }
+    }*/
     @Override
     public void render(float v) {
+        gameManager.gameLoop();
         ScreenUtils.clear(Color.BLACK);
         stage.act(v);
         stage.draw();
