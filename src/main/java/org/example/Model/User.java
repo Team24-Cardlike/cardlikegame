@@ -1,7 +1,6 @@
 package org.example.Model;
 
 import com.badlogic.gdx.utils.Array;
-import org.example.Model.Upgrades.Upgrade;
 
 import java.util.ArrayList;
 // import java.util.Collections;
@@ -9,16 +8,16 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class User extends Player {
-    
+
     ArrayList<Card> hand;
     int gold;
     public int cardsPerHand = 10;
     ArrayList<Card> selectedCards;
     ArrayList<Boolean> hoveredCards;
     ArrayList<Boolean> boolSelectedCards;
-    ArrayList<Upgrade> usersUpgrades;
+
     CardCombos combos = new CardCombos();
-    //ArrayList<Upgrade> upgrades = new ArrayList<>();
+
 
 
     public User(int startHealth){
@@ -37,21 +36,15 @@ public class User extends Player {
         for (int i = 0; i < amount; i++) {
             card = deck.pop();
             this.hand.add(card);
-            boolSelectedCards.add(false);
-            hoveredCards.add(false);
-        }
-
-        hoveredCards = new ArrayList<>();
-        boolSelectedCards = new ArrayList<>();
-
-        for (int i = 0; i < amount; i++) {
-            hoveredCards.add(false);
-            boolSelectedCards.add(false);
         }
     }
 
     public ArrayList<Card> getSelectedCards(){
         return this.selectedCards;
+    }
+
+    public void addSelectedCard(Card c) {
+        this.selectedCards.add(c);
     }
 
     /**
@@ -84,28 +77,14 @@ public class User extends Player {
      */
 
     public void removeCards(ArrayList<Integer> indices) {
-        //ArrayList<Card> played = new ArrayList<>();
-
-        // Sortera indices fallande så remove() funkar
-        //indices.sort(Collections.reverseOrder());
-
         for (int index : indices) {
-            //played.add(hand.remove(index));
             hand.remove(index);
         }
-
-        //return played;
     }
 
-    int playCards(ArrayList<Card> cardsPlayed){
-        this.selectedCards.clear();
-        for(Card card : cardsPlayed){
-            this.selectedCards.add(card);
-            this.hand.remove(card);
-        }
+    int playCards(){
         int damage = getDamage();
-        this.selectedCards.clear();
-        //MAYBE ADD DRAWCARDS HERE
+        selectedCards = new ArrayList<>();
         return damage;
         // TODO: FINISH FUNCTION
     }
@@ -117,34 +96,17 @@ public class User extends Player {
     public ArrayList<Card> getHand() {
         return this.hand;
     }
+    public void removeCardFromHand(int index) {
+        this.hand.remove(index);
+    }
 
     public void setSelectedCards(ArrayList<Card> selectedCards){
         this.selectedCards = selectedCards;
-    }
-
-    public void setCardAsSelectedBool(int i, boolean value){
-        this.boolSelectedCards.set(i, value);
-    }
-    public void setCardAsHovered(int i, boolean value){
-        this.hoveredCards.set(i, value);
-    }
-    public ArrayList<Boolean> getBoolSelectedCards(){
-        return this.boolSelectedCards;
-    }
-    public ArrayList<Boolean> getHoveredCards(){
-        return this.hoveredCards;
     }
 
     public void resetUser(){
         this.health = maxHealth;
         this.hand = new ArrayList<>();
         this.selectedCards = new ArrayList<>();
-        this.hoveredCards = new ArrayList<>();
-        this.boolSelectedCards = new ArrayList<>();
     }
-
-    public void setUsersUpgrades(Upgrade upgrade){
-        usersUpgrades.add(upgrade);
-    }
-
 }

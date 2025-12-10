@@ -3,15 +3,15 @@ package org.example;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
-import org.example.Controller.Controller;
-import org.example.Model.Game;
-import org.example.Model.Opponent;
-import org.example.Model.ShopController;
-import org.example.Model.Upgrades.DamageUpgrade;
-import org.example.Model.Upgrades.Upgrade;
-import org.example.Model.Upgrades.UpgradeLibrary;
-import org.example.View.ShopView;
-import org.example.View.View;
+import org.example.Controller.RoundController;
+import org.example.Model.*;
+import org.example.Views.RoundView;
+import org.example.Views.MainMenuView;
+
+//Du är mer av ett problem nu än problemet själv -Kristoffer under roleplaying workshop till Axel :)
+//Holy words
+import org.example.Controller.RoundController;
+//import org.example.GameRender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,22 +22,35 @@ public class DesktopLauncher {
         config.setTitle(("Maven LibGDX test"));
         config.setWindowedMode(800,600);
 
-        Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
-        Game game = new Game(opp);
-        View view = new View();
+        //Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
+
+        RoundView rview = new RoundView();
+        GameManager manager = new GameManager( rview);
+        rview.setRound(manager.currentRound);
+
+        //Round round = new Round(opp, ob);
+        //RoundView rview = new RoundView();
+        //rview.setRound(round);
+        MainMenuView mview = new MainMenuView();
+        RoundController roundController = new RoundController(manager.currentRound);
+
+        GameRender gameRender = new GameRender(rview,mview, roundController, manager);
+
+        mview.setController(roundController);
+        rview.setController(roundController);
+        //mview.setController(controller);
+
+        rview.setController(roundController);
+
+        //round.observers.addObserver(rview);
+        //round.observers.notifyGameInit();
 
         UpgradeLibrary ul = new UpgradeLibrary();
         ShopController sc = new ShopController(game);
         ShopView shopView = new ShopView(ul, sc);
 
-        Controller controller = new Controller(game);
-        GameRender gameRender = new GameRender(game, view, shopView, controller);
-                
-        view.setGame(game);
-        view.setController(controller);
-        
-        game.observers.addObserver(view);
-        game.observers.notifyGameInit();
+        //game.observers.addObserver(view);
+        //game.observers.notifyGameInit();
         new Lwjgl3Application(gameRender, config);
     }
 }
