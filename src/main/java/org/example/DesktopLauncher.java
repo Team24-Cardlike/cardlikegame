@@ -3,6 +3,7 @@ package org.example;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
+import org.example.Controller.MenuController;
 import org.example.Controller.RoundController;
 import org.example.Model.*;
 import org.example.Views.RoundView;
@@ -11,6 +12,7 @@ import org.example.Views.MainMenuView;
 //Du är mer av ett problem nu än problemet själv -Kristoffer under roleplaying workshop till Axel :)
 //Holy words
 import org.example.Controller.RoundController;
+import org.example.Views.ShopView;
 //import org.example.GameRender;
 
 public class DesktopLauncher {
@@ -32,7 +34,10 @@ public class DesktopLauncher {
         mview.setGameManager(manager);
         MenuController menuController = new MenuController(manager);
 
-        GameRender gameRender = new GameRender(rview,mview);
+        ShopView sview = new ShopView();
+        ShopController shopController = new ShopController(manager.getUser(), manager);
+        sview.setShopController(shopController);
+        GameRender gameRender = new GameRender(rview, mview, sview);
 
         manager.setStateObs(gameRender);
         mview.setController(menuController);

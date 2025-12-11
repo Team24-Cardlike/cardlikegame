@@ -35,6 +35,9 @@ public class Round {
         o.addObserver(ob);
     }
 
+    public User getUser(){
+        return user;
+    }
     // Check states
     public void roundUpdate() {
         if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);

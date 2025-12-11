@@ -1,4 +1,4 @@
-package org.example.View;
+package org.example.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -33,10 +33,18 @@ public class ShopView implements Screen {
     private Table table;
     private SpriteBatch batch;
     private ShopController shopController;
-    public ShopView(UpgradeLibrary upgradeLibrary, ShopController sc) {
-        this.upgradeLibrary = upgradeLibrary;
-        shopController = sc;
+
+    public ShopView() {
+        //this.shopController = shopController;
         items = new ArrayList<>();
+    }
+
+    public void setShopController(ShopController ctrl){
+        this.shopController = ctrl;
+        this.upgradeLibrary = shopController.getUpgradeLibrary();
+    }
+
+    public void update(){
         updateList();
     }
 
@@ -58,7 +66,7 @@ public class ShopView implements Screen {
     public void show() {
         batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport(), batch);
-
+        update();
         Texture bg = new Texture("assets/images/background.png");
         Image background = new Image(bg);
         background.setFillParent(true);

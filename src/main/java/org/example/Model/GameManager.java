@@ -1,8 +1,6 @@
 package org.example.Model;
 
-import org.example.Model.GameState.GameState;
-import org.example.Model.GameState.MenuState;
-import org.example.Model.GameState.RoundState;
+import org.example.Model.GameState.*;
 
 import java.util.ArrayList;
 
@@ -19,21 +17,16 @@ public class GameManager {
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
 
-
-
-
-
-    public  GameManager(RoundObserver o) {
-
+    public GameManager(RoundObserver o) {
         this.currentRound = new Round(new Opponent(400,15,1, "bossman"),  o);
         this.gameMap = new GameMap(100, user,this);
         this.roundObs = o;
+        this.user = currentRound.getUser();
+        //this.setState(new ShopState());
 
 
         this.setState(new MenuState());
         notifyState();
-
-
     }
 
     public GameManager(User user, GameMap map, RoundObserver o) {
@@ -42,11 +35,11 @@ public class GameManager {
         this.gameMap = map;
         this.roundObs = o;
 
+        setState(new MapState());
     }
+
     public void gameLoop() {
-
         state.update(this);
-
     }
 
     public  void setState(GameState state) {
@@ -57,11 +50,11 @@ public class GameManager {
         return state.getName();
     }
 
-
-
     public void initRound() {
         currentRound.init();
     }
+
+    public User getUser(){return user;}
 
     public void startGame( ){
         setState(new RoundState());
@@ -72,6 +65,7 @@ public class GameManager {
     public void setStateObs(StateObserver obs) {
         stateObservers.add(obs);
     }
+
     public void notifyState() {
        for(StateObserver o: stateObservers) {
            o.updateState(getState());

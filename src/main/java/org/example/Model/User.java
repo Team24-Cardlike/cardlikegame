@@ -1,6 +1,7 @@
 package org.example.Model;
 
 import com.badlogic.gdx.utils.Array;
+import org.example.Model.Upgrades.Upgrade;
 
 import java.util.ArrayList;
 // import java.util.Collections;
@@ -15,10 +16,8 @@ public class User extends Player {
     ArrayList<Card> selectedCards;
     ArrayList<Boolean> hoveredCards;
     ArrayList<Boolean> boolSelectedCards;
-
+    ArrayList<Upgrade> usersUpgrades;
     CardCombos combos = new CardCombos();
-
-
 
     public User(int startHealth){
         this.maxHealth = startHealth;
@@ -75,6 +74,9 @@ public class User extends Player {
      *
      * @param indices indices of cards that you selected
      */
+    public void setUsersUpgrades(Upgrade upgrade){
+        usersUpgrades.add(upgrade);
+    }
 
     public void removeCards(ArrayList<Integer> indices) {
         for (int index : indices) {
@@ -109,4 +111,6 @@ public class User extends Player {
         this.hand = new ArrayList<>();
         this.selectedCards = new ArrayList<>();
     }
+
+
 }

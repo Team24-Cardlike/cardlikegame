@@ -76,13 +76,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private float opponentStartY = 300;      // original Y
     private float opponentDropY = 180;
 
-
-
     private float opponentHealthPercentage;
     private float userHealthPercentage;
     private boolean playerTurn;
     private boolean gameEnded = false;
-
 
     int a = 0;
     public ArrayList<Integer> selectedIndices;
@@ -97,16 +94,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         this.gameManager = manager;
     }
 
-
-
     public void setController(RoundController roundController) {
         this.roundController = roundController;
     }
 
     @Override
     public void show() {
-
-
         BitmapFont font = new BitmapFont(); // standard font
         style = new Label.LabelStyle();
         style.font = font;
@@ -136,6 +129,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         discardButton.setPosition(600, 200);
         discardButton.setSize(80, 100);
         stage.addActor(discardButton);
+
 
 
         startButton = new Image(new Texture("assets/images/enemyEvil.png"));

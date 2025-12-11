@@ -28,8 +28,6 @@ public class GameMap {
 
         this.maneger = maneger;
         createMap();
-
-
     }
 
     void createMap(){
@@ -54,7 +52,7 @@ public class GameMap {
 
     public void setLvlFalse() {
         this.lvlSelected = false;
-        maneger.setState(new RoundState());
+        //maneger.setState(new RoundState());
     }
 
     public void levelSelect(int index) {
@@ -63,6 +61,5 @@ public class GameMap {
     }
 
     public Graph<Opponent> getMap() {
-        return this.map;
-    }
+        return this.map;}
 }
