@@ -48,6 +48,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private Image menuButton;
     public Image discardButton;
     public Image nextButton;
+    private Image shopButton;
 
     public Texture nextButtonTexture;
     public Texture vicTxt;
@@ -119,20 +120,24 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         stage = new Stage(viewport, spriteBatch);
         cardSprites = new ArrayList<>();
 
+        shopButton = new Image(new Texture("assets/images/3sun.png"));
+        shopButton.setPosition(5, 300);
+        shopButton.setSize(50, 50);
+        stage.addActor(shopButton);
 
         menuButton = new Image(new Texture("assets/images/victoryPlaceholder.png"));
         menuButton.setPosition(0.2f, 3.5f);
         menuButton.setSize(1, 0.7f);
         stage.addActor(menuButton);
 
-        discardButton = new Image(new Texture("assets/images/discardTest.png"));
+        discardButton = new Image(new Texture("assets/images/discard.png"));
         discardButton.setPosition(600, 200);
         discardButton.setSize(80, 100);
         stage.addActor(discardButton);
 
 
 
-        startButton = new Image(new Texture("assets/images/enemyEvil.png"));
+        startButton = new Image(new Texture("assets/images/endTurn.png"));
         startButton.setPosition(0, 200);
         startButton.setSize(150, 100);
         stage.addActor(startButton);
@@ -161,6 +166,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             public void clicked(InputEvent event, float x, float y) {
                 //throwCards();
                 roundController.discardCards(removedIndices);
+            }
+        });
+        shopButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //throwCards();
+                roundController.openShop();
             }
         });
         input();

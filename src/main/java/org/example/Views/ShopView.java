@@ -33,6 +33,7 @@ public class ShopView implements Screen {
     private Table table;
     private SpriteBatch batch;
     private ShopController shopController;
+    private Image closeShop;
 
     public ShopView() {
         //this.shopController = shopController;
@@ -66,6 +67,8 @@ public class ShopView implements Screen {
     public void show() {
         batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport(), batch);
+
+
         update();
         Texture bg = new Texture("assets/images/background.png");
         Image background = new Image(bg);
@@ -77,6 +80,19 @@ public class ShopView implements Screen {
         stage.addActor(table);
 
         shopGrid();
+
+        closeShop = new Image(new Texture("assets/images/endTurn.png"));
+        closeShop.setPosition(0, 200);
+        closeShop.setSize(50, 50);
+        stage.addActor(closeShop);
+
+        closeShop.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                shopController.closeShop();
+            }
+        });
+
         Gdx.input.setInputProcessor(stage);
     }
 

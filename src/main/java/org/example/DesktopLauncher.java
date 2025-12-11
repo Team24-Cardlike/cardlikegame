@@ -27,7 +27,7 @@ public class DesktopLauncher {
         RoundView rview = new RoundView();
         GameManager manager = new GameManager(rview);
         rview.setGameManager(manager);
-        RoundController roundController = new RoundController(manager.currentRound);
+        RoundController roundController = new RoundController(manager.currentRound, manager);
 
 
         MainMenuView mview = new MainMenuView();
