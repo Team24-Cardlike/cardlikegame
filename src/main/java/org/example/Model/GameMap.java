@@ -1,18 +1,22 @@
 package org.example.Model;
-import org.w3c.dom.Node;
 
+
+import org.example.Model.GameState.RoundState;
 
 import java.util.*;
 public class GameMap {
-    Graph<Game> map;
+    Graph<Opponent> map;
     ArrayList<Opponent> opponents;
     Opponent heimdall;
     Opponent balder;
     Opponent freja;
     Opponent tor;
     Opponent oden;
+    Opponent currentOpponent;
+    boolean lvlSelected = false;
+    GameManager maneger;
 
-    GameMap(int dif){
+    GameMap(int dif, User user , GameManager maneger){
         this.map  = new Graph<>();
         this.opponents = new ArrayList<>();
         this.heimdall = new Opponent(300*dif, 10, 3, "Heimdall");
@@ -22,19 +26,40 @@ public class GameMap {
         this.oden = new Opponent(1500*dif, 40, 2, "Oden");
         this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
 
+        this.maneger = maneger;
         createMap();
     }
 
     void createMap(){
-        this.map.addVertex(new Game(this.opponents.getFirst()));
-        this.map.addVertex(new Game(this.opponents.getLast()));
-        for(int i = 0; i<opponents.size(); i++) {
-            if(!(i+1 > opponents.size()))
-                this.map.addEdge(new Game(this.opponents.get(i)), new Game(this.opponents.get(i+1)), false);
-        }
+        //Add opponents to nodes
+        map.addVertex(heimdall);
+        map.addVertex(balder);
+        map.addVertex(freja);
+        map.addVertex(tor);
+        map.addVertex(oden);
+
+        //Attach nodes
+        map.addEdge(heimdall, balder, false);
+        map.addEdge(heimdall, freja, false);
+
+        map.addEdge(balder, tor, false);
+        map.addEdge(freja, tor, false);
+
+        map.addEdge(tor, oden, false);
     }
 
-    public Graph<Game> getMap() {
-        return this.map;
+
+
+    public void setLvlFalse() {
+        this.lvlSelected = false;
+        //maneger.setState(new RoundState());
     }
+
+    public void levelSelect(int index) {
+        // List<Opponent> list = m
+
+    }
+
+    public Graph<Opponent> getMap() {
+        return this.map;}
 }
