@@ -141,7 +141,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         discardButton.setSize(80, 100);
         stage.addActor(discardButton);
 
-        startButton = new Image(new Texture("assets/images/enemyEvil.png"));
+
+
+        startButton = new Image(new Texture("assets/images/endTurn.png"));
         startButton.setPosition(0, 200);
         startButton.setSize(150, 100);
         stage.addActor(startButton);
@@ -373,6 +375,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     public void drawCardSprites() {
+
         for (int i = 0; i < selectedCardSprites.size(); i++) {
             Sprite selectedCard = selectedCardSprites.get(i);
 
@@ -505,6 +508,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onHandChanged(ArrayList<String> hand) {
+
         this.cardSprites.clear(); // Clear current sprites before update
 
         for (int i = 0; i < hand.size(); i++) {
@@ -523,7 +527,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
             cardSprites.add(cardSprite);
             hoveredCards.add(false); //Resetting hovered if marked.
+
         }
+
     }
 
     @Override
@@ -545,12 +551,14 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     @Override
     public void onBestComboChanged(String bestCombo) {
         this.currentBestCombo = bestCombo;
+
     }
 
     @Override
     public void onHealthChanged(float userHealth, float opponentHealth) {
         this.opponentHealthPercentage = opponentHealth;
         this.userHealthPercentage = userHealth;
+
     }
 
     @Override

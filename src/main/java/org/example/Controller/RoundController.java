@@ -16,6 +16,7 @@ public class RoundController {
 
     public void nextRound(){
         round.endRound();
+
     }
 
     public void selectCard(int a) {

@@ -27,6 +27,10 @@ public class ShopController {
         user.setUsersUpgrades(upgrade);
     }
 
+    public void closeShop(){
+        manager.closeShop();
+    }
+
     public ArrayList<String> getUserUpgrades(){
         stringList.clear();
         for(int i = 0; i < user.usersUpgrades.size(); i++){
