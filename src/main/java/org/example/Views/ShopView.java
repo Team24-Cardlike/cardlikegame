@@ -85,7 +85,7 @@ public class ShopView implements Screen {
         int count = 0;
 
         for(Upgrade item: items){
-            Texture tex = new Texture("assets/images/3sun.png");
+            Texture tex = new Texture(item.getPic());
 
             TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(tex));
             ImageButton itemButton = new ImageButton(drawable);
@@ -131,7 +131,7 @@ public class ShopView implements Screen {
         desc.setPosition(20, background.getHeight() -80);
         popup.addActor(desc);
 
-        Image buyButton = new Image(new Texture("assets/images/endTurn.png"));
+        Image buyButton = new Image(new Texture(item.getPic()));
         buyButton.setSize(120, 60);
         buyButton.setPosition(20, 20);
         buyButton.addListener(new ClickListener() {

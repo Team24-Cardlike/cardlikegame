@@ -13,17 +13,17 @@ public class GameManager {
     private User user;
     private boolean gameMenu = true;
 
+    private ShopState shopState;
     RoundObserver roundObs;
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
 
     public GameManager(RoundObserver o) {
-        this.currentRound = new Round(new Opponent(400,15,1, "bossman"),  o);
-        this.gameMap = new GameMap(100, user,this);
+        this.currentRound = new Round(new Opponent(100,1000,1, "bossman"),  o);
         this.roundObs = o;
         this.user = currentRound.getUser();
+        this.gameMap = new GameMap(100, user,this);
         //this.setState(new ShopState());
-
 
         this.setState(new MenuState());
         notifyState();
@@ -42,12 +42,23 @@ public class GameManager {
         state.update(this);
     }
 
-    public  void setState(GameState state) {
+    public void setState(GameState state) {
         this.state = state;
+    }
+
+    public void setShopState(){
+        setState(new ShopState());
+        notifyState();
     }
 
     public String getState() {
         return state.getName();
+    }
+
+    public void resetRound(){
+        this.currentRound = new Round(user, new Opponent(400,15,1, "bossman"), roundObs);
+        notifyState();
+        currentRound.init();
     }
 
     public void initRound() {

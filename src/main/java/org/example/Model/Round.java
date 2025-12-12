@@ -22,8 +22,11 @@ public class Round {
 
     public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
+        this.user.resetUser();
         this.opponent = opponent;
+        //this.opponent.resetOpponent();
         this.deck.createInGameDeck();
+        user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         o.addObserver(ob);
     }
 
@@ -49,10 +52,9 @@ public class Round {
         }
         else {
             opponentTurn();
-
         }
         //round ends
-        if ( user.health <= 0 || checkDeadOpponent()) {
+        if (user.health <= 0 || checkDeadOpponent()) {
 
             roundFinished = true;
             if(opponentHealth < userHealth) {
@@ -63,7 +65,6 @@ public class Round {
         }
 
     }
-
 
     /**
      *  <b>Does the following:</b>
@@ -159,6 +160,9 @@ public class Round {
         this.roundFinished = true;
     }
 
+    public void restart(){
+
+    }
 
     public void init() {
         o.notifyHandChanged(user.getHand());

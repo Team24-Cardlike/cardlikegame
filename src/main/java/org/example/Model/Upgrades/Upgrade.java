@@ -9,12 +9,14 @@ public abstract class Upgrade {
     String desc;
     int cost;
     String category;
+    String pic;
 
-    Upgrade(String name, String desc, int cost, String category){
+    Upgrade(String name, String desc, int cost, String category, String pic){
         this.name = name;
         this.desc = desc;
         this.cost = cost;
         this.category = category;
+        this.pic = "assets/images/"+pic+".png";
     }
 
     public String getName(){
@@ -22,6 +24,9 @@ public abstract class Upgrade {
     }
     public String getDesc(){
         return this.desc;
+    }
+    public String getPic(){
+        return pic;
     }
     public int getCost(){
         return this.cost;
