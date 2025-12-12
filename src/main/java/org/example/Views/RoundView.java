@@ -9,35 +9,23 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import org.example.Controller.RoundController;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;        // borde vara vit
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Stack;
 
 public class RoundView extends ApplicationAdapter implements RoundObserver, Screen {
     public FitViewport viewport;
@@ -46,9 +34,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     Texture background;
 
-    public Image victoryWindow;
     public Image startButton;
-    private Image menuButton;
+    public Image handbookButton;
     public Image discardButton;
     public Image nextButton;
     public Image retryButton;
@@ -91,7 +78,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private boolean gameEnded = false;
     private boolean isVictory = false;
 
-    int a = 0;
     public ArrayList<Integer> selectedIndices;
     public ArrayList<Integer> removedIndices;
     private GameManager gameManager;
@@ -126,10 +112,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         style = new Label.LabelStyle();
         style.font = comboFont;
 
-        //BitmapFont font = new BitmapFont(); // standard font
-       // style = new Label.LabelStyle();
-       // style.font = font;
-
         vicTxt = new Texture("assets/images/victory.png");
         lossTxt = new Texture("assets/images/gameover.png");
         nextButtonTexture = new Texture("assets/images/nextbutton.png");
@@ -151,11 +133,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         shopButton.setSize(150, 100);
         stage.addActor(shopButton);
 
-
-        menuButton = new Image(new Texture("assets/images/victoryPlaceholder.png"));
-        menuButton.setPosition(0.2f, 3.5f);
-        menuButton.setSize(1, 0.7f);
-        stage.addActor(menuButton);
+        handbookButton = new Image(new Texture("assets/images/rules.png"));
+        handbookButton.setPosition(5, 500);
+        handbookButton.setSize(70, 120);
+        stage.addActor(handbookButton);
 
         discardButton = new Image(new Texture("assets/images/discard.png"));
         discardButton.setPosition(650, 200);
@@ -183,6 +164,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 onPlaySelectedCards();
+            }
+        });
+
+        handbookButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                roundController.openHandbook();
             }
         });
 
@@ -564,7 +552,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onSelectedChanged(ArrayList<String> selected) {
         ArrayList<String> temp = selected;
 
-
         selectedCardSprites.clear();
         for (int i = 0; i < temp.size(); i++) {
             Sprite cardSprite = new Sprite(new Texture("assets/images/" + temp.get(i)));
@@ -579,14 +566,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     @Override
     public void onBestComboChanged(String bestCombo) {
         this.currentBestCombo = bestCombo;
-
     }
 
     @Override
     public void onHealthChanged(float userHealth, float opponentHealth) {
         this.opponentHealthPercentage = opponentHealth;
         this.userHealthPercentage = userHealth;
-
     }
 
     @Override
