@@ -1,4 +1,4 @@
-package org.example.Model;
+/*package org.example.Model;
 
 
 import java.util.ArrayList;
@@ -61,3 +61,4 @@ public class GameObservers {
         }
     }
 }
+*/

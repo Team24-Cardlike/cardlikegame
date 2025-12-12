@@ -83,8 +83,7 @@ public class Round {
             totalDamageToOpponent = totalDamageToOpponent + damage;
             while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
 
-
-            System.out.println("Din motståndare tog " + damage + " skada! " + this.opponent.getHealth(opponent) + " kvar");
+            System.out.println("Din motståndare tog " + damage + " skada! " + this.opponent.getHealth() + " kvar");
             playerTurn = false;
 
             o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed

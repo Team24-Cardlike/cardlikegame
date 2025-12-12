@@ -1,7 +1,7 @@
 package org.example.Model;
 
 
-
+/*
 import java.util.*;
 
 public class Game {
@@ -10,7 +10,7 @@ public class Game {
 
     private Deck deck; // Object with all possible cards, and the deck you draw from
     //Upgrades upgrades;
-    private User user;  
+    private User user;
     private Opponent opponent;
     private Stack<Card> gameDeck; // The deck you draw from
     // private int turn = 0; // Not needed?
@@ -72,19 +72,19 @@ public class Game {
 
 
     public void gameLoop1() {
-        
-        // System.out.println(this.gameDeck.size() + this.user.hand.size());    
-        // System.out.println(selectedCards.size());    
+
+        // System.out.println(this.gameDeck.size() + this.user.hand.size());
+        // System.out.println(selectedCards.size());
         if (gameDeck.size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
         while (user.hand.size() < user.cardsPerHand) user.hand.add(gameDeck.pop());
         observers.notifyHandChanged(user.getHand());
         observers.notifyHealthChanged(user.getHealthRatio(), opponent.getHealthRatio());
 
-        if (playerTurn) {            
+        if (playerTurn) {
 
             // Wait for player to make turn
         }
-        else {            
+        else {
             opponentTurn();
         }
 
@@ -106,7 +106,7 @@ public class Game {
             System.out.println();
             System.out.println("-------------");
 
-            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) { 
+            if (this.gameDeck.size() <= this.deck.cards.size() - user.cardsPerHand) {
                 deck.refill(user.hand);
             }
 
@@ -143,7 +143,7 @@ public class Game {
     }
 
 
-    private void damage(Player defender, Player attacker){        
+    private void damage(Player defender, Player attacker){
         defender.takeDamage(attacker.getDamage());
     }
 
@@ -155,14 +155,14 @@ public class Game {
      *   <li>user.drawCards()</li>
      * </ul>
      * @param //playedCards cards played from the front end
-     */
-    public void playCards(ArrayList<Card> playedCards){        
+     *//*
+    public void playCards(ArrayList<Card> playedCards){
         int damage = user.playCards(playedCards);
         this.opponent.takeDamage(damage*100);
-        totalDamageToOpponent = totalDamageToOpponent + damage;        
+        totalDamageToOpponent = totalDamageToOpponent + damage;
 
         if(checkDeadOpponent()){
-            gameState = false;            
+            gameState = false;
             return;
         }
 
@@ -174,7 +174,7 @@ public class Game {
 
 
 
-    private void opponentTurn() {        
+    private void opponentTurn() {
         int oppDamage = opponent.getDamage();
         user.takeDamage(oppDamage);
         totalDamageToPlayer += oppDamage;
@@ -205,7 +205,7 @@ public class Game {
 
     }
 
-    private boolean checkDeadOpponent(){        
+    private boolean checkDeadOpponent(){
         return opponent.getHealth() <= 0;
     }
 
@@ -244,7 +244,7 @@ public class Game {
             if(bool)i++;
         }
         return i;
-    }    
+    }
 
     public void nextRound(){
         this.user.resetUser();
@@ -263,4 +263,4 @@ public class Game {
         this.playerTurn = true;
     }
 }
-
+*/

@@ -1,12 +1,12 @@
-package org.example.Controller;
+/*package org.example.Controller;
 
 import java.util.ArrayList;
 
 import org.example.Model.Card;
 import org.example.Model.Game;
 
-public class Controller{    
-    private Game game;    
+public class Controller{
+    private Game game;
 
     public Controller(Game game){        
         this.game = game;
@@ -28,3 +28,4 @@ public class Controller{
         this.game.playCards(temp);
     }    
 }
+*/
