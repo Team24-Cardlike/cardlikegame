@@ -13,6 +13,8 @@ import org.example.Views.MainMenuView;
 //Holy words
 import org.example.Controller.RoundController;
 import org.example.Views.ShopView;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+
 //import org.example.GameRender;
 
 public class DesktopLauncher {

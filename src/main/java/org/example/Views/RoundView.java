@@ -31,6 +31,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.Controller.RoundController;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.example.Model.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;        // borde vara vit
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,9 +110,25 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void show() {
-        BitmapFont font = new BitmapFont(); // standard font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/impact.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 35;
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 4f;
+        parameter.color = new Color(1f, 1f, 0f, 1f);
+        parameter.shadowOffsetX = 4;
+        parameter.shadowOffsetY = 4;
+        parameter.shadowColor = new Color(0,0,0,0.75f);
+
+        BitmapFont comboFont = generator.generateFont(parameter);
+        generator.dispose();
+
         style = new Label.LabelStyle();
-        style.font = font;
+        style.font = comboFont;
+
+        //BitmapFont font = new BitmapFont(); // standard font
+       // style = new Label.LabelStyle();
+       // style.font = font;
 
         vicTxt = new Texture("assets/images/victory.png");
         lossTxt = new Texture("assets/images/gameover.png");
@@ -450,7 +468,16 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
 
         currentComboLabel = new Label(comboName, style);
-        currentComboLabel.setPosition(200, 200);
+
+        // Position: top right
+        float x = viewport.getWorldWidth() - currentComboLabel.getPrefWidth() - 60;
+        float y = viewport.getWorldHeight() - currentComboLabel.getPrefHeight() - 80;
+
+        currentComboLabel.setPosition(x, y);
+
+        // Animation
+        //currentComboLabel.getColor().a = 0;  // start genomskinlig
+
         stage.addActor(currentComboLabel);
     }
 
