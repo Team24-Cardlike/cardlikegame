@@ -235,7 +235,7 @@ public class Testing {
         assertEquals(410, user.getDamage());
 
         ArrayList<Upgrade> upgrades = new ArrayList<>();
-        upgrades.add(lib.getUpgrade("Jhin's Blessing"));
+        upgrades.add(lib.getUpgrade(11));
 
         user.setUpgrades(upgrades);
         assertEquals((int)(410*1.4444), user.getDamage());

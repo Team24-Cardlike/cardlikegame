@@ -34,6 +34,15 @@ public class Round {
         this.deck.createInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         o.addObserver(ob);
+
+        //TODO: REMOVE THESE TEMPORARY ADDS
+        this.user.addUpgrade(lib.getUpgrade(11));
+        this.user.addUpgrade(lib.getUpgrade(14));
+        this.user.addUpgrade(lib.getUpgrade(21));
+        this.user.addUpgrade(lib.getUpgrade(15));
+        this.user.addUpgrade(lib.getUpgrade(31));
+        this.user.addUpgrade(lib.getUpgrade(32));
+        this.user.addUpgrade(lib.getUpgrade(22));
     }
 
     public Round(Opponent opponent , RoundObserver ob){
@@ -42,6 +51,15 @@ public class Round {
         this.deck.createInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         o.addObserver(ob);
+
+        //TODO: REMOVE THESE TEMPORARY ADDS
+        this.user.addUpgrade(lib.getUpgrade(11));
+        this.user.addUpgrade(lib.getUpgrade(14));
+        this.user.addUpgrade(lib.getUpgrade(21));
+        this.user.addUpgrade(lib.getUpgrade(15));
+        this.user.addUpgrade(lib.getUpgrade(31));
+        this.user.addUpgrade(lib.getUpgrade(32));
+        this.user.addUpgrade(lib.getUpgrade(22));
     }
 
     public User getUser(){
@@ -51,23 +69,18 @@ public class Round {
     public void roundUpdate() {
         if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
 
-        if (playerTurn) {
+
+        if (playerTurn && !this.roundFinished) {
             // Wait for player to make turn
             currentBestCombo = bestCombo(user.getSelectedCards());
             o.notifyBestCombo(currentBestCombo);
         }
-        else {
+
+        else if(!playerTurn && !this.roundFinished){
             opponentTurn();
         }
         //round ends
-        if ( user.health <= 0 || checkDeadOpponent()) {
-            roundFinished = true;
-            if(opponentHealth < userHealth) {
-            o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
-            else {
-                o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
-            }
-        }
+
 
     }
 
@@ -81,10 +94,8 @@ public class Round {
      * @param //playedCards cards played from the front end
      */
     public void playCards(){
-        //TODO: REMOVE THESE TEMPORARY ADDS
-        this.user.addUpgrade(lib.getUpgrade("Lone Wolf"));
-        this.user.addUpgrade(lib.getUpgrade("Jhin's Blessing"));
-        this.user.damage = user.playCards();
+        this.user.damage = 0;
+        this.user.damage = this.user.playCards();
         for(Upgrade upg : this.user.upgrades){
             checkUpgrade(upg);
         }
@@ -95,13 +106,19 @@ public class Round {
 
 
         System.out.println("Din motståndare tog "+this.user.damage+" skada! "+ this.opponent.getHealth()+ " kvar");
+        checkUpgrade(lib.getUpgrade(15));
+        checkUpgrade(lib.getUpgrade(31));
+        checkUpgrade(lib.getUpgrade(32));
+        this.user.selectedCards = new ArrayList<>();
+        this.user.damage = 0;
         playerTurn = false;
 
-            o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed
-            o.notifyPlayerTurn(playerTurn); // Notify observer of changed player turn
-            o.notifySelectedChanged(user.getSelectedCards()); // Notify observer of reset selected
-            o.notifyHandChanged(user.getHand()); // Notify observer of new hand
-        }
+        o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed
+        o.notifyPlayerTurn(playerTurn); // Notify observer of changed player turn
+        o.notifySelectedChanged(user.getSelectedCards()); // Notify observer of reset selected
+        o.notifyHandChanged(user.getHand());// Notify observer of new hand
+        checkDeadPlayer();
+    }
 
     //TODO: Make user attack first
     private void opponentTurn() {
@@ -112,14 +129,33 @@ public class Round {
         totalDamageToPlayer += oppDamage;
 
         System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " HP kvar");
+        checkUpgrade(lib.getUpgrade(22));
+        checkDeadPlayer();
         playerTurn = true;
 
         o.notifyHealthChanged(userHealth,opponentHealth);// Notify observer of health changed
         o.notifyPlayerTurn(playerTurn); // notify player turn changed
+
+    }
+
+    private void checkDeadPlayer(){
+        if (checkDeadUser() || checkDeadOpponent()) {
+            this.roundFinished = true;
+            if(checkDeadOpponent()) {
+                o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
+            else {
+                System.out.println("hejhej");
+                o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
+            }
+        }
     }
 
     private boolean checkDeadOpponent(){
-        return opponent.health <= 0;
+        return this.opponent.health <= 0;
+    }
+
+    private boolean checkDeadUser(){
+        return this.user.health <= 0;
     }
 
     private String bestCombo(ArrayList<Card> cards){
@@ -167,16 +203,13 @@ public class Round {
         this.roundFinished = true;
     }
 
-    public User getUser(){
-        return  this.user;
-    }
-
     public Opponent getOpponent() {
         return this.opponent;
     }
 
     public void checkUpgrade(Upgrade upgrade){
-        this.upgradeManager.checkUpgrade(upgrade, this);
+        if(this.getUser().getUpgrades().contains(upgrade))
+            this.upgradeManager.checkUpgrade(upgrade, this);
     }
     public void restart(){
 

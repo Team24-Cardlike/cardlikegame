@@ -53,8 +53,11 @@ public class User extends Player {
 
     @Override
     public int getDamage() {
-        this.damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
         return this.damage;
+    }
+
+    public void setDamage(){
+        this.damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
     }
 
     int getHiVal(ArrayList<Card> cards){
@@ -78,7 +81,7 @@ public class User extends Player {
     }
 
     int playCards(){
-        this.damage = getDamage();
+        setDamage();
         return this.damage;
         // TODO: FINISH FUNCTION
     }
@@ -108,6 +111,8 @@ public class User extends Player {
         return this.gold;
     }
 
+    public void addGold(int amount){ this.gold += amount;}
+
     public void setGold(int amount){
         this.gold = amount;
     }
@@ -121,7 +126,10 @@ public class User extends Player {
     }
 
     public void addUpgrade(Upgrade upgrade){
-        this.upgrades.add(upgrade);
+        if(this.upgrades.contains(upgrade))
+            System.out.println("Already have that upgrade!");
+        else
+            this.upgrades.add(upgrade);
     }
 
     public void buyUpgrade(Upgrade upgrade){

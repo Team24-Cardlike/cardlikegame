@@ -8,7 +8,6 @@ import java.util.Objects;
 public class ComboDmgAmp extends Upgrade{
     final Combo ampedCombo;
     final float ampAmount;
-
     /***
      * @
      * @param name the name of the Upgrade.
@@ -16,8 +15,8 @@ public class ComboDmgAmp extends Upgrade{
      * @param ampAmount the float that you multiply with your damage.
      * @param cost the cost of the upgrade in the shop.
      */
-    ComboDmgAmp(String name, Combo ampedCombo, float ampAmount, int cost) {
-        super(name, "Gain " + ampAmount + " damage-amp on " + ampedCombo.name + " combos.", cost, "Damage");
+    ComboDmgAmp(String name, Combo ampedCombo, float ampAmount, int cost, String pic, int id) {
+        super(name, "Gain " + ampAmount + " damage-amp on " + ampedCombo.name + " combos.", cost, "Damage", pic, id);
         this.ampedCombo = ampedCombo;
         this.ampAmount = ampAmount;
     }

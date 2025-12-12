@@ -4,8 +4,8 @@ import org.example.Model.Round;
 
 public class GoldOnKill extends Upgrade{
     int extraGold;
-    GoldOnKill(String name, int cost, int extraGold){
-        super(name, "Grants you " + extraGold + " extra gold after a kill.", cost, "Economy");
+    GoldOnKill(String name, int cost, int extraGold, String pic, int id){
+        super(name, "Grants you " + extraGold + " extra gold after a kill.", cost, "Economy", pic, id);
         this.extraGold = extraGold;
     }
     @Override
@@ -20,7 +20,7 @@ public class GoldOnKill extends Upgrade{
      */
     @Override
     public void onTriggered(Round round) {
-        int gold = round.getUser().getGold() + this.extraGold;
-        round.getUser().setGold(gold);
+        System.out.println("You earned " + this.extraGold + " extra gold from " + this.name + "!");
+        round.getUser().addGold(this.extraGold);
     }
 }

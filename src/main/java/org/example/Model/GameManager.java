@@ -22,7 +22,7 @@ public class GameManager {
     GameState state;
 
     public GameManager(RoundObserver o) {
-        this.currentRound = new Round(new Opponent(400,15,1, "bossman"),  o);
+        this.currentRound = new Round(new Opponent(400,500,1, "bossman"),  o);
         this.roundObs = o;
         this.user = currentRound.getUser();
         this.gameMap = new GameMap(100, user,this);

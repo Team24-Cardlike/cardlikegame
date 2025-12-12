@@ -24,7 +24,7 @@ public class ShopController {
     }
 
     public void upgradeBaught(Upgrade upgrade){
-        user.setUsersUpgrades(upgrade);
+        user.addUpgrade(upgrade);
     }
 
     public void closeShop(){
@@ -33,8 +33,8 @@ public class ShopController {
 
     public ArrayList<String> getUserUpgrades(){
         stringList.clear();
-        for(int i = 0; i < user.usersUpgrades.size(); i++){
-            stringList.add(user.usersUpgrades.get(i).getName());
+        for(int i = 0; i < user.upgrades.size(); i++){
+            stringList.add(user.upgrades.get(i).getName());
         }
         return stringList;
     }
