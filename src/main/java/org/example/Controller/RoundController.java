@@ -34,8 +34,9 @@ public class RoundController {
         this.round.playCards();
     }
 
-    public void openHandbook(){}
+    public void openHandbook(){manager.setHandbookState();}
 
     public void restart(){manager.resetRound();}
+
     public void switchView(String view){manager.setShopState();}
 }

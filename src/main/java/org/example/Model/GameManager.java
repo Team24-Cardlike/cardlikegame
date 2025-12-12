@@ -55,6 +55,11 @@ public class GameManager {
         notifyState();
     }
 
+    public void setHandbookState(){
+        setState(new HandbookState());
+        notifyState();
+    }
+
     public String getState() {
         return state.getName();
     }

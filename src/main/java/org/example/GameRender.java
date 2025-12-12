@@ -6,6 +6,7 @@ import org.example.Controller.MenuController;
 import org.example.Model.GameState.*;
 import org.example.Model.Round;
 import org.example.Model.StateObserver;
+import org.example.Views.HandbookView;
 import org.example.Views.RoundView;
 import org.example.Controller.RoundController;
 import org.example.Model.GameManager;
@@ -20,12 +21,14 @@ public class GameRender extends Game implements StateObserver {
     private RoundView roundView;
     private MainMenuView menuView;
     private ShopView shopView;
+    private HandbookView handbookView;
 
-    GameRender(RoundView roundView, MainMenuView menuView, ShopView shopView) {
+    GameRender(RoundView roundView, MainMenuView menuView, ShopView shopView, HandbookView handbookView) {
         //this.round = round;
         this.roundView = roundView;
         this.menuView = menuView;
         this.shopView = shopView;
+        this.handbookView = handbookView;
 
         //this.manager = manager;
         //this.menuController = menuController;
@@ -55,6 +58,9 @@ public class GameRender extends Game implements StateObserver {
                 break;
             case "menu":
                 setScreen(menuView);
+                break;
+            case "handbook":
+                setScreen(handbookView);
                 break;
         }
     }

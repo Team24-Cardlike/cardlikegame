@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import org.example.Controller.MenuController;
 import org.example.Controller.RoundController;
 import org.example.Model.*;
+import org.example.Views.HandbookView;
 import org.example.Views.RoundView;
 import org.example.Views.MainMenuView;
 
@@ -13,7 +14,6 @@ import org.example.Views.MainMenuView;
 //Holy words
 import org.example.Controller.RoundController;
 import org.example.Views.ShopView;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 //import org.example.GameRender;
 
@@ -37,9 +37,11 @@ public class DesktopLauncher {
         MenuController menuController = new MenuController(manager);
 
         ShopView sview = new ShopView();
+        HandbookView hview = new HandbookView();
         ShopController shopController = new ShopController(manager.getUser(), manager);
         sview.setShopController(shopController);
-        GameRender gameRender = new GameRender(rview, mview, sview);
+        hview.setController(shopController);
+        GameRender gameRender = new GameRender(rview, mview, sview, hview);
 
         manager.setStateObs(gameRender);
         mview.setController(menuController);
