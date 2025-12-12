@@ -56,6 +56,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public Texture retryButtonTexture;
     public Texture nextButtonTexture;
     public Texture vicTxt;
+    public Texture lossTxt;
 
     //ArrayList containing card-sprites for selected cards and hand
     public ArrayList<Sprite> cardSprites = new ArrayList<>();
@@ -111,7 +112,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         style = new Label.LabelStyle();
         style.font = font;
 
-        vicTxt = new Texture("assets/images/victoryPlaceholder.png");
+        vicTxt = new Texture("assets/images/victory.png");
+        lossTxt = new Texture("assets/images/gameover.png");
         nextButtonTexture = new Texture("assets/images/nextbutton.png");
         retryButtonTexture = new Texture("assets/images/nextPlaceholder.png");
         sr = new ShapeRenderer();
@@ -410,7 +412,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
          panel = new Image(new TextureRegionDrawable(vicTxt));
         }
         else{
-            panel = new Image(new TextureRegionDrawable(background));
+            panel = new Image(new TextureRegionDrawable(lossTxt));
         }
         panel.setSize(600, 400);
         panel.setPosition(100,50);
@@ -431,13 +433,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         {
             nextButton = new Image(nextButtonTexture);
             nextButton.setPosition(600,200);
-            nextButton.setSize(80, 100);
+            nextButton.setSize(80, 50);
             stage.addActor(nextButton);
         }
         else{
             retryButton = new Image(nextButtonTexture);
             retryButton.setPosition(600,200);
-            retryButton.setSize(80, 100);
+            retryButton.setSize(80, 50);
             stage.addActor(retryButton);
         }
     }
