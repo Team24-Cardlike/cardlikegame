@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -35,8 +36,9 @@ public class ShopView implements Screen {
     private ShopController shopController;
     private Image closeShop;
 
+    private BitmapFont font;
+
     public ShopView() {
-        //this.shopController = shopController;
         items = new ArrayList<>();
     }
 
@@ -68,22 +70,29 @@ public class ShopView implements Screen {
         batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport(), batch);
 
-
         update();
+
         Texture bg = new Texture("assets/images/background.png");
         Image background = new Image(bg);
         background.setFillParent(true);
         stage.addActor(background);
 
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Impact.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 24;
+        font = generator.generateFont(parameter);
+        generator.dispose();
+
         table = new Table();
         table.setFillParent(true);
+        table.top().padTop(50); // Låt oss lägga den nedanför topen
         stage.addActor(table);
 
         shopGrid();
 
         closeShop = new Image(new Texture("assets/images/endTurn.png"));
-        closeShop.setPosition(0, 200);
         closeShop.setSize(50, 50);
+        closeShop.setPosition(stage.getWidth() - 60, stage.getHeight() - 60); // Top-right
         stage.addActor(closeShop);
 
         closeShop.addListener(new ClickListener() {
@@ -97,6 +106,7 @@ public class ShopView implements Screen {
     }
 
     private void shopGrid(){
+        table.clear();
         int columns = 5;
         int count = 0;
 
@@ -130,26 +140,33 @@ public class ShopView implements Screen {
         Image background = new Image(backgroundTexture);
         popup.addActor(background);
 
+        float popupWidth = 400;
+        float popupHeight = 300;
+        background.setSize(popupWidth, popupHeight);
+        popup.setPosition((stage.getWidth() - popupWidth)/2f, (stage.getHeight() - popupHeight)/2f);
+        /*
         float pw = background.getWidth();
         float ph = background.getHeight();
         popup.setPosition(
                 (stage.getWidth() - pw) / 2f,
                 (stage.getHeight() - ph) / 2f
-        );
+        );*/
 
-        BitmapFont font = new BitmapFont();
         Label.LabelStyle ls = new Label.LabelStyle(font, Color.WHITE);
         Label title = new Label(item.getName(), ls);
-        title.setPosition(20, background.getHeight() - 40);
+        title.setPosition(20, popupHeight - 40);
         popup.addActor(title);
 
+
         Label desc = new Label(item.getDesc(), ls);
-        desc.setPosition(20, background.getHeight() -80);
+        desc.setPosition(20, popupHeight - 80);
+        desc.setWidth(popupWidth - 40);
+        desc.setWrap(true);
         popup.addActor(desc);
 
         Image buyButton = new Image(new Texture(item.getPic()));
         buyButton.setSize(120, 60);
-        buyButton.setPosition(20, 20);
+        buyButton.setPosition(popupWidth/2f - 60, 20);
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

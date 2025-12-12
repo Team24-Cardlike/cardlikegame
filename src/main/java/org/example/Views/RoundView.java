@@ -151,21 +151,20 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         shopButton.setSize(150, 100);
         stage.addActor(shopButton);
 
+
         menuButton = new Image(new Texture("assets/images/victoryPlaceholder.png"));
         menuButton.setPosition(0.2f, 3.5f);
         menuButton.setSize(1, 0.7f);
         stage.addActor(menuButton);
 
         discardButton = new Image(new Texture("assets/images/discard.png"));
-        discardButton.setPosition(600, 200);
-        discardButton.setSize(80, 100);
+        discardButton.setPosition(650, 200);
+        discardButton.setSize(120, 60);
         stage.addActor(discardButton);
 
-
-
         startButton = new Image(new Texture("assets/images/endTurn.png"));
-        startButton.setPosition(0, 200);
-        startButton.setSize(150, 100);
+        startButton.setPosition(5, 200);
+        startButton.setSize(120, 60);
         stage.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
 
@@ -175,7 +174,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         opponentSprite.setSize(250f, 150f);
         opponentSprite.setPosition(
                 viewport.getWorldWidth() / 2f - opponentSprite.getWidth() / 2f,
-                viewport.getWorldHeight() - 250
+                viewport.getWorldHeight() - 200
         );
         background = new Texture("assets/images/bräde.png");
 
@@ -288,36 +287,39 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         float width = 250;
         float height = 30;
 
-        //float healthPercent = (float) round.user.health / round.user.maxHealth; TODO REMOVE
+        // Clamp mellan 0 och 1
+        float clampedUserHealth = Math.clamp(userHealthPercentage, 0f, 1f);
+
+        float greenWidthUser = width * clampedUserHealth;
+        float redWidthUser = width - greenWidthUser;
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        float greenWidthUser = width * userHealthPercentage;
-        float redWidthUser = width - greenWidthUser;
-
         // RED background
         sr.setColor(Color.RED);
-        sr.rect(x, y, redWidthUser, height);
+        sr.rect(x, y, width, height); // rita hela baren röd först
 
-        // GREEN foreground (scaled)
-        sr.setColor(Color.GREEN);
-        sr.rect(x + redWidthUser, y, greenWidthUser, height);
+        // GREEN foreground (skalar med procent)
+        if (greenWidthUser > 0) {
+            sr.setColor(Color.GREEN);
+            sr.rect(x, y, greenWidthUser, height);
+        }
 
         // ENEMY HEALTH BAR (top-right)
         float ex = 520;
         float ey = 550;
 
-       //  float enemyPercent = (float) game.opponent.health / game.opponent.maxHealth; TODO REMOVE
+        float clampedOpponentHealth = Math.clamp(opponentHealthPercentage, 0f, 1f);
 
-        float greenWidthOpp = width * opponentHealthPercentage;
-        float redWidthOpp = width - greenWidthOpp;
-        // RED
+        float greenWidthOpp = width * clampedOpponentHealth;
+
         sr.setColor(Color.RED);
-        sr.rect(ex, ey, redWidthOpp, height);
+        sr.rect(ex, ey, width, height); // röd bakgrund
 
-        // GREEN
-        sr.setColor(Color.GREEN);
-        sr.rect(ex + redWidthOpp, ey, greenWidthOpp, height);
+        if (greenWidthOpp > 0) {
+            sr.setColor(Color.GREEN);
+            sr.rect(ex, ey, greenWidthOpp, height);
+        }
 
         sr.end();
     }
@@ -470,13 +472,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         currentComboLabel = new Label(comboName, style);
 
         // Position: top right
-        float x = viewport.getWorldWidth() - currentComboLabel.getPrefWidth() - 60;
-        float y = viewport.getWorldHeight() - currentComboLabel.getPrefHeight() - 80;
+        float x = viewport.getWorldWidth() - currentComboLabel.getPrefWidth() - 90;
+        float y = viewport.getWorldHeight() - currentComboLabel.getPrefHeight() - 200;
 
         currentComboLabel.setPosition(x, y);
-
-        // Animation
-        //currentComboLabel.getColor().a = 0;  // start genomskinlig
 
         stage.addActor(currentComboLabel);
     }
