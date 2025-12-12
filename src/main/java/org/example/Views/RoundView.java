@@ -166,6 +166,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 onPlaySelectedCards();
+            
             }
         });
 
@@ -311,9 +312,14 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
 
+    /**
+     * AI-generated solution for getting the correct hitbox now that the
+     * cards are rotated
+     * @param index index of the card
+     * @param cards all cards in hand
+     * @return
+     */
     private Polygon generateHitbox(int index,ArrayList<Sprite> cards) {
-        // AI-generated solution for getting the correct hitbox now that the
-        // cards are rotated
         Sprite sprite = cards.get(index);
         float[] vertices = new float[]{
                 0, 0,
@@ -330,14 +336,14 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         return poly;
     }
 
-    //Check if user hovers over card
+
+    /**
+     * Check if user hovers over card
+     */
     public void getHoverdCards() {
         for (int a = 0; a < cardSprites.size(); a++){
             Polygon poly = generateHitbox(a, cardSprites);
-            // Check if card is hovered over
-            if (poly.contains(coords.x, coords.y)) {
-                // if (cardSprites.get(a).getBoundingRectangle().contains(coords.x,coords.y)) {
-                // hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
+            if (poly.contains(coords.x, coords.y)) {                
                 hoveredCards.set(a, true);
                 for (int i = 0; i < cardSprites.size(); i++) {
                     if (i != a) hoveredCards.set(i, false);
@@ -394,7 +400,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             card.setColor(hoveredCards.get(i) ? Color.LIGHT_GRAY : Color.WHITE);
             card.draw(spriteBatch);
         }
-
     }
 
     public void oppAnimation() {
@@ -521,7 +526,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             // y is adjusted to create a slight curved spread before rotation.
             float y = 80 - 7.5f * (float)Math.pow(Math.abs(i - hand.size()/2), 1.20f);
             // startX is position of card at index 0
-            float startX = 60* i + 80 ;
+            // float startX = 60 * i + 80;
+            float startX = viewport.getWorldWidth()/2 - cardSprite.getWidth()/2 + 40 - 60 * (hand.size()/2 - i);
 
             cardSprite.setPosition( startX,y );
             cardSprite.setOriginCenter();

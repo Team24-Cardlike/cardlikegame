@@ -14,9 +14,9 @@ public class GameMap {
     Opponent oden;
     Opponent currentOpponent;
     boolean lvlSelected = false;
-    GameManager maneger;
+    GameManager manager;
 
-    GameMap(int dif, User user , GameManager maneger){
+    GameMap(int dif, User user , GameManager manager){
         this.map  = new Graph<>();
         this.opponents = new ArrayList<>();
         this.heimdall = new Opponent(300*dif, 10, 3, "Heimdall");
@@ -26,7 +26,7 @@ public class GameMap {
         this.oden = new Opponent(1500*dif, 40, 2, "Oden");
         this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
 
-        this.maneger = maneger;
+        this.manager = manager;
         createMap();
     }
 
@@ -52,7 +52,7 @@ public class GameMap {
 
     public void setLvlFalse() {
         this.lvlSelected = false;
-        //maneger.setState(new RoundState());
+        //manager.setState(new RoundState());
     }
 
     public void levelSelect(int index) {

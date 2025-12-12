@@ -8,12 +8,7 @@ import org.example.Controller.RoundController;
 import org.example.Model.*;
 import org.example.Views.RoundView;
 import org.example.Views.MainMenuView;
-
-//Du är mer av ett problem nu än problemet själv -Kristoffer under roleplaying workshop till Axel :)
-//Holy words
-import org.example.Controller.RoundController;
 import org.example.Views.ShopView;
-//import org.example.GameRender;
 
 public class DesktopLauncher {
     public static void main(String[] args) {
@@ -26,8 +21,9 @@ public class DesktopLauncher {
         //Creating View, Controler for round
         RoundView rview = new RoundView();
         GameManager manager = new GameManager(rview);
-        rview.setGameManager(manager);
-        RoundController roundController = new RoundController(manager.currentRound, manager);
+        rview.setGameManager(manager);        
+        Save save = new Save(manager);
+        RoundController roundController = new RoundController(manager.currentRound, manager, save);
 
 
         MainMenuView mview = new MainMenuView();
