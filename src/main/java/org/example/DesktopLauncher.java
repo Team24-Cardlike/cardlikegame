@@ -3,9 +3,11 @@ package org.example;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
+import org.example.Controller.MapController;
 import org.example.Controller.MenuController;
 import org.example.Controller.RoundController;
 import org.example.Model.*;
+import org.example.Views.MapView;
 import org.example.Views.RoundView;
 import org.example.Views.MainMenuView;
 
@@ -23,20 +25,27 @@ public class DesktopLauncher {
 
         //Creating View, Controler for round
         RoundView rview = new RoundView();
-        GameManager manager = new GameManager(rview);
+        MapView mapView = new MapView();
+
+        GameManager manager = new GameManager(rview,mapView);
         rview.setGameManager(manager);
         RoundController roundController = new RoundController(manager.currentRound);
 
+        MapController mapController = new MapController();
+        mapController.setMap(manager.gameMap);
 
         MainMenuView mview = new MainMenuView();
         mview.setGameManager(manager);
         MenuController menuController = new MenuController(manager);
 
-        GameRender gameRender = new GameRender(rview,mview);
+        GameRender gameRender = new GameRender(rview,mview, mapView);
 
         manager.setStateObs(gameRender);
         mview.setController(menuController);
         rview.setController(roundController);
+
+        mapView.setController(mapController);
+        mapView.setManeger(manager);
 
         new Lwjgl3Application(gameRender, config);
     }

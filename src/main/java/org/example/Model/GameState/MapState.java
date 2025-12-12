@@ -9,7 +9,7 @@ public class MapState implements GameState{
     @Override
     public void update(GameManager maneger) {
         map = maneger.gameMap;
-
+        map.updateMap();
 
     }
 

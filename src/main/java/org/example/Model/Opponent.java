@@ -24,5 +24,9 @@ public class Opponent extends Player {
         return this.damage;
     }
 
+    public String getName(){
+        return name;
+    }
+
     public String getTexture(){return "assets/images/"+this.image+"png";}
 }

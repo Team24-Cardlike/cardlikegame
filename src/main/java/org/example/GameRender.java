@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import org.example.Controller.MenuController;
 import org.example.Model.Round;
 import org.example.Model.StateObserver;
+import org.example.Views.MapView;
 import org.example.Views.RoundView;
 import org.example.Controller.RoundController;
 import org.example.Model.GameManager;
@@ -12,13 +13,16 @@ import org.example.Views.MainMenuView;
 
 public class GameRender extends Game implements StateObserver {
 
-    private RoundView rview;
-    private MainMenuView mview;
+    private final RoundView rview;
+    private final MainMenuView mview;
+    private final MapView mapView;
     private Screen current;
 
 
-    GameRender(RoundView rview, MainMenuView mview) {
+
+    GameRender(RoundView rview, MainMenuView mview, MapView mapView) {
         //this.round = round;
+        this.mapView = mapView;
         this.rview = rview;
         this.mview = mview;
 
@@ -33,13 +37,14 @@ public class GameRender extends Game implements StateObserver {
         switch (state) {
             case "round":
                 setScreen(rview);
+
                 break;
             case "map":
+                setScreen(mapView);
                 break;
             case "shop":
                 break;
             case "menu":
-
                 setScreen(mview);
                 break;
         }
@@ -47,7 +52,6 @@ public class GameRender extends Game implements StateObserver {
 
     @Override
     public void updateState(String state) {
-
         switchView(state);
     }
 }
