@@ -47,12 +47,12 @@ public class MainMenuView implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        background = new Texture("assets/images/backgroundMainMenu.png");
+        background = new Texture("assets/images/mainmenu.png");
         Image bg = new Image(background);
         bg.setFillParent(true);
         stage.addActor(bg);
 
-        menuButton = new Image(new Texture("assets/images/menuButton.png"));
+        menuButton = new Image(new Texture("assets/images/playbutton.png"));
         menuButton.setPosition(300, 150);
         menuButton.setSize(200, 50);
         stage.addActor(menuButton);

@@ -28,8 +28,11 @@ public class Round {
     public boolean beenAttacked = false;
     public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
+        this.user.resetUser();
         this.opponent = opponent;
+        //this.opponent.resetOpponent();
         this.deck.createInGameDeck();
+        user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         o.addObserver(ob);
     }
 
@@ -41,6 +44,9 @@ public class Round {
         o.addObserver(ob);
     }
 
+    public User getUser(){
+        return user;
+    }
     // Check states
     public void roundUpdate() {
         if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
@@ -52,7 +58,6 @@ public class Round {
         }
         else {
             opponentTurn();
-
         }
         //round ends
         if ( user.health <= 0 || checkDeadOpponent()) {
@@ -65,7 +70,6 @@ public class Round {
         }
 
     }
-
 
     /**
      *  <b>Does the following:</b>
@@ -173,6 +177,9 @@ public class Round {
 
     public void checkUpgrade(Upgrade upgrade){
         this.upgradeManager.checkUpgrade(upgrade, this);
+    }
+    public void restart(){
+
     }
 
     public void init() {

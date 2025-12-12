@@ -26,10 +26,10 @@ public class UpgradeLibrary {
     }
 
     private void registerDamageUpgrades() {
-        this.damageUpgrades.add(new ComboDmgAmp("Lone Wolf", combos.single, 4, 15));
-        this.damageUpgrades.add(new ComboDmgAmp("Twin Synergy", combos.pair,2, 15));
-        this.damageUpgrades.add(new ComboDmgAmp("Three Musketeers", combos.three_of_a_kind, 1.75f, 15));
-        this.damageUpgrades.add(new ComboDmgAmp("Jhin's Blessing", combos.four_of_a_kind,1.4444f, 15));
+        this.damageUpgrades.add(new ComboDmgAmp("Lone Wolf", combos.single, 4, 15, "lonewolf"));
+        this.damageUpgrades.add(new ComboDmgAmp("Twin Synergy", combos.pair,2, 15, "twinsynnergy"));
+        this.damageUpgrades.add(new ComboDmgAmp("Three Musketeers", combos.three_of_a_kind, 1.75, 15, "lonewolf"));
+        this.damageUpgrades.add(new ComboDmgAmp("Jhin's Blessing", combos.four_of_a_kind,1.4444, 15, "jhinsblessing"));
 
         this.damageUpgrades.add(new ExecuteUpgrade("Fatality", 0.10f, 10));
     }

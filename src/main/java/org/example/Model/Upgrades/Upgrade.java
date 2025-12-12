@@ -7,6 +7,7 @@ public abstract class Upgrade {
     String desc;
     int cost;
     String category;
+    String pic;
 
     /***
      *
@@ -15,24 +16,31 @@ public abstract class Upgrade {
      * @param cost int cost of the upgrade
      * @param category String name of the category (Sustain, Damage, Economy)
      */
-    Upgrade(String name, String desc, int cost, String category){
+    Upgrade(String name, String desc, int cost, String category, String pic){
         this.name = name;
         this.desc = desc;
         this.cost = cost;
         this.category = category;
+        this.pic = "assets/images/"+pic+".png";
     }
 
-    public String getName() {
+    public String getName(){
         return this.name;
     }
-
-    public int getCost() {
-        return this.cost;
-    }
-
-    public String getDesc() {
+    public String getDesc(){
         return this.desc;
     }
+    public String getPic(){
+        return this.pic;
+    }
+    public int getCost(){
+        return this.cost;
+    }
+    // Called when the augment is purchased (for permanent stat changes)
+    public void onBuy(User user){}
+
+    // Called before evaluating a combo (for dynamic effects)
+    public void beforeCombo(User user, Card[] hand) {}
 
     public String getCategory() {
         return this.category;

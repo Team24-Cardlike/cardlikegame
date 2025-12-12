@@ -12,6 +12,7 @@ import org.example.Views.MainMenuView;
 //Du är mer av ett problem nu än problemet själv -Kristoffer under roleplaying workshop till Axel :)
 //Holy words
 import org.example.Controller.RoundController;
+import org.example.Views.ShopView;
 //import org.example.GameRender;
 
 public class DesktopLauncher {
@@ -20,19 +21,23 @@ public class DesktopLauncher {
         config.setTitle(("Maven LibGDX test"));
         config.setWindowedMode(800,600);
 
+        //Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
 
         //Creating View, Controler for round
         RoundView rview = new RoundView();
         GameManager manager = new GameManager(rview);
         rview.setGameManager(manager);
-        RoundController roundController = new RoundController(manager.currentRound);
+        RoundController roundController = new RoundController(manager.currentRound, manager);
 
 
         MainMenuView mview = new MainMenuView();
         mview.setGameManager(manager);
         MenuController menuController = new MenuController(manager);
 
-        GameRender gameRender = new GameRender(rview,mview);
+        ShopView sview = new ShopView();
+        ShopController shopController = new ShopController(manager.getUser(), manager);
+        sview.setShopController(shopController);
+        GameRender gameRender = new GameRender(rview, mview, sview);
 
         manager.setStateObs(gameRender);
         mview.setController(menuController);

@@ -54,7 +54,7 @@ public class User extends Player {
     @Override
     public int getDamage() {
         this.damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
-        return damage;
+        return this.damage;
     }
 
     int getHiVal(ArrayList<Card> cards){
