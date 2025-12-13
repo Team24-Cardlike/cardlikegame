@@ -22,7 +22,7 @@ public class DesktopLauncher {
         RoundView rview = new RoundView();
         GameManager manager = new GameManager(rview);
         rview.setGameManager(manager);        
-        Save save = new Save(manager);
+        Save save = new Save(new GameData(manager));
         RoundController roundController = new RoundController(manager.currentRound, manager, save);
 
 

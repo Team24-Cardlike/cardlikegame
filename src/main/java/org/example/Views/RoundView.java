@@ -106,6 +106,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         this.roundController = roundController;
     }
 
+
+    /**
+     * Initialize buttons and add listeners
+     */
     @Override
     public void show() {
         BitmapFont font = new BitmapFont(); // standard font
@@ -187,6 +191,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         input();
     }
 
+    /**
+     * Handles selecting and unselecting cards
+     */
     public void input() {
         coords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(coords);
@@ -519,14 +526,14 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         this.cardSprites.clear(); // Clear current sprites before update
 
         for (int i = 0; i < hand.size(); i++) {
-            //Iterating ocher hand to get card png
+            // Iterating over hand to get card png
             Sprite cardSprite = new Sprite(new Texture("assets/images/" + hand.get(i)));
             cardSprite.setSize(75,125);
             // Sets the card's position: x is centered based on the number of cards,
             // y is adjusted to create a slight curved spread before rotation.
             float y = 80 - 7.5f * (float)Math.pow(Math.abs(i - hand.size()/2), 1.20f);
-            // startX is position of card at index 0
-            // float startX = 60 * i + 80;
+            
+            // startX is position of card at index 0, put cards in center horizontally
             float startX = viewport.getWorldWidth()/2 - cardSprite.getWidth()/2 + 40 - 60 * (hand.size()/2 - i);
 
             cardSprite.setPosition( startX,y );
