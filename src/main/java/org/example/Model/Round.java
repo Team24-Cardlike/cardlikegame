@@ -52,6 +52,7 @@ public class Round {
         }
         else {
             opponentTurn();
+
         }
         //round ends
         if (user.health <= 0 || checkDeadOpponent()) {
@@ -65,6 +66,7 @@ public class Round {
         }
 
     }
+
 
     /**
      *  <b>Does the following:</b>
@@ -165,12 +167,15 @@ public class Round {
 
     public void init() {
         o.notifyHandChanged(user.getHand());
-        System.out.println(user.getHand().size());
+
         o.notifySelectedChanged(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
         o.notifyPlayerTurn(playerTurn);
+        o.notifyNewRound();
     }
+
+
 
 }
 

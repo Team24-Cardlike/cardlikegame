@@ -1,15 +1,21 @@
 package org.example.Model;
 
 import org.example.Model.GameState.*;
+import org.example.Model.GameState.GameState;
+import org.example.Model.GameState.MapState;
+import org.example.Model.GameState.MenuState;
+import org.example.Model.GameState.RoundState;
 
 import java.util.ArrayList;
 
 public class GameManager {
 
+
+    private  MapObserver mapObs;
     public Round currentRound;
     public GameMap gameMap;
     private User user;
-    private boolean gameMenu = true;
+
 
     private RoundState roundState;
     private ShopState shopState;
@@ -19,12 +25,16 @@ public class GameManager {
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
 
-    public GameManager(RoundObserver o) {
-        this.currentRound = new Round(new Opponent(400,15,1, "bossman"),  o);
-        this.roundObs = o;
-        this.user = currentRound.getUser();
-        this.gameMap = new GameMap(100, user,this);
-        //this.setState(new ShopState());
+
+
+
+
+    public  GameManager(RoundObserver roundObs, MapObserver mapObs) {
+
+        this.gameMap = new GameMap(100, user,this, mapObs);
+        this.roundObs = roundObs;
+        this.mapObs = mapObs;
+        this.user = new User(1000);
 
         shopState = new ShopState();
         menuState = new MenuState();
@@ -33,13 +43,13 @@ public class GameManager {
         notifyState();
     }
 
-    public GameManager(User user, GameMap map, RoundObserver o) {
+    public GameManager(User user, GameMap map, RoundObserver roundObs, MapObserver mapObs) {
         // Load saved game, start att map State
         this.user = user;
         this.gameMap = map;
-        this.roundObs = o;
+        this.roundObs = roundObs;
+        this.mapObs = mapObs;
 
-        setState(new MapState());
     }
 
     public void gameLoop() {
@@ -66,7 +76,15 @@ public class GameManager {
     }
 
     public void initRound() {
+        Opponent op = gameMap.currentOpponent;
+        this.currentRound = new Round(this.user,op,roundObs);
+
+        setState(new RoundState());
+        notifyState();
         currentRound.init();
+    }
+    public void initMap() {
+
     }
 
     public User getUser(){return user;}
@@ -78,10 +96,10 @@ public class GameManager {
     }
 
     public void startGame( ){
-        roundState = new RoundState();
-        setState(roundState);
+        initMap();
+        setState(new MapState());;
         notifyState();
-        initRound();
+
     }
 
     public void setStateObs(StateObserver obs) {

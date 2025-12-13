@@ -11,6 +11,7 @@ public interface RoundObserver {
     void onHealthChanged(float userHealth, float opponentHealth);
     void onGameEnded(String resultMessage, int totalDamageUser, int totalDamageOpponent);
     void onPlayerTurn(boolean playerTurn);
+    void onRoundInit();
 }
 
 

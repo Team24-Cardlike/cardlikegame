@@ -198,6 +198,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y) && (selectedCardSprites.size() < 5)) {
                     roundController.selectCard(a);
+
                     break;
                 }
             }
@@ -225,6 +226,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
         if (gameEnded) {
             //Display match stats
+            System.out.println("fsd");
             endGame();
             // Adding next button
             if(isVictory){
@@ -579,7 +581,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if (!playerTurn) {
             oppAnimation();
         }
-        System.out.println(playerTurn);
+
+    }
+
+    @Override
+    public void onRoundInit() {
+        Round r = gameManager.currentRound;
+        this.roundController.setRound(r);
     }
 
     @Override
