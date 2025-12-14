@@ -57,9 +57,10 @@ public class GameMap {
 
         //Attach nodes
         map.addEdge(heimdall, balder, false);
-        map.addEdge(heimdall, freja, false);
 
         map.addEdge(balder, tor, false);
+
+        map.addEdge(balder, freja, false);
         map.addEdge(freja, tor, false);
 
         map.addEdge(tor, oden, false);
@@ -87,6 +88,7 @@ public class GameMap {
             maneger.initRound();
         }
     for (Opponent op: map.neighbours(currentOpponent)) {
+
         if (s == op.getName()) {
             currentOpponent = op;
             maneger.initRound();
@@ -113,7 +115,6 @@ public class GameMap {
 
         for (Opponent o: ops) {
             String name = o.getName();
-            System.out.println(o.getName());
             lvls.add(name);
         }
     }
