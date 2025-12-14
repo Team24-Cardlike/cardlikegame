@@ -44,7 +44,7 @@ public class MainMenuView implements Screen {
     public void show() {
 
 
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(1280, 720));
         Gdx.input.setInputProcessor(stage);
 
         background = new Texture("assets/images/mainmenu.png");
@@ -98,8 +98,9 @@ public class MainMenuView implements Screen {
     }
 
     @Override
-    public void resize(int i, int i1) {
-
+    public void resize(int width, int height) {
+        if (width <= 0 || height <= 0) return;
+        stage.getViewport().update(width, height, true); // true centers the camera
     }
 
     @Override

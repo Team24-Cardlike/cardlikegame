@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.Model.Round;
-import org.example.Model.ShopController;
+import org.example.Controller.ShopController;
 
 public class HandbookView implements Screen {
     private Stage stage;

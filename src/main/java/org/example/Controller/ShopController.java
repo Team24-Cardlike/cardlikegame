@@ -1,7 +1,10 @@
-package org.example.Model;
+package org.example.Controller;
 
+import org.example.Model.GameManager;
+import org.example.Model.Round;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
+import org.example.Model.User;
 
 import java.util.ArrayList;
 
@@ -33,8 +36,8 @@ public class ShopController {
 
     public ArrayList<String> getUserUpgrades(){
         stringList.clear();
-        for(int i = 0; i < user.usersUpgrades.size(); i++){
-            stringList.add(user.usersUpgrades.get(i).getName());
+        for(int i = 0; i < user.getUsersUpgrades().size(); i++){
+            stringList.add(user.getUsersUpgrades().get(i).getName());
         }
         return stringList;
     }

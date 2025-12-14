@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import org.example.Controller.MenuController;
 import org.example.Controller.RoundController;
+import org.example.Controller.ShopController;
 import org.example.Model.*;
 import org.example.Views.HandbookView;
 import org.example.Views.RoundView;
@@ -12,7 +13,6 @@ import org.example.Views.MainMenuView;
 
 //Du är mer av ett problem nu än problemet själv -Kristoffer under roleplaying workshop till Axel :)
 //Holy words
-import org.example.Controller.RoundController;
 import org.example.Views.ShopView;
 
 //import org.example.GameRender;
@@ -21,7 +21,7 @@ public class DesktopLauncher {
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(("Maven LibGDX test"));
-        config.setWindowedMode(800,600);
+        config.setWindowedMode(1280,720);
 
         //Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
 

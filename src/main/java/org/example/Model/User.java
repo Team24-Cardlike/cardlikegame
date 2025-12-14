@@ -77,7 +77,7 @@ public class User extends Player {
     public void setUsersUpgrades(Upgrade upgrade){
         usersUpgrades.add(upgrade);
     }
-
+    public ArrayList<Upgrade> getUsersUpgrades(){return usersUpgrades;}
     public void removeCards(ArrayList<Integer> indices) {
         for (int index : indices) {
             hand.remove(index);
