@@ -8,8 +8,10 @@ public class MapState implements GameState{
     GameMap map;
     String name = "map";
     @Override
-    public void update(GameManager manager) {
-        map = manager.gameMap;
+    public void update(GameManager maneger) {
+        map = maneger.gameMap;
+        map.updateMap();
+
     }
 
     @Override

@@ -233,6 +233,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
         if (gameEnded) {
             //Display match stats
+            System.out.println("fsd");
             endGame();
             // Adding next button
             if(isVictory){
@@ -592,7 +593,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if (!playerTurn) {
             oppAnimation();
         }
-        System.out.println(playerTurn);
+
     }
 
     @Override

@@ -14,6 +14,7 @@ public class MenuState implements GameState{
     @Override
     public void update(GameManager maneger) {
 
+
     }
 
     @Override

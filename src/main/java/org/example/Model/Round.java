@@ -20,6 +20,7 @@ public class Round {
 
     private String currentBestCombo;
 
+
     public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
         this.user.resetUser();
@@ -43,27 +44,37 @@ public class Round {
     }
     // Check states
     public void roundUpdate() {
+
         if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
 
         if (playerTurn) {
             // Wait for player to make turn
             currentBestCombo = bestCombo(user.getSelectedCards());
             o.notifyBestCombo(currentBestCombo);
-        }
-        else {
-            opponentTurn();
-        }
-        //round ends
-        if (user.health <= 0 || checkDeadOpponent()) {
 
-            roundFinished = true;
-            if(opponentHealth < userHealth) {
-            o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
-            else {
-                o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
+            if (checkDeadOpponent()) {
+                gameOver();
+
+
             }
         }
 
+        else  {
+            opponentTurn();
+        }
+        //round ends
+        if ( user.health <= 0 ) {
+            gameOver();
+        }
+
+    }
+    public void gameOver() {
+        roundFinished = true;
+        if(opponentHealth < userHealth) {
+            o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
+        else {
+            o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
+        }
     }
 
     /**
@@ -156,6 +167,7 @@ public class Round {
 
     // Round ended
     public void endRound() {
+
         this.roundFinished = true;
     }
 
@@ -165,12 +177,12 @@ public class Round {
 
     public void init() {
         o.notifyHandChanged(user.getHand());
-        System.out.println(user.getHand().size());
+
         o.notifySelectedChanged(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
         o.notifyPlayerTurn(playerTurn);
-    }
+    }    
 
 }
 
