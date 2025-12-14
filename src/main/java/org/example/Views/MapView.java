@@ -3,7 +3,6 @@ package org.example.Views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
@@ -12,11 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Controller.MapController;
 import org.example.Model.GameManager;
-import org.example.Model.GameMap;
 import org.example.Model.MapObserver;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class MapView implements Screen, MapObserver {
     private FitViewport viewport;
@@ -27,16 +25,17 @@ public class MapView implements Screen, MapObserver {
     private MapController controller;
 
     ArrayList<String> lvls = new ArrayList<>();
-
     private ArrayList<Sprite> opponentIcons = new ArrayList<>();
-    private Texture mapBackground;
 
+    private Texture mapBackground;
     private Texture greenDot;
     private Texture redDot;
     private Texture redX;
     private Texture lokiHead;
 
     private int currentLvl = 0;
+    private Set<String> completedLvls;
+    private Set<String> availableLvls;
 
     private String currentOp;
 
@@ -52,6 +51,7 @@ public class MapView implements Screen, MapObserver {
     };
 
     Vector3 coords = new Vector3();
+
 
     public void setManeger(GameManager m) {
         this.maneger = m;
@@ -96,19 +96,19 @@ public class MapView implements Screen, MapObserver {
 
         for (int i = 0; i < lvls.size(); i ++) {
 
+            String op = lvls.get(i);
             float x = levelPositions[i][0];
             float y = levelPositions[i][1];
 
-            if (i < currentLvl) {
+            if (completedLvls.contains(op)) {
                 drawComplete(x, y);
             }
 
-            else if (i == currentLvl) {
+            else if (availableLvls.contains(op)) {
                 drawCurrent(x,y);
-
             }
 
-            else if (i > currentLvl) {
+            else  {
                 drawRest(x,y);
 
             }
@@ -238,9 +238,11 @@ public class MapView implements Screen, MapObserver {
     }
 
     @Override
-    public void onMapChanged(ArrayList<String> lvls, int currentLvl) {
+    public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {
 
         this.lvls = lvls;
-        this.currentLvl = currentLvl;
+
+        this.completedLvls = completedLvls;
+        this.availableLvls = availableLvls;
     }
 }

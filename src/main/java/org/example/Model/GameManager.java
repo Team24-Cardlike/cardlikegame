@@ -31,7 +31,7 @@ public class GameManager {
 
     public  GameManager(RoundObserver roundObs, MapObserver mapObs) {
 
-        this.gameMap = new GameMap(100, user,this, mapObs);
+        this.gameMap = new GameMap(100, this, mapObs);
         this.roundObs = roundObs;
         this.mapObs = mapObs;
         this.user = new User(1000);
@@ -58,6 +58,7 @@ public class GameManager {
 
     public  void setState(GameState state) {
         this.state = state;
+        notifyState();
     }
 
     public void setShopState(){
@@ -84,6 +85,7 @@ public class GameManager {
         currentRound.init();
     }
     public void initMap() {
+        this.gameMap.updateMap();
 
     }
 

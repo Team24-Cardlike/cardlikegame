@@ -226,7 +226,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
         if (gameEnded) {
             //Display match stats
-            System.out.println("fsd");
             endGame();
             // Adding next button
             if(isVictory){

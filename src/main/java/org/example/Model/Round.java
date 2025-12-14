@@ -43,6 +43,7 @@ public class Round {
     }
     // Check states
     public void roundUpdate() {
+
         if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
 
         if (playerTurn) {
@@ -57,7 +58,6 @@ public class Round {
         //round ends
         if (user.health <= 0 || checkDeadOpponent()) {
 
-            roundFinished = true;
             if(opponentHealth < userHealth) {
             o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
             else {
