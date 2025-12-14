@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 public class GameManager {
 
-
-
     public Round currentRound;
     public GameMap gameMap;
     private User user;
@@ -57,6 +55,11 @@ public class GameManager {
         notifyState();
     }
 
+    public void setHandbookState(){
+        setState(new HandbookState());
+        notifyState();
+    }
+
     public String getState() {
         return state.getName();
     }
@@ -74,13 +77,14 @@ public class GameManager {
     public User getUser(){return user;}
 
     public void closeShop(){
-        //setState(this.roundState);
+        setState(this.roundState);
         notifyState();
         initRound();
     }
 
     public void startGame( ){
-        setState(new RoundState());
+        roundState = new RoundState();
+        setState(roundState);
         notifyState();
         initRound();
     }

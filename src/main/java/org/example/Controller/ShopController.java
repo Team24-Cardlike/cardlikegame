@@ -1,7 +1,10 @@
-package org.example.Model;
+package org.example.Controller;
 
+import org.example.Model.GameManager;
+import org.example.Model.Round;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
+import org.example.Model.User;
 
 import java.util.ArrayList;
 
@@ -23,7 +26,7 @@ public class ShopController {
         return ul;
     }
 
-    public void upgradeBaught(Upgrade upgrade){
+    public void upgradeBought(Upgrade upgrade){
         user.addUpgrade(upgrade);
     }
 
