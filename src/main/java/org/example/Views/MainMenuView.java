@@ -42,8 +42,6 @@ public class MainMenuView implements Screen {
 
     @Override
     public void show() {
-
-
         stage = new Stage(new FitViewport(1280, 720));
         Gdx.input.setInputProcessor(stage);
 
@@ -53,8 +51,8 @@ public class MainMenuView implements Screen {
         stage.addActor(bg);
 
         menuButton = new Image(new Texture("assets/images/playbutton.png"));
-        menuButton.setPosition(300, 150);
         menuButton.setSize(200, 50);
+        menuButton.setPosition(stage.getWidth()/2 -100, 150);
         stage.addActor(menuButton);
 
         menuButton.addListener(new ClickListener() {

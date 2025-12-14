@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.Controller.ShopController;
 import org.example.Model.Upgrades.Upgrade;
@@ -65,7 +66,7 @@ public class ShopView implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        stage = new Stage(new ScreenViewport(), batch);
+        stage = new Stage(new FitViewport(1280,720), batch);
 
         update();
 
@@ -82,13 +83,13 @@ public class ShopView implements Screen {
 
         table = new Table();
         table.setFillParent(true);
-        table.top().padTop(50); // Låt oss lägga den nedanför topen
+        table.top().padTop(50);
         stage.addActor(table);
 
         shopGrid();
 
         closeShop = new Image(new Texture("assets/images/endTurn.png"));
-        closeShop.setSize(50, 50);
+        closeShop.setSize(150, 100);
         closeShop.setPosition(stage.getWidth() - 60, stage.getHeight() - 60); // Top-right
         stage.addActor(closeShop);
 

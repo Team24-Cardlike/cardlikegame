@@ -325,7 +325,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     // Creates
     public void createSpriteList( ){
 
-
     }
 
 
