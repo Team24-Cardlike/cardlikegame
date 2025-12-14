@@ -10,10 +10,14 @@ public class RoundController {
     public GameManager manager;
     
 
-    public RoundController(Round round, GameManager manager){
+    public RoundController(GameManager manager){
         this.manager = manager;
-        this.round = round;        
-    }    
+
+    }
+
+    public void setRound(Round r) {
+       this.round = r;
+    }
 
     public void nextRound(){
         round.endRound();
@@ -23,18 +27,22 @@ public class RoundController {
     public void selectCard(int a) {
         round.addSelectedCards(a);
 
+
     }
 
     public void unselectCard(int a) {
         round.unselectCard(a);
 
+
     }
     public void discardCards(ArrayList<Integer> cards){
         this.round.discard();
+
     }
 
     public void playCards() {        
         this.round.playCards();
+
     }
 
     public void restart(){manager.resetRound();}

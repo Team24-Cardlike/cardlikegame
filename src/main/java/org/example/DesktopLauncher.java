@@ -18,7 +18,6 @@ public class DesktopLauncher {
         config.setTitle(("Maven LibGDX test"));
         config.setWindowedMode(800,600);
 
-        //Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");
 
         //Creating View, Controler for round
         RoundView roundView = new RoundView();        
@@ -27,7 +26,7 @@ public class DesktopLauncher {
         GameManager manager = new GameManager(roundView,mapView);
         roundView.setGameManager(manager);        
         Save save = new Save(new GameData(manager));
-        RoundController roundController = new RoundController(manager.currentRound, manager);
+        RoundController roundController = new RoundController(manager);
 
         roundView.setGameManager(manager);        
 
@@ -37,8 +36,10 @@ public class DesktopLauncher {
         MainMenuView menuView = new MainMenuView();
         menuView.setGameManager(manager);
         MenuController menuController = new MenuController(manager, save);
-
-        GameRender gameRender = new GameRender(roundView,menuView, mapView, shopView);
+        
+        ShopController shopController = new ShopController(manager.getUser(), manager);
+        shopView.setShopController(shopController);
+        GameRender gameRender = new GameRender(roundView, menuView,mapView, shopView);
 
         manager.setStateObs(gameRender);
         menuView.setController(menuController);

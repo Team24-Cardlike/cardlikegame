@@ -27,7 +27,7 @@ public class Save {
      */
     public void saveGame() {  
 
-        gameData.updateData(); // Gets the newest data from the model
+        gameData.updateData(); // Updates gameData the newest data from the model
 
         try (FileWriter writer = new FileWriter(fileName)) {            
             GSON.toJson(gameData, writer);
@@ -45,9 +45,9 @@ public class Save {
         try (FileReader reader = new FileReader(fileName)) {
                     
             GameData loadedData = GSON.fromJson(reader, GameData.class);
-            loadedData.setGameManager(gameData.getGameManager());
+            if (loadedData != null) loadedData.setGameManager(gameData.getGameManager());
                                     
-            System.out.println("Game loaded successfully. Health: " + loadedData.getHealth());
+            // System.out.println("Game loaded successfully. Health: " + loadedData.getHealth());
             
             setLoadedData(loadedData);
 
@@ -64,8 +64,16 @@ public class Save {
      * Loads saved data into the game
      */
     private void setLoadedData(GameData loadedData) {
-        loadedData.setHealth();
+        // loadedData.setHealth();
         // TODO: Add new setters here
-    }
+        try {            
+            loadedData.setCompletedLvls();
+            loadedData.setAvailableLvls();
+            // loadedData.getGameManager().gameMap.updateMap();
+            loadedData.setOppIdx();
+        } catch (NullPointerException e) {
+            System.out.println("Funkar ej med ladda in completedlvls");
+        }
 
+    }
 }

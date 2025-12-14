@@ -206,6 +206,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y) && (selectedCardSprites.size() < 5)) {
                     roundController.selectCard(a);
+
                     break;
                 }
             }
@@ -226,23 +227,23 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
 
     public void onPlaySelectedCards(){
-        roundController.playCards();
-
+        roundController.playCards();        
         if(playerTurn){
             opponentAnimation();
         }
         if (gameEnded) {
             //Display match stats
-            System.out.println("fsd");
             endGame();
             // Adding next button
             if(isVictory){
                 nextButton.addListener(new ClickListener(){
                     @Override
                     public void clicked(InputEvent event, float x, float y){
-                        roundController.nextRound();
+                        roundController.nextRound();  
+                        isVictory = false;
+                        gameEnded = false;                                                                  
                     }
-                });
+                });                
             }
 
             else{
@@ -422,7 +423,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     public void endGame(){
         if(isVictory){
-         panel = new Image(new TextureRegionDrawable(vicTxt));
+            panel = new Image(new TextureRegionDrawable(vicTxt));          
         }
         else{
             panel = new Image(new TextureRegionDrawable(lossTxt));
@@ -447,7 +448,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             nextButton = new Image(nextButtonTexture);
             nextButton.setPosition(600,200);
             nextButton.setSize(80, 50);
-            stage.addActor(nextButton);
+            stage.addActor(nextButton);            
         }
         else{
             retryButton = new Image(nextButtonTexture);
@@ -594,6 +595,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             oppAnimation();
         }
 
+    }
+
+    @Override
+    public void onRoundInit() {
+        Round r = gameManager.currentRound;
+        this.roundController.setRound(r);
     }
 
     @Override

@@ -15,7 +15,7 @@ public abstract class Player {
         this.health = health;
     }
 
-    void takeDamage(int damage){
+    void takeDamage(int damage){        
         this.health-=damage;
     }
 

@@ -20,7 +20,6 @@ public class Round {
 
     private String currentBestCombo;
 
-
     public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
         this.user.resetUser();
@@ -44,38 +43,34 @@ public class Round {
     }
     // Check states
     public void roundUpdate() {
-
+        
         if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
 
         if (playerTurn) {
             // Wait for player to make turn
             currentBestCombo = bestCombo(user.getSelectedCards());
             o.notifyBestCombo(currentBestCombo);
-
-            if (checkDeadOpponent()) {
-                gameOver();
-
-
-            }
         }
-
-        else  {
-            opponentTurn();
-        }
-        //round ends
-        if ( user.health <= 0 ) {
-            gameOver();
-        }
-
-    }
-    public void gameOver() {
-        roundFinished = true;
-        if(opponentHealth < userHealth) {
-            o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
         else {
-            o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
+            opponentTurn();
+
         }
+        // round ends
+        
+        if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {
+            System.out.println(checkDeadOpponent());                   
+            if(opponentHealth < userHealth) {
+            o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
+            else {
+                o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
+            }
+            // roundFinished = true;
+            userHealth = user.maxHealth; // Terrible temp solution to winning-immediately-bug
+            opponent.health = opponent.maxHealth;
+        }
+
     }
+
 
     /**
      *  <b>Does the following:</b>
@@ -88,7 +83,7 @@ public class Round {
      */
     public void playCards() {
         if (user.getSelectedCards().size() > 0) {
-            int damage = user.playCards();
+            int damage = user.playCards();            
             this.opponent.takeDamage(damage);
             opponentHealth = opponent.getHealthRatio();
             totalDamageToOpponent = totalDamageToOpponent + damage;
@@ -167,7 +162,6 @@ public class Round {
 
     // Round ended
     public void endRound() {
-
         this.roundFinished = true;
     }
 
@@ -182,7 +176,10 @@ public class Round {
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
         o.notifyPlayerTurn(playerTurn);
-    }    
+        o.notifyNewRound();
+    }
+
+
 
 }
 
