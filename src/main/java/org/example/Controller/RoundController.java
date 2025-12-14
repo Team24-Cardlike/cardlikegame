@@ -4,17 +4,15 @@ import java.util.ArrayList;
 
 import org.example.Model.GameManager;
 import org.example.Model.Round;
-import org.example.Model.Save;
 
 public class RoundController {
     public Round round;
     public GameManager manager;
-    private Save save;
+    
 
-    public RoundController(Round round, GameManager manager, Save save){
+    public RoundController(Round round, GameManager manager){
         this.manager = manager;
-        this.round = round;
-        this.save = save;
+        this.round = round;        
     }    
 
     public void nextRound(){
@@ -33,11 +31,9 @@ public class RoundController {
     }
     public void discardCards(ArrayList<Integer> cards){
         this.round.discard();
-        save.loadGame();
     }
 
-    public void playCards() {
-        save.saveGame(); // TODO: Remove this, it's just for testing
+    public void playCards() {        
         this.round.playCards();
     }
 

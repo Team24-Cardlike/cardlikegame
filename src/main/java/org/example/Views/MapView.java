@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Controller.MapController;
 import org.example.Model.GameManager;
@@ -35,6 +38,7 @@ public class MapView implements Screen, MapObserver {
     private Texture redDot;
     private Texture redX;
     private Texture lokiHead;
+    private Image saveButton;
 
     private int currentLvl = 0;
 
@@ -63,6 +67,8 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void show() {
+        
+
         viewport = new FitViewport(800,600);
         batch = new SpriteBatch();
         stage = new Stage(viewport,batch);
@@ -74,7 +80,19 @@ public class MapView implements Screen, MapObserver {
         redDot   = new Texture("assets/images/redDot.png");
         redX     = new Texture("assets/images/redX.png");
         lokiHead = new Texture("assets/images/lokiHead.png");
+        
+        saveButton = new Image(new Texture("assets/images/save.png"));
+        saveButton.setPosition(viewport.getWorldWidth()-110, viewport.getWorldHeight()-90);
+        saveButton.setSize(100, 100);
+        stage.addActor(saveButton);
 
+        saveButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.save();
+            
+            }
+        });
         
     }
 
@@ -82,12 +100,18 @@ public class MapView implements Screen, MapObserver {
 
         batch.begin();
         batch.draw(mapBackground,0,0,viewport.getWorldWidth(),viewport.getWorldHeight());
+        
 
         drawOpponent();
+        drawSaveButton();
 
         batch.end();
 
         stage.draw();
+    }
+
+    private void drawSaveButton() {
+
     }
 
 
@@ -176,8 +200,7 @@ public class MapView implements Screen, MapObserver {
 
 
         private Polygon generateHitbox(int index,ArrayList<Sprite> ops) {
-            // AI-generated solution for getting the correct hitbox now that the
-            // cards are rotated
+            // AI-generated solution for getting the correct hitbox
             Sprite sprite = opponentIcons.get(index);
             float[] vertices = new float[]{
                     0, 0,
