@@ -9,33 +9,23 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import org.example.Controller.RoundController;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import org.example.Model.*;
-
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Stack;
 
 public class RoundView extends ApplicationAdapter implements RoundObserver, Screen {
     public FitViewport viewport;
@@ -44,9 +34,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     Texture background;
 
-    public Image victoryWindow;
     public Image startButton;
-    private Image menuButton;
+    public Image handbookButton;
     public Image discardButton;
     public Image nextButton;
     public Image retryButton;
@@ -89,7 +78,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private boolean gameEnded = false;
     private boolean isVictory = false;
 
-    int a = 0;
     public ArrayList<Integer> selectedIndices;
     public ArrayList<Integer> removedIndices;
     private GameManager gameManager;
@@ -108,9 +96,21 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void show() {
-        BitmapFont font = new BitmapFont(); // standard font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/impact.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 35;
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 4f;
+        parameter.color = new Color(1f, 1f, 0f, 1f);
+        parameter.shadowOffsetX = 4;
+        parameter.shadowOffsetY = 4;
+        parameter.shadowColor = new Color(0,0,0,0.75f);
+
+        BitmapFont comboFont = generator.generateFont(parameter);
+        generator.dispose();
+
         style = new Label.LabelStyle();
-        style.font = font;
+        style.font = comboFont;
 
         vicTxt = new Texture("assets/images/victory.png");
         lossTxt = new Texture("assets/images/gameover.png");
@@ -123,41 +123,49 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         camera.setToOrtho(false, 8, 5);
         camera.position.set(4, 2.5f, 0); // center camera
         camera.update();
-        viewport = new FitViewport(800, 600, camera);
+        viewport = new FitViewport(1280,720, camera);
 
         stage = new Stage(viewport, spriteBatch);
         cardSprites = new ArrayList<>();
 
         shopButton = new Image(new Texture("assets/images/victoryPlaceholder.png"));
-        shopButton.setPosition(5, 400);
         shopButton.setSize(150, 100);
+        shopButton.setPosition(
+                20,
+                viewport.getWorldHeight() - shopButton.getHeight() - 20
+        );
         stage.addActor(shopButton);
 
-        menuButton = new Image(new Texture("assets/images/victoryPlaceholder.png"));
-        menuButton.setPosition(0.2f, 3.5f);
-        menuButton.setSize(1, 0.7f);
-        stage.addActor(menuButton);
+        handbookButton = new Image(new Texture("assets/images/rules.png"));
+        handbookButton.setSize(70, 120);
+        handbookButton.setPosition(
+                20,
+                viewport.getWorldHeight() - shopButton.getHeight()
+                        - handbookButton.getHeight() - 40
+        );
+        stage.addActor(handbookButton);
 
         discardButton = new Image(new Texture("assets/images/discard.png"));
-        discardButton.setPosition(600, 200);
-        discardButton.setSize(80, 100);
+        discardButton.setSize(140, 60);
+        discardButton.setPosition(
+                viewport.getWorldWidth() - discardButton.getWidth() - 20,
+                20
+        );
         stage.addActor(discardButton);
 
-
-
         startButton = new Image(new Texture("assets/images/endTurn.png"));
-        startButton.setPosition(0, 200);
-        startButton.setSize(150, 100);
+        startButton.setPosition(20, 20);
+        startButton.setSize(140, 60);
         stage.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
 
 
         opponentTexture = new Texture("assets/images/enemyCorrect.png");
         opponentSprite = new Sprite(opponentTexture);
-        opponentSprite.setSize(250f, 150f);
+        opponentSprite.setSize(350, 200);
         opponentSprite.setPosition(
                 viewport.getWorldWidth() / 2f - opponentSprite.getWidth() / 2f,
-                viewport.getWorldHeight() - 250
+                viewport.getWorldHeight() - opponentSprite.getHeight() - 50
         );
         background = new Texture("assets/images/bräde.png");
 
@@ -166,6 +174,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 onPlaySelectedCards();
+            }
+        });
+
+        handbookButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                roundController.openHandbook();
             }
         });
 
@@ -198,7 +213,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y) && (selectedCardSprites.size() < 5)) {
                     roundController.selectCard(a);
-
                     break;
                 }
             }
@@ -220,10 +234,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     public void onPlaySelectedCards(){
         roundController.playCards();
-
-        if(playerTurn){
-            opponentAnimation();
-        }
+        //TODO: Why is the gameEnd-check in onPlaySelectedCards()?
         if (gameEnded) {
             //Display match stats
             System.out.println("fsd");
@@ -248,6 +259,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 });
             }
         }
+        else if(playerTurn){
+            opponentAnimation();
+        }
+
     }
 
 
@@ -268,47 +283,49 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         // USER HEALTH BAR (bottom-left)
         float x = 50;
-        float y = 550;
+        float y = 650;
         float width = 250;
         float height = 30;
 
-        //float healthPercent = (float) round.user.health / round.user.maxHealth; TODO REMOVE
+        // Clamp mellan 0 och 1
+        float clampedUserHealth = Math.clamp(userHealthPercentage, 0f, 1f);
+
+        float greenWidthUser = width * clampedUserHealth;
+        float redWidthUser = width - greenWidthUser;
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        float greenWidthUser = width * userHealthPercentage;
-        float redWidthUser = width - greenWidthUser;
-
         // RED background
         sr.setColor(Color.RED);
-        sr.rect(x, y, redWidthUser, height);
+        sr.rect(x, y, width, height); // rita hela baren röd först
 
-        // GREEN foreground (scaled)
-        sr.setColor(Color.GREEN);
-        sr.rect(x + redWidthUser, y, greenWidthUser, height);
+        // GREEN foreground (skalar med procent)
+        if (greenWidthUser > 0) {
+            sr.setColor(Color.GREEN);
+            sr.rect(x, y, greenWidthUser, height);
+        }
 
         // ENEMY HEALTH BAR (top-right)
-        float ex = 520;
-        float ey = 550;
+        float ex = 1000;
+        float ey = 650;
 
-       //  float enemyPercent = (float) game.opponent.health / game.opponent.maxHealth; TODO REMOVE
+        float clampedOpponentHealth = Math.clamp(opponentHealthPercentage, 0f, 1f);
 
-        float greenWidthOpp = width * opponentHealthPercentage;
-        float redWidthOpp = width - greenWidthOpp;
-        // RED
+        float greenWidthOpp = width * clampedOpponentHealth;
+
         sr.setColor(Color.RED);
-        sr.rect(ex, ey, redWidthOpp, height);
+        sr.rect(ex, ey, width, height); // röd bakgrund
 
-        // GREEN
-        sr.setColor(Color.GREEN);
-        sr.rect(ex + redWidthOpp, ey, greenWidthOpp, height);
+        if (greenWidthOpp > 0) {
+            sr.setColor(Color.GREEN);
+            sr.rect(ex, ey, greenWidthOpp, height);
+        }
 
         sr.end();
     }
     
     // Creates
     public void createSpriteList( ){
-
 
     }
 
@@ -383,10 +400,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         for (int i = 0; i < selectedCardSprites.size(); i++) {
             Sprite selectedCard = selectedCardSprites.get(i);
 
-            float cx = 150 + i * 90;
-            float cy = 200;
+            //float cx = 150 + i * 90;
+            //float cy = 200;
 
-            selectedCard.setPosition(cx, cy);
+            //selectedCard.setPosition(cx, cy);
             selectedCard.setColor(Color.GOLD);
             selectedCard.draw(spriteBatch);
         }
@@ -411,21 +428,33 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     public void endGame(){
         if(isVictory){
-         panel = new Image(new TextureRegionDrawable(vicTxt));
+            panel = new Image(new TextureRegionDrawable(vicTxt));
         }
         else{
             panel = new Image(new TextureRegionDrawable(lossTxt));
         }
         panel.setSize(600, 400);
-        panel.setPosition(100,50);
+        panel.setPosition(
+                viewport.getWorldWidth() / 2f - panel.getWidth() / 2f,
+                viewport.getWorldHeight() / 2f - panel.getHeight() / 2f
+        );
         stage.addActor(panel);
 
         Label label1 = new Label("Post-round statistics", style);
-        label1.setPosition(200,200);
+        label1.setPosition(
+                viewport.getWorldWidth() / 2f - label1.getPrefWidth() / 2f,
+                viewport.getWorldHeight() / 2f + 80
+        );
         Label label2 = new Label("You did: " + totalDamageToOpponent+" damage to your enemy!", style);
-        label2.setPosition(200,150);
+        label2.setPosition(
+                viewport.getWorldWidth() / 2f - label1.getPrefWidth() / 2f,
+                viewport.getWorldHeight() / 2f + 50
+        );
         Label label3 = new Label("You took: "+ totalDamageToUser+" damage", style);
-        label3.setPosition(200,100);
+        label2.setPosition(
+                viewport.getWorldWidth() / 2f - label1.getPrefWidth() / 2f,
+                viewport.getWorldHeight() / 2f + 20
+        );
 
         stage.addActor(label1);
         stage.addActor(label2);
@@ -452,7 +481,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
 
         currentComboLabel = new Label(comboName, style);
-        currentComboLabel.setPosition(200, 200);
+
+        // Position: top right
+        float x = viewport.getWorldWidth() - currentComboLabel.getPrefWidth() - 90;
+        float y = viewport.getWorldHeight() - currentComboLabel.getPrefHeight() - 200;
+
+        currentComboLabel.setPosition(x, y);
+
         stage.addActor(currentComboLabel);
     }
 
@@ -510,7 +545,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         show();
     }
 
-    @Override
+        @Override
     public void onHandChanged(ArrayList<String> hand) {
 
         this.cardSprites.clear(); // Clear current sprites before update
@@ -518,14 +553,20 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         for (int i = 0; i < hand.size(); i++) {
             //Iterating ocher hand to get card png
             Sprite cardSprite = new Sprite(new Texture("assets/images/" + hand.get(i)));
-            cardSprite.setSize(75,125);
+            cardSprite.setSize(100,175);
             // Sets the card's position: x is centered based on the number of cards,
             // y is adjusted to create a slight curved spread before rotation.
-            float y = 80 - 7.5f * (float)Math.pow(Math.abs(i - hand.size()/2), 1.20f);
+            //float y = 80 - 7.5f * (float)Math.pow(Math.abs(i - hand.size()/2), 1.20f);
             // startX is position of card at index 0
-            float startX = 60* i + 80 ;
+            //float startX = 60* i + 80 ;
+            float cardSpacing = 150;
+            float totalWidth = cardSprites.size() * cardSpacing;
+            float startX = viewport.getWorldWidth() / 4f - totalWidth / 2f;
 
-            cardSprite.setPosition( startX,y );
+            float x = startX + i * cardSpacing;
+            float y = 35;
+
+            cardSprite.setPosition(x, y);
             cardSprite.setOriginCenter();
             cardSprite.setRotation(5 * (hand.size()/2 - i)); // Rotating cars
 
@@ -540,13 +581,15 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onSelectedChanged(ArrayList<String> selected) {
         ArrayList<String> temp = selected;
 
-
         selectedCardSprites.clear();
         for (int i = 0; i < temp.size(); i++) {
             Sprite cardSprite = new Sprite(new Texture("assets/images/" + temp.get(i)));
-            cardSprite.setSize(75, 125);
+            cardSprite.setSize(100, 175);
+            float spacing = 250;
+            float total = selectedCardSprites.size() * spacing;
+            float sx = viewport.getWorldWidth() / 4f - total / 2f;
 
-            cardSprite.setPosition(80 + i * 60, 200);
+            cardSprite.setPosition(sx + i * spacing, 250);
             cardSprite.setOriginCenter();
             selectedCardSprites.add(cardSprite);
         }
@@ -555,14 +598,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     @Override
     public void onBestComboChanged(String bestCombo) {
         this.currentBestCombo = bestCombo;
-
     }
 
     @Override
     public void onHealthChanged(float userHealth, float opponentHealth) {
         this.opponentHealthPercentage = opponentHealth;
         this.userHealthPercentage = userHealth;
-
     }
 
     @Override
@@ -573,6 +614,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         this.gameEnded = true;
         this.totalDamageToOpponent = totalDamageToOpponent;
         this.totalDamageToUser = totalDamageToUser;
+        endGame();
     }
 
     @Override
@@ -581,13 +623,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if (!playerTurn) {
             oppAnimation();
         }
-
-    }
-
-    @Override
-    public void onRoundInit() {
-        Round r = gameManager.currentRound;
-        this.roundController.setRound(r);
+        System.out.println(playerTurn);
     }
 
     @Override

@@ -44,6 +44,9 @@ public class RoundController {
 
     }
 
+    public void openHandbook(){manager.setHandbookState();}
+
     public void restart(){manager.resetRound();}
+
     public void switchView(String view){manager.setShopState();}
 }
