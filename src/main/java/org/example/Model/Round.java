@@ -25,6 +25,7 @@ public class Round {
     private UpgradeManager upgradeManager = new UpgradeManager();
     private UpgradeLibrary lib = new UpgradeLibrary();
 
+    public int turnNumber = 0;
     public boolean beenAttacked = false;
     public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
@@ -94,6 +95,7 @@ public class Round {
      * @param //playedCards cards played from the front end
      */
     public void playCards(){
+        this.turnNumber += 1;
         this.user.damage = 0;
         this.user.damage = this.user.playCards();
         for(Upgrade upg : this.user.upgrades){
