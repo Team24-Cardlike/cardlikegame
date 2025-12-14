@@ -1,27 +1,33 @@
 package org.example.Model.OpponentFactories;
 
-public class RegularOpponent implements OpponentInterface{
-    private final String name;
-    private final int maxHealth;
+public abstract class RegularOpponent extends Opponent{
+    protected String name;
+    protected int maxHealth;
     public int damage;
     public String image;
     private int health;
 
-    public RegularOpponent(int startHealth, int damage, String name){
-        this.maxHealth = startHealth;
-        this.damage = damage;
-        this.health = maxHealth;
-        this.name = name;
-        this.image = name+".png";
-    }
+    public abstract void Create();
+
 
     @Override
     public int getDamage() {
-        return damage;
+        return 0;
     }
 
     @Override
     public String getTexture() {
-        return "assets/images/"+name+".png";
+        return "";
     }
+
+    @Override
+    public void takeDamage(int damage){
+        health = health-damage;
+    }
+
+    @Override
+    public float getHealthRatio(){
+        return (float) health/maxHealth;
+    }
+
 }

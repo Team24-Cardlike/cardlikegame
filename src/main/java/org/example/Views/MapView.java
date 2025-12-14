@@ -23,7 +23,7 @@ public class MapView implements Screen, MapObserver {
     private SpriteBatch batch;
     private Stage stage;
 
-    private GameManager maneger;
+    private GameManager manager;
     private MapController controller;
 
     ArrayList<String> lvls = new ArrayList<>();
@@ -54,7 +54,7 @@ public class MapView implements Screen, MapObserver {
     Vector3 coords = new Vector3();
 
     public void setManeger(GameManager m) {
-        this.maneger = m;
+        this.manager = m;
 
     }
     public void setController(MapController c) {
@@ -201,7 +201,7 @@ public class MapView implements Screen, MapObserver {
     @Override
     public void render(float v) {
 
-        maneger.gameLoop();
+        this.manager.gameLoop();
 
         input();
         draw();

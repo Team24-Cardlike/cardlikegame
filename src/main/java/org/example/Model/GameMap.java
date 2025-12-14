@@ -2,23 +2,23 @@ package org.example.Model;
 
 
 import org.example.Model.GameState.RoundState;
-import org.example.Model.OpponentFactories.BossFactory;
-import org.example.Model.OpponentFactories.BossOpponent;
-import org.example.Model.OpponentFactories.OpponentInterface;
+import org.example.Model.OpponentFactories.*;
 
 import java.util.*;
 public class GameMap {
-    Graph<OpponentInterface> map;
+    Graph<Opponent> map;
     ArrayList<BossOpponent> opponents;
     BossOpponent heimdall;
     BossOpponent balder;
     BossOpponent freja;
     BossOpponent tor;
     BossOpponent oden;
-    BossOpponent currentOpponent;
+    Opponent currentOpponent;
     boolean lvlSelected = false;
     GameManager manager;
     BossFactory bf = new BossFactory();
+    RegularFactory rf = new RegularFactory();
+
 
     List<MapObserver> obs = new ArrayList<>();
 

@@ -21,7 +21,7 @@ public class GameRender extends Game implements StateObserver {
 
     private final RoundView roundView;
     private final MainMenuView menuView;
-    private final MapView mapView;
+    private final MapView mapView = new MapView();
     private Screen current;
     private ShopView shopView;
     private HandbookView handbookView;
@@ -32,6 +32,7 @@ public class GameRender extends Game implements StateObserver {
         this.menuView = menuView;
         this.shopView = shopView;
         this.handbookView = handbookView;
+
 
     }
     @Override

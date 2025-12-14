@@ -5,6 +5,7 @@ import org.example.Model.GameState.GameState;
 import org.example.Model.GameState.MapState;
 import org.example.Model.GameState.MenuState;
 import org.example.Model.GameState.RoundState;
+import org.example.Model.OpponentFactories.Opponent;
 import org.example.Model.OpponentFactories.OpponentInterface;
 
 import java.util.ArrayList;
@@ -76,13 +77,15 @@ public class GameManager {
     }
 
     public void resetRound(){
-        this.currentRound = new Round(user, new Opponent(400,15,1, "bossman"), roundObs);
+        //this.currentRound = new Round(user, gameMap.levelSelect("Freja"), roundObs);
+        System.out.println("Reset");
         notifyState();
         currentRound.init();
     }
 
     public void initRound() {
-        OpponentInterface op = gameMap.currentOpponent;
+        Opponent op = gameMap.currentOpponent;
+        System.out.println(op.getName());
         this.currentRound = new Round(this.user,op,roundObs);
 
         setState(new RoundState());

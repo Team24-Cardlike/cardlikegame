@@ -1,6 +1,6 @@
 package org.example.Model.OpponentFactories;
 
-public abstract class BossOpponent implements OpponentInterface {
+public abstract class BossOpponent extends Opponent {
     protected String name;
     protected int maxHealth;
     public int damage;
@@ -10,6 +10,10 @@ public abstract class BossOpponent implements OpponentInterface {
 
     public abstract void Create();
 
+    @Override
+    public void takeDamage(int damage){
+        health = health-damage;
+    }
 
     @Override
     public int getDamage() {
@@ -19,6 +23,11 @@ public abstract class BossOpponent implements OpponentInterface {
     @Override
     public String getTexture() {
         return "";
+    }
+
+    @Override
+    public float getHealthRatio(){
+        return (float) health/maxHealth;
     }
 }
 

@@ -12,4 +12,8 @@ public class TorBoss extends BossOpponent {
         super.turns = 3;
         super.image = name+".png";
     }
+    @Override
+    public String getName() {
+        return name;
+    }
 }

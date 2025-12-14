@@ -1,6 +1,7 @@
 package org.example.Model;
 
 import org.example.Model.OpponentFactories.BossOpponent;
+import org.example.Model.OpponentFactories.Opponent;
 import org.example.Model.OpponentFactories.OpponentInterface;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
@@ -31,7 +32,7 @@ public class Round {
     public int turnNumber = 0;
     public boolean beenAttacked = false;
 
-    public Round(User user, OpponentInterface opponent, RoundObserver ob){
+    public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
         this.user.resetUser();
         this.opponent = opponent;
@@ -141,7 +142,7 @@ public class Round {
     }
 
     private boolean checkDeadOpponent(){
-        return this.opponent.health <= 0;
+        return opponent.getHealth() <= 0;
     }
 
     private boolean checkDeadUser(){
@@ -165,6 +166,7 @@ public class Round {
         user.setSelectedCards(new ArrayList<>());
         o.notifySelectedChanged(user.getSelectedCards());
     }
+
 
     // Removing selected card from hand and adding it to selected cards
     public void addSelectedCards(int index) {
@@ -190,6 +192,7 @@ public class Round {
 
     // Round ended
     public void endRound() {
+        user.addGold(totalDamageToOpponent);
         this.roundFinished = true;
     }
 

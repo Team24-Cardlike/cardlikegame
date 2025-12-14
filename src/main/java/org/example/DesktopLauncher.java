@@ -5,9 +5,13 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import org.example.Controller.MenuController;
 import org.example.Controller.RoundController;
+import org.example.Controller.MapController;
+import org.example.Controller.ShopController;
 import org.example.Model.*;
 import org.example.Views.RoundView;
 import org.example.Views.MainMenuView;
+import org.example.Views.HandbookView;
+import org.example.Views.MapView;
 
 //Du är mer av ett problem nu än problemet själv -Kristoffer under roleplaying workshop till Axel :)
 //Holy words
@@ -28,6 +32,8 @@ public class DesktopLauncher {
         MapView mapView = new MapView();
 
         GameManager manager = new GameManager(roundView,mapView);
+        mapView.setManeger(manager);
+
         roundView.setGameManager(manager);
         RoundController roundController = new RoundController(manager);
 
@@ -38,19 +44,18 @@ public class DesktopLauncher {
         menuView.setGameManager(manager);
         MenuController menuController = new MenuController(manager);
 
-        HandbookView hview = new HandbookView();
+        HandbookView handbookView = new HandbookView();
         ShopView shopView = new ShopView();
         ShopController shopController = new ShopController(manager.getUser(), manager);
-        hview.setController(shopController);
+        handbookView.setController(shopController);
         shopView.setShopController(shopController);
-        GameRender gameRender = new GameRender(roundView, menuView,mapView, shopView);
+        GameRender gameRender = new GameRender(roundView, menuView, shopView, handbookView);
 
         manager.setStateObs(gameRender);
         menuView.setController(menuController);
         roundView.setController(roundController);
 
         mapView.setController(mapController);
-        mapView.setManeger(manager);
 
         new Lwjgl3Application(gameRender, config);
     }

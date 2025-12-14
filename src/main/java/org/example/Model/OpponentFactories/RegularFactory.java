@@ -1,22 +1,21 @@
 package org.example.Model.OpponentFactories;
 
-public class RegularFactory extends OpponentFactory{
-    private final String name;
-    private final int maxHealth;
-    public int damage;
-    public String image;
-    private int health;
+import org.example.Model.OpponentFactories.DeclaredBosses.*;
+import org.example.Model.OpponentFactories.DeclaredRegular.GnomeRegular;
+import org.example.Model.OpponentFactories.DeclaredRegular.ImpRegular;
+import org.example.Model.OpponentFactories.DeclaredRegular.WolfRegular;
 
-    public RegularFactory(int startHealth, int damage, String name){
-        this.maxHealth = startHealth;
-        this.damage = damage;
-        this.health = maxHealth;
-        this.name = name;
-        this.image = name+".png";
-    }
-
+public class RegularFactory extends OpponentFactory {
     @Override
-    public OpponentInterface Create() {
-        return new RegularOpponent(maxHealth, damage, name);
+    public RegularOpponent Create(String name) {
+        switch(name){
+            case "Wolf":
+                return new WolfRegular();
+            case "Gnome":
+                return new GnomeRegular();
+            case "Imp":
+                return new ImpRegular();
+        }
+        return null;
     }
 }

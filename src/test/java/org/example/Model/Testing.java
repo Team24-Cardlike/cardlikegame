@@ -1,6 +1,7 @@
 package org.example.Model;
 
 
+import org.example.Model.OpponentFactories.Opponent;
 import org.example.Model.Upgrades.ComboDmgAmp;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;

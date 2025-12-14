@@ -12,4 +12,8 @@ public class FrejaBoss extends BossOpponent {
         super.turns = 3;
         super.image = name+".png";
     }
+    @Override
+    public String getName() {
+        return name;
+    }
 }

@@ -12,4 +12,8 @@ public class OdenBoss extends BossOpponent {
         super.turns = 2;
         super.image = name+".png";
     }
+    @Override
+    public String getName() {
+        return name;
+    }
 }
