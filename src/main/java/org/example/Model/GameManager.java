@@ -5,6 +5,7 @@ import org.example.Model.GameState.GameState;
 import org.example.Model.GameState.MapState;
 import org.example.Model.GameState.MenuState;
 import org.example.Model.GameState.RoundState;
+import org.example.Model.OpponentFactories.OpponentInterface;
 
 import java.util.ArrayList;
 
@@ -76,7 +77,7 @@ public class GameManager {
     }
 
     public void initRound() {
-        Opponent op = gameMap.currentOpponent;
+        OpponentInterface op = gameMap.currentOpponent;
         this.currentRound = new Round(this.user,op,roundObs);
 
         setState(new RoundState());

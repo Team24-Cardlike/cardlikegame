@@ -1,5 +1,7 @@
 package org.example.Model;
 
+import org.example.Model.OpponentFactories.BossOpponent;
+import org.example.Model.OpponentFactories.OpponentInterface;
 import org.example.Model.Upgrades.Upgrade;
 import java.util.*;
 
@@ -20,7 +22,7 @@ public class Round {
 
     private String currentBestCombo;
 
-    public Round(User user, Opponent opponent, RoundObserver ob){
+    public Round(User user, OpponentInterface opponent, RoundObserver ob){
         this.user = user;
         this.user.resetUser();
         this.opponent = opponent;

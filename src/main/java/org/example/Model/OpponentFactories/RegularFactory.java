@@ -1,9 +1,22 @@
 package org.example.Model.OpponentFactories;
 
-import org.example.Model.Opponent;
-
 public class RegularFactory extends OpponentFactory{
-    public Opponent Create() {
-        return null;
+    private final String name;
+    private final int maxHealth;
+    public int damage;
+    public String image;
+    private int health;
+
+    public RegularFactory(int startHealth, int damage, String name){
+        this.maxHealth = startHealth;
+        this.damage = damage;
+        this.health = maxHealth;
+        this.name = name;
+        this.image = name+".png";
+    }
+
+    @Override
+    public OpponentInterface Create() {
+        return new RegularOpponent(maxHealth, damage, name);
     }
 }

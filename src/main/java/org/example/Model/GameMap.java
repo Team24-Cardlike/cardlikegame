@@ -2,40 +2,45 @@ package org.example.Model;
 
 
 import org.example.Model.GameState.RoundState;
+import org.example.Model.OpponentFactories.BossFactory;
+import org.example.Model.OpponentFactories.BossOpponent;
+import org.example.Model.OpponentFactories.OpponentInterface;
 
 import java.util.*;
 public class GameMap {
-    Graph<Opponent> map;
-    ArrayList<Opponent> opponents;
-    Opponent heimdall;
-    Opponent balder;
-    Opponent freja;
-    Opponent tor;
-    Opponent oden;
-    Opponent currentOpponent;
+    Graph<OpponentInterface> map;
+    ArrayList<BossOpponent> opponents;
+    BossOpponent heimdall;
+    BossOpponent balder;
+    BossOpponent freja;
+    BossOpponent tor;
+    BossOpponent oden;
+    BossOpponent currentOpponent;
     boolean lvlSelected = false;
-    GameManager maneger;
+    GameManager manager;
+    BossFactory bf = new BossFactory();
 
     List<MapObserver> obs = new ArrayList<>();
 
     ArrayList<String> lvls = new ArrayList<>();
     int currentLvl  = 0;
 
-    GameMap(int dif, User user , GameManager maneger, MapObserver mapObs){
+    GameMap(int dif, User user , GameManager manager, MapObserver mapObs){
         this.map  = new Graph<>();
         this.opponents = new ArrayList<>();
-        this.heimdall = new Opponent(400, 10, 3, "Heimdall");
-        this.balder = new Opponent(500*dif, 15, 3, "Balder");
-        this.freja = new Opponent(600*dif, 20, 3, "Freja");
-        this.tor = new Opponent(1000*dif, 30, 3, "Tor");
-        this.oden = new Opponent(1500*dif, 40, 2, "Oden");
+        this.heimdall = bf.Create("Heimdall");
+        this.balder = bf.Create("Balder");
+        this.freja = bf.Create("Freja");
+        this.tor = bf.Create("Tor");
+        this.oden = bf.Create("Oden");
+
         this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
 
 
 
         obs.add(mapObs);
 
-        this.maneger = maneger;
+        this.manager = manager;
         createMap();
 
 
@@ -68,7 +73,7 @@ public class GameMap {
 
     public void setLvlFalse() {
         this.lvlSelected = false;
-        maneger.setState(new RoundState());
+        manager.setState(new RoundState());
     }
 
     public List<Opponent> getNeighbours(Opponent op) {
@@ -79,11 +84,11 @@ public class GameMap {
 
     public void levelSelect(String s) {
         if (currentOpponent == null) {   currentOpponent = heimdall;
-            maneger.initRound();}
+            manager.initRound();}
     for (Opponent op: map.neighbours(currentOpponent)) {
         if (s == op.getName()) {
             currentOpponent = op;
-            maneger.initRound();
+            manager.initRound();
         }
         else if (s == "Shop") {
             initShop();
