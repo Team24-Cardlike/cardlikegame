@@ -4,13 +4,15 @@ import org.example.Model.OpponentFactories.BossOpponent;
 
 public class TyrBoss extends BossOpponent {
 
-    @Override
-    public void Create() {
+    public TyrBoss() {
         super.name = "Tyr";
-        super.maxHealth = 900;
-        super.health = maxHealth;
-        super.damage = 25;
-        super.turns = 2;
+        super.maxHealth = 800;
+        super.damage = 20;
+        super.turns = 1;
         super.image = name+".png";
+    }
+    @Override
+    public String getName() {
+        return name;
     }
 }

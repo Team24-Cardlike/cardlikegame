@@ -15,7 +15,6 @@ public class RoundState implements GameState{
         r = manager.currentRound;
         r.roundUpdate();
         if (r.roundFinished) {manager.initMap();
-            System.out.println();
             manager.setState(new MapState());
 
 

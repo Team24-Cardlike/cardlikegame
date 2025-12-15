@@ -1,33 +1,30 @@
 package org.example.Model;
-
-import com.badlogic.gdx.utils.Array;
 import org.example.Model.Upgrades.Upgrade;
+import org.example.Model.Upgrades.UpgradeLibrary;
+import org.example.Model.Upgrades.UpgradeManager;
 
 import java.util.ArrayList;
-// import java.util.Collections;
 import java.util.Collections;
 import java.util.Stack;
 
 public class User extends Player {
-
+    public int damage;
     ArrayList<Card> hand;
     int gold;
     public int cardsPerHand = 10;
     ArrayList<Card> selectedCards;
-    ArrayList<Boolean> hoveredCards;
-    ArrayList<Boolean> boolSelectedCards;
-    ArrayList<Upgrade> usersUpgrades;
+
     CardCombos combos = new CardCombos();
 
+    public ArrayList<Upgrade> upgrades = new ArrayList<>();
+
     public User(int startHealth){
+        this.damage = 0;
         this.maxHealth = startHealth;
         this.hand = new ArrayList<>();
         this.health = maxHealth;
         this.gold = 0;
         this.selectedCards = new ArrayList<>();
-        this.hoveredCards = new ArrayList<>();
-        this.boolSelectedCards = new ArrayList<>();
-        this.usersUpgrades = new ArrayList<>();
     }
 
     public void drawCards(Stack<Card> deck, int amount){
@@ -56,9 +53,11 @@ public class User extends Player {
 
     @Override
     public int getDamage() {
-        int damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
-        //Beräkna beroende på aktiva upgrades
-        return damage;
+        return this.damage;
+    }
+
+    public void setDamage(){
+        this.damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
     }
 
     int getHiVal(ArrayList<Card> cards){
@@ -74,9 +73,6 @@ public class User extends Player {
      *
      * @param indices indices of cards that you selected
      */
-    public void setUsersUpgrades(Upgrade upgrade){
-        usersUpgrades.add(upgrade);
-    }
 
     public void removeCards(ArrayList<Integer> indices) {
         for (int index : indices) {
@@ -85,9 +81,8 @@ public class User extends Player {
     }
 
     int playCards(){
-        int damage = getDamage();
-        selectedCards = new ArrayList<>();
-        return damage;
+        setDamage();
+        return this.damage;
         // TODO: FINISH FUNCTION
     }
 
@@ -113,4 +108,38 @@ public class User extends Player {
     }
 
 
+    public int getGold(){
+        return this.gold;
+    }
+
+    public void addGold(int amount){ this.gold += amount;}
+
+    public void setGold(int amount){
+        this.gold = amount;
+    }
+
+    public ArrayList<Upgrade> getUpgrades(){
+        return this.upgrades;
+    }
+
+    public void setUpgrades(ArrayList<Upgrade> upgrades){
+        this.upgrades.addAll(upgrades);
+    }
+
+    public void addUpgrade(Upgrade upgrade){
+        if(this.upgrades.contains(upgrade))
+            System.out.println("Already have that upgrade!");
+        else
+            this.upgrades.add(upgrade);
+    }
+
+    public void buyUpgrade(Upgrade upgrade){
+        if(this.gold >= upgrade.getCost()) {
+            this.gold -= upgrade.getCost();
+            this.upgrades.add(upgrade);
+        }
+        else{
+            System.out.println("Too poor!");
+        }
+    }
 }

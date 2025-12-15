@@ -6,12 +6,12 @@ import org.example.Model.GameState.MapState;
 import org.example.Model.GameState.MenuState;
 import org.example.Model.GameState.RoundState;
 import org.example.Model.OpponentFactories.OpponentInterface;
+import org.example.Model.OpponentFactories.Opponent;
+import org.example.Model.OpponentFactories.OpponentInterface;
 
 import java.util.ArrayList;
 
 public class GameManager {
-
-
     private  MapObserver mapObs;
     public Round currentRound;
     public GameMap gameMap;
@@ -26,7 +26,6 @@ public class GameManager {
     RoundObserver roundObs;
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
-
 
 
 
@@ -51,7 +50,6 @@ public class GameManager {
         this.gameMap = map;
         this.roundObs = roundObs;
         this.mapObs = mapObs;
-
     }
 
     public void gameLoop() {
@@ -68,25 +66,32 @@ public class GameManager {
         notifyState();
     }
 
+    public void setHandbookState(){
+        setState(new HandbookState());
+        notifyState();
+    }
+
     public String getState() {
         return state.getName();
     }
 
     public void resetRound(){
-        gameMap.resetOp();
+
         this.currentRound = new Round(user, gameMap.currentOpponent, roundObs);
         notifyState();
         currentRound.init();
     }
 
     public void initRound() {
-        OpponentInterface op = gameMap.currentOpponent;
+        Opponent op = gameMap.currentOpponent;
         this.currentRound = new Round(this.user,op,roundObs);
 
+        System.out.println("This round: "+ currentRound.getOpponent().getName());
         setState(new RoundState());
         notifyState();
         currentRound.init();
     }
+
     public void initMap() {
         this.gameMap.updateMap();
 
@@ -104,7 +109,6 @@ public class GameManager {
         initMap();
         setState(new MapState());;
         notifyState();
-
     }
 
     public void setStateObs(StateObserver obs) {

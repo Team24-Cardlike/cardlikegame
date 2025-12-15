@@ -2,25 +2,25 @@ package org.example.Model;
 
 
 import org.example.Model.GameState.RoundState;
-import org.example.Model.OpponentFactories.BossFactory;
-import org.example.Model.OpponentFactories.BossOpponent;
-import org.example.Model.OpponentFactories.OpponentInterface;
+
+import org.example.Model.OpponentFactories.*;
 
 import java.util.*;
 public class GameMap {
-    Graph<OpponentInterface> map;
-    ArrayList<OpponentInterface> opponents;
+    Graph<Opponent> map;
+    ArrayList<BossOpponent> opponents;
     BossOpponent heimdall;
     BossOpponent balder;
     BossOpponent freja;
     BossOpponent tyr;
     BossOpponent tor;
     BossOpponent oden;
-    OpponentInterface currentOpponent;
-    OpponentInterface oPCopy;
+    Opponent currentOpponent;
     boolean lvlSelected = false;
     GameManager manager;
     BossFactory bf = new BossFactory();
+    RegularFactory rf = new RegularFactory();
+
 
     private List<MapObserver> obs = new ArrayList<>();
     private Set<String> availableLvls = new HashSet<>();
@@ -38,18 +38,13 @@ public class GameMap {
         this.tor = bf.Create("Tor");
         this.oden = bf.Create("Oden");
 
-        this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja,this.tyr, this.tor,this.oden));
 
-
-
+        this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
 
         obs.add(mapObs);
 
         this.manager = manager;
         createMap();
-
-
-
     }
 
     void createMap(){
@@ -58,6 +53,7 @@ public class GameMap {
         map.addVertex(heimdall);
         map.addVertex(balder);
         map.addVertex(freja);
+        map.addVertex(tyr);
         map.addVertex(tor);
         map.addVertex(oden);
 
@@ -65,10 +61,11 @@ public class GameMap {
         map.addEdge(heimdall, balder, false);
 
         map.addEdge(balder, tor, false);
-
         map.addEdge(balder, freja, false);
+
+
         map.addEdge(freja, tyr, false);
-        map.addEdge(freja, tor, false);
+        map.addEdge(tyr, tor, false);
 
         map.addEdge(tor, oden, false);
 
@@ -81,49 +78,44 @@ public class GameMap {
 
 
 
-    public List<OpponentInterface> getNeighbours(OpponentInterface op) {
+    public List<Opponent> getNeighbours(Opponent op) {
         return map.neighbours(op);
     }
 
-
+    public ArrayList<String> getLvls(){
+        return lvls;
+    }
 
     public void levelSelect(String s) {
         //Setting first lvl
         if (currentOpponent == null &&  s.equals(heimdall.getName()) ) {   currentOpponent =  heimdall;
             manager.initRound();
         }
-    for (OpponentInterface op: map.neighbours(currentOpponent)) {
 
-        if (s == op.getName()) {
-            currentOpponent = op;
-            manager.initRound();
-        }
-        else if (s == "Shop") {
+        else if (s.equals("Shop")) {
             initShop();
-
+            return;
         }
-
-    }
-
+        for (Opponent op: getNeighbours(currentOpponent)){//map.neighbours(currentOpponent)) {
+            if (Objects.equals(s, op.getName())) {
+                currentOpponent = op;
+                manager.initRound();
+                return;
+            }
+        }
     }
 
     private void initShop() {
 
     }
 
-
-
-
-
-
     public void getLvlOps(){
         lvls.clear();
-        List<OpponentInterface> ops =  map.getAllVertices(heimdall);
+        List<Opponent> ops = map.getAllVertices(heimdall);
 
-        for (OpponentInterface o: ops) {
+        for (Opponent o: ops) {
 
             String name = o.getName();
-
             lvls.add(name);
         }
     }
@@ -135,13 +127,13 @@ public class GameMap {
         if ( currentOpponent != null) {
         completedLvls.add(currentOpponent.getName());
 
-        for(OpponentInterface op: getNeighbours(currentOpponent)){
+        for(Opponent op: getNeighbours(currentOpponent)){
 
         availableLvls.add(op.getName());}}
        notifyMapUpdate();
     }
 
-    public Graph<OpponentInterface> getMap() {
+    public Graph<Opponent> getMap() {
         return this.map;
     }
 
@@ -149,10 +141,5 @@ public class GameMap {
         for(MapObserver o: obs) {
             o.onMapChanged(this.lvls,this.completedLvls, this.availableLvls);
         }
-    }
-
-
-    public void resetOp() {
-        currentOpponent.reset();
     }
 }

@@ -1,22 +1,18 @@
 package org.example.Model.OpponentFactories.DeclaredBosses;
 
 import org.example.Model.OpponentFactories.BossOpponent;
-import org.example.Model.OpponentFactories.OpponentInterface;
 
 public class BalderBoss extends BossOpponent {
 
-    @Override
-    public void Create() {
+    public BalderBoss() {
         super.name = "Balder";
-        super.maxHealth = 500;
-        super.health = maxHealth;
+        super.maxHealth = 50;
         super.damage = 15;
         super.turns = 3;
         super.image = name+".png";
     }
-
-
-
-
-
+    @Override
+    public String getName() {
+        return name;
+    }
 }

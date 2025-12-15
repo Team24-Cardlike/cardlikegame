@@ -5,32 +5,19 @@ import org.example.Model.OpponentFactories.DeclaredBosses.*;
 public class BossFactory extends OpponentFactory {
     @Override
     public BossOpponent Create(String name) {
-        BossOpponent boss;
         switch(name){
             case "Heimdall":
-                boss = new HeimdallBoss();
-                boss.Create();
-                return boss;
+                return new HeimdallBoss();
             case "Balder":
-                boss = new BalderBoss();
-                boss.Create();
-                return boss;
+                return new BalderBoss();
             case "Freja":
-                boss = new FrejaBoss();
-                boss.Create();
-                return boss;
+                return new FrejaBoss();
             case "Tyr":
-                boss = new TyrBoss();
-                boss.Create();
-                return boss;
+                return new TyrBoss();
             case "Tor":
-                boss = new TorBoss();
-                boss.Create();
-                return boss;
+                return new TorBoss();
             case "Oden":
-                boss = new OdenBoss();
-                boss.Create();
-                return boss;
+                return new OdenBoss();
         }
         return null;
     }

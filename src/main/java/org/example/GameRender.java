@@ -7,6 +7,7 @@ import org.example.Model.GameState.*;
 import org.example.Model.Round;
 import org.example.Model.StateObserver;
 import org.example.Views.MapView;
+import org.example.Views.HandbookView;
 import org.example.Views.RoundView;
 import org.example.Controller.RoundController;
 import org.example.Model.GameManager;
@@ -18,22 +19,20 @@ import java.util.Map;
 
 public class GameRender extends Game implements StateObserver {
 
-    private final RoundView roundView;
-    private final MainMenuView menuView;
-    private final MapView mapView;
+    private RoundView roundView;
+    private MainMenuView menuView;
+    private MapView mapView;
     private Screen current;
     private ShopView shopView;
+    private HandbookView handbookView;
 
-    GameRender(RoundView roundView, MainMenuView menuView, MapView mapView, ShopView shopView) {
-
-
-
+    GameRender(RoundView roundView, MainMenuView menuView, ShopView shopView, HandbookView handbookView, MapView mapview) {
         //this.round = round;
-        this.mapView = mapView;
         this.roundView = roundView;
         this.menuView = menuView;
         this.shopView = shopView;
-
+        this.handbookView = handbookView;
+        this.mapView = mapview;
     }
     @Override
     public void create() {
@@ -54,6 +53,9 @@ public class GameRender extends Game implements StateObserver {
                 break;
             case "menu":
                 setScreen(menuView);
+                break;
+            case "handbook":
+                setScreen(handbookView);
                 break;
         }
     }
