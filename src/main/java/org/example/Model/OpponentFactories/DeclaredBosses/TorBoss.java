@@ -4,8 +4,7 @@ import org.example.Model.OpponentFactories.BossOpponent;
 
 public class TorBoss extends BossOpponent {
 
-    @Override
-    public void Create() {
+    public TorBoss() {
         super.name = "Tor";
         super.maxHealth = 1000;
         super.damage = 30;

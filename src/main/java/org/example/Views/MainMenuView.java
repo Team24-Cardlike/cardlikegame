@@ -61,8 +61,6 @@ public class MainMenuView implements Screen {
                 controller.startGame();
             }
         });
-
-
     }
 
     @Override

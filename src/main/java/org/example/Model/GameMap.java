@@ -36,15 +36,10 @@ public class GameMap {
 
         this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
 
-
-
         obs.add(mapObs);
 
         this.manager = manager;
         createMap();
-
-
-
     }
 
     void createMap(){
@@ -80,34 +75,35 @@ public class GameMap {
         return map.neighbours(op);
     }
 
-
+    public ArrayList<String> getLvls(){
+        return lvls;
+    }
 
     public void levelSelect(String s) {
-        if (currentOpponent == null) {   currentOpponent = heimdall;
-            manager.initRound();}
-    for (Opponent op: map.neighbours(currentOpponent)) {
-        if (s == op.getName()) {
-            currentOpponent = op;
+        if (currentOpponent == null) {
+            currentOpponent = heimdall;
             manager.initRound();
+            return;
         }
-        else if (s == "Shop") {
+        else if (s.equals("Shop")) {
             initShop();
-
+            return;
         }
-    }
+        for (Opponent op: getNeighbours(currentOpponent)){//map.neighbours(currentOpponent)) {
+            if (Objects.equals(s, op.getName())) {
+                currentOpponent = op;
+                manager.initRound();
+                return;
+            }
+        }
     }
 
     private void initShop() {
 
     }
 
-
-
-
-
-
     public void getLvlOps(){
-        List<Opponent> ops =  map.getAllVertices();
+        List<Opponent> ops = map.getAllVertices();
 
         for (Opponent o: ops) {
             String name = o.getName();
@@ -120,9 +116,6 @@ public class GameMap {
     //Updates with new visible enemies.
     public void updateMap( ){
         //Current Opponent is complete
-
-
-
        notifyMapUpdate();
     }
 
@@ -135,8 +128,4 @@ public class GameMap {
             o.onMapChanged(lvls, currentLvl);
         }
     }
-
-
-
-
 }

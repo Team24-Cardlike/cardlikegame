@@ -8,7 +8,7 @@ public abstract class BossOpponent extends Opponent {
     public String image;
     private int health;
 
-    public abstract void Create();
+    //public abstract void Create();
 
     @Override
     public void takeDamage(int damage){

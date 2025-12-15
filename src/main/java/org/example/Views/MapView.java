@@ -26,7 +26,7 @@ public class MapView implements Screen, MapObserver {
     private GameManager manager;
     private MapController controller;
 
-    ArrayList<String> lvls = new ArrayList<>();
+    ArrayList<String> lvls;
 
     private ArrayList<Sprite> opponentIcons = new ArrayList<>();
     private Texture mapBackground;
@@ -53,40 +53,36 @@ public class MapView implements Screen, MapObserver {
 
     Vector3 coords = new Vector3();
 
-    public void setManeger(GameManager m) {
+    public void setManager(GameManager m) {
         this.manager = m;
-
     }
+
     public void setController(MapController c) {
         this.controller = c;
     }
 
     @Override
     public void show() {
-        viewport = new FitViewport(800,600);
+        viewport = new FitViewport(1280,720);
         batch = new SpriteBatch();
         stage = new Stage(viewport,batch);
 
         Gdx.input.setInputProcessor(stage);
         mapBackground = new Texture("assets/images/map.png");
         greenDot = new Texture("assets/images/greenDot.png");
+        lvls = controller.getLvlList();
 
         redDot   = new Texture("assets/images/redDot.png");
         redX     = new Texture("assets/images/redX.png");
         lokiHead = new Texture("assets/images/lokiHead.png");
-
-        
     }
 
     public void draw(){
-
         batch.begin();
         batch.draw(mapBackground,0,0,viewport.getWorldWidth(),viewport.getWorldHeight());
 
         drawOpponent();
-
         batch.end();
-
         stage.draw();
     }
 
@@ -116,8 +112,6 @@ public class MapView implements Screen, MapObserver {
                 s.draw(batch);
             }
         }
-
-
     }
 
     public void drawComplete(float x, float y) {
@@ -134,10 +128,8 @@ public class MapView implements Screen, MapObserver {
         opponentIcons.add(base);
         Sprite player =  makeSprite(lokiHead,x - 40,y- 20);
         opponentIcons.add(player);
-
-
-
     }
+
     public void drawRest(float x, float y) {
         Sprite base =  makeSprite(redDot,x,y);
         opponentIcons.add(base);
@@ -151,8 +143,6 @@ public class MapView implements Screen, MapObserver {
         s.setPosition(centerX-s.getWidth() / 2f, centerY - s.getHeight()/2f);
         return s;
     }
-
-
 
     private void input() {
         // Hämta muskoordinater
@@ -194,23 +184,13 @@ public class MapView implements Screen, MapObserver {
             return poly;
         }
 
-
-
-
-
     @Override
     public void render(float v) {
-
-        this.manager.gameLoop();
+        manager.gameLoop();
 
         input();
         draw();
-
-
     }
-
-
-
 
     @Override
     public void resize(int i, int i1) {
@@ -239,7 +219,6 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void onMapChanged(ArrayList<String> lvls, int currentLvl) {
-
         this.lvls = lvls;
         this.currentLvl = currentLvl;
     }

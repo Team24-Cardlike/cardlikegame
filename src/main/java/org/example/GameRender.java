@@ -19,21 +19,20 @@ import java.util.Map;
 
 public class GameRender extends Game implements StateObserver {
 
-    private final RoundView roundView;
-    private final MainMenuView menuView;
-    private final MapView mapView = new MapView();
+    private RoundView roundView;
+    private MainMenuView menuView;
+    private MapView mapView;
     private Screen current;
     private ShopView shopView;
     private HandbookView handbookView;
 
-    GameRender(RoundView roundView, MainMenuView menuView, ShopView shopView, HandbookView handbookView) {
+    GameRender(RoundView roundView, MainMenuView menuView, ShopView shopView, HandbookView handbookView, MapView mapview) {
         //this.round = round;
         this.roundView = roundView;
         this.menuView = menuView;
         this.shopView = shopView;
         this.handbookView = handbookView;
-
-
+        this.mapView = mapview;
     }
     @Override
     public void create() {

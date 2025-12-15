@@ -4,14 +4,14 @@ import org.example.Model.OpponentFactories.BossOpponent;
 
 public class HeimdallBoss extends BossOpponent {
 
-    @Override
-    public void Create() {
+    public HeimdallBoss() {
         super.name = "Heimdall";
         super.maxHealth = 400;
         super.damage = 10;
         super.turns = 3;
         super.image = name+".png";
     }
+
     @Override
     public String getName() {
         return name;

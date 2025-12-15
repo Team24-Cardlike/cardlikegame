@@ -4,8 +4,7 @@ import org.example.Model.OpponentFactories.BossOpponent;
 
 public class FrejaBoss extends BossOpponent {
 
-    @Override
-    public void Create() {
+    public FrejaBoss(){
         super.name = "Freja";
         super.maxHealth = 600;
         super.damage = 20;

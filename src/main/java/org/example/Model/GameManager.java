@@ -1,5 +1,6 @@
 package org.example.Model;
 
+import org.example.Controller.RoundController;
 import org.example.Model.GameState.*;
 import org.example.Model.GameState.GameState;
 import org.example.Model.GameState.MapState;
@@ -11,28 +12,19 @@ import org.example.Model.OpponentFactories.OpponentInterface;
 import java.util.ArrayList;
 
 public class GameManager {
-
-
     private  MapObserver mapObs;
     public Round currentRound;
     public GameMap gameMap;
     private User user;
-
-
     private RoundState roundState;
     private ShopState shopState;
     private MenuState menuState;
-
+    private RoundController roundController;
     RoundObserver roundObs;
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
 
-
-
-
-
-    public  GameManager(RoundObserver roundObs, MapObserver mapObs) {
-
+    public GameManager(RoundObserver roundObs, MapObserver mapObs) {
         this.gameMap = new GameMap(100, user,this, mapObs);
         this.roundObs = roundObs;
         this.mapObs = mapObs;
@@ -51,7 +43,6 @@ public class GameManager {
         this.gameMap = map;
         this.roundObs = roundObs;
         this.mapObs = mapObs;
-
     }
 
     public void gameLoop() {
@@ -60,6 +51,10 @@ public class GameManager {
 
     public  void setState(GameState state) {
         this.state = state;
+    }
+
+    public void setRoundController(RoundController roundController){
+        this.roundController = roundController;
     }
 
     public void setShopState(){
@@ -87,11 +82,13 @@ public class GameManager {
         Opponent op = gameMap.currentOpponent;
         System.out.println(op.getName());
         this.currentRound = new Round(this.user,op,roundObs);
-
+        roundController.setRound(currentRound);
+        System.out.println("This round: "+ currentRound.getOpponent().getName());
         setState(new RoundState());
         notifyState();
         currentRound.init();
     }
+
     public void initMap() {
 
     }
@@ -108,7 +105,6 @@ public class GameManager {
         initMap();
         setState(new MapState());;
         notifyState();
-
     }
 
     public void setStateObs(StateObserver obs) {
