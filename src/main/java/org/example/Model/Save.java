@@ -69,8 +69,7 @@ public class Save {
         try {            
             loadedData.setCompletedLvls();
             loadedData.setAvailableLvls();
-            // loadedData.getGameManager().gameMap.updateMap();
-            loadedData.setOppIdx();
+            // loadedData.getGameManager().gameMap.updateMap();            
         } catch (NullPointerException e) {
             System.out.println("Funkar ej med ladda in completedlvls");
         }

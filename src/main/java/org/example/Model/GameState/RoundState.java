@@ -14,8 +14,8 @@ public class RoundState implements GameState{
     public void update(GameManager manager) {
         r = manager.currentRound;
         r.roundUpdate();
-        if (r.roundFinished) {                 
-            if (manager.currentRound.getWon()) {                
+        if (r.roundFinished) {                             
+            if (manager.currentRound.getWon()) {                                            
                 manager.initMap();            
             }
             System.out.println();

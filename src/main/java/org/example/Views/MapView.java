@@ -199,7 +199,7 @@ public class MapView implements Screen, MapObserver {
 
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y)) {
-                    System.out.println(name);
+                    // System.out.println(name);
                     controller.selectLvl(name);
                     break;
                 }

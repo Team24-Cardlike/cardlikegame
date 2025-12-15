@@ -12,8 +12,7 @@ public class GameMap {
     private final Opponent freja;
     private final Opponent tor;
     private final Opponent oden;
-    public Opponent currentOpponent;
-    private int oppIdx;
+    public Opponent currentOpponent;    
     boolean lvlSelected = false;
     GameManager manager;
 
@@ -63,7 +62,7 @@ public class GameMap {
         map.addEdge(balder, tor, false);
 
         map.addEdge(balder, freja, false);
-        map.addEdge(freja, tor, true);
+        map.addEdge(freja, tor, false); // true?
 
         map.addEdge(tor, oden, false);
         
@@ -104,8 +103,9 @@ public class GameMap {
 
 
 
-    public void levelSelect(String s) {   
-        if (currentOpponent == null &&  s.equals(heimdall.getName()) ) {   
+    public void levelSelect(String s) {    
+           
+        if (s.equals(heimdall.getName()) ) {   
             currentOpponent = heimdall;
             manager.initRound();
         }                
@@ -113,17 +113,17 @@ public class GameMap {
         // for (Opponent op: map.neighbours(opponents.get(oppIdx))) { // currentOpponent  
         for (int i = 0; i < opponents.size(); i++) {            
             Opponent op = opponents.get(i);
-            if (map.neighbours(opponents.get(oppIdx)).contains(op)) {
-                System.out.println(op.getName() + "granne");
-                if (s == op.getName()) {                
+            // if (map.neighbours(opponents.get(oppIdx)).contains(op)) {
+                // System.out.println(op.getName() + "granne");                     
+                if (s == op.getName() && availableLvls.contains(op.getName())) {                                                        
                     currentOpponent = op;
-                    oppIdx = i;      
+                    // setOppIdx(i);                        
                     manager.initRound();
                 }
                 else if (s == "Shop") {
                     initShop();
                     
-                }
+                // }
             }
         }
     }
@@ -150,11 +150,12 @@ public class GameMap {
     // Method called after a round has been won
     // Updates with new visible enemies.
     public void updateMap( ){
-        // Current Opponent is complete
+        // Current Opponent is complete        
         if ( currentOpponent != null) {
             completedLvls.add(currentOpponent.getName());
-        for(Opponent op: getNeighbours(currentOpponent)){
-            availableLvls.add(op.getName());}}
+        for(Opponent op: getNeighbours(currentOpponent)){ // TODO: Change to opps.get(oppIdx)?
+            availableLvls.add(op.getName());}
+        }
         notifyMapUpdate();
     }
 
@@ -167,15 +168,7 @@ public class GameMap {
             o.onMapChanged(this.lvls,this.completedLvls, this.availableLvls);
         }
     }
-
-    public void setOppIdx(int oppIdx) {
-        this.oppIdx = oppIdx;
-    }
-    public int getOppIdx() {
-        return this.oppIdx;
-    }
-
-
+    
 
 
 }

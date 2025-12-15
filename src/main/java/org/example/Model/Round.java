@@ -14,6 +14,7 @@ public class Round {
     private int totalDamageToPlayer = 0;
     private boolean playerTurn = true;
     public boolean roundFinished = false;
+    private boolean won = false;
 
     private float userHealth = 1;
     private float opponentHealth = 1;
@@ -57,11 +58,12 @@ public class Round {
         }
         // round ends
         
-        if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {
-            System.out.println("nu dog någon");                   
-            if(opponentHealth < userHealth) {                
+        if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {                              
+            if(opponentHealth < userHealth) {
+                this.won = true;             
                 o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
             else {
+                this.won = false;
                 o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
             }
             // roundFinished = true;
@@ -169,8 +171,8 @@ public class Round {
 
     }
 
-    public boolean getWon() {
-        return roundFinished && opponent.getHealth() <= 0;
+    public boolean getWon() {        
+        return won;
     }
 
     public void init() {

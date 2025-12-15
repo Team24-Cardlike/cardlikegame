@@ -34,7 +34,7 @@ public class GameManager {
         this.gameMap = new GameMap(100, this, mapObs);
         this.roundObs = roundObs;
         this.mapObs = mapObs;
-        this.user = new User(10);
+        this.user = new User(50);
 
         shopState = new ShopState();
         menuState = new MenuState();
@@ -130,8 +130,6 @@ public class GameManager {
        }
     }
 
-    int getOppIdx() {
-        return gameMap.getOppIdx();
-    }
+    
 
 }

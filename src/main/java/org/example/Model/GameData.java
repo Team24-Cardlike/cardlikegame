@@ -12,8 +12,7 @@ public class GameData {
     // private int health;
     // TODO: Add new attributes here
     private Set<String> completedLvls;
-    private Set<String> availableLvls;
-    private int oppIdx;
+    private Set<String> availableLvls;    
 
     public GameData(GameManager gameManager) {        
         this.gameManager = gameManager;        
@@ -23,8 +22,7 @@ public class GameData {
         // this.health = gameManager.getUser().getHealth(); // For testing
         // TODO: Add more getters here!
         this.completedLvls = gameManager.getCompletedLvls();
-        this.availableLvls = gameManager.getAvailableLvls();
-        this.oppIdx = gameManager.getOppIdx();        
+        this.availableLvls = gameManager.getAvailableLvls();        
 
     }
 
@@ -50,8 +48,5 @@ public class GameData {
     void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
-
-    public void setOppIdx() {
-        gameManager.gameMap.setOppIdx(oppIdx);
-    }
+    
 }
