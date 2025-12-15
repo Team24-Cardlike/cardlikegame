@@ -58,15 +58,15 @@ public class Round {
         // round ends
         
         if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {
-            System.out.println(checkDeadOpponent());                   
-            if(opponentHealth < userHealth) {
-            o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
+            System.out.println("nu dog någon");                   
+            if(opponentHealth < userHealth) {                
+                o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
             else {
                 o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
             }
             // roundFinished = true;
-            userHealth = user.maxHealth; // Terrible temp solution to winning-immediately-bug
-            opponent.health = opponent.maxHealth;
+            user.setHealth(user.maxHealth); // Terrible temp solution to winning-immediately-bug
+            opponent.setHealth(opponent.maxHealth);
         }
 
     }
@@ -110,7 +110,7 @@ public class Round {
         System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " hp kvar");
         playerTurn = true;
 
-        o.notifyHealthChanged(userHealth,opponentHealth);// Notify observer of health changed
+        o.notifyHealthChanged(userHealth, opponentHealth);// Notify observer of health changed
         o.notifyPlayerTurn(playerTurn); // notify player turn changed
     }
 

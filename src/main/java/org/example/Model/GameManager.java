@@ -34,7 +34,7 @@ public class GameManager {
         this.gameMap = new GameMap(100, this, mapObs);
         this.roundObs = roundObs;
         this.mapObs = mapObs;
-        this.user = new User(1000);
+        this.user = new User(10);
 
         shopState = new ShopState();
         menuState = new MenuState();

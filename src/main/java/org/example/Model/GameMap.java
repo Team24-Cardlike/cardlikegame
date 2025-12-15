@@ -33,7 +33,7 @@ public class GameMap {
         this.freja = new Opponent(1*dif, 20, 3, "Freja"); // 600
         this.tor = new Opponent(1*dif, 30, 3, "Tor"); // 1000
         this.oden = new Opponent(1*dif, 40, 2, "Oden"); // 1500
-        this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
+        this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));        
 
 
 
@@ -63,7 +63,7 @@ public class GameMap {
         map.addEdge(balder, tor, false);
 
         map.addEdge(balder, freja, false);
-        map.addEdge(freja, tor, false);
+        map.addEdge(freja, tor, true);
 
         map.addEdge(tor, oden, false);
         
@@ -114,10 +114,10 @@ public class GameMap {
         for (int i = 0; i < opponents.size(); i++) {            
             Opponent op = opponents.get(i);
             if (map.neighbours(opponents.get(oppIdx)).contains(op)) {
-
+                System.out.println(op.getName() + "granne");
                 if (s == op.getName()) {                
                     currentOpponent = op;
-                    oppIdx = i;        
+                    oppIdx = i;      
                     manager.initRound();
                 }
                 else if (s == "Shop") {
@@ -152,10 +152,10 @@ public class GameMap {
     public void updateMap( ){
         // Current Opponent is complete
         if ( currentOpponent != null) {
-        completedLvls.add(currentOpponent.getName());
+            completedLvls.add(currentOpponent.getName());
         for(Opponent op: getNeighbours(currentOpponent)){
-        availableLvls.add(op.getName());}}
-       notifyMapUpdate();
+            availableLvls.add(op.getName());}}
+        notifyMapUpdate();
     }
 
     public Graph<Opponent> getMap() {
