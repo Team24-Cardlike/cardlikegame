@@ -37,13 +37,13 @@ public class Round {
         o.addObserver(ob);
 
         //TODO: REMOVE THESE TEMPORARY ADDS
-        this.user.addUpgrade(lib.getUpgrade(11));
+        /*this.user.addUpgrade(lib.getUpgrade(11));
         this.user.addUpgrade(lib.getUpgrade(14));
         this.user.addUpgrade(lib.getUpgrade(21));
         this.user.addUpgrade(lib.getUpgrade(15));
         this.user.addUpgrade(lib.getUpgrade(31));
         this.user.addUpgrade(lib.getUpgrade(32));
-        this.user.addUpgrade(lib.getUpgrade(22));
+        this.user.addUpgrade(lib.getUpgrade(22));*/
     }
 
     public Round(Opponent opponent , RoundObserver ob){
@@ -54,13 +54,13 @@ public class Round {
         o.addObserver(ob);
 
         //TODO: REMOVE THESE TEMPORARY ADDS
-        this.user.addUpgrade(lib.getUpgrade(11));
+        /*this.user.addUpgrade(lib.getUpgrade(11));
         this.user.addUpgrade(lib.getUpgrade(14));
         this.user.addUpgrade(lib.getUpgrade(21));
         this.user.addUpgrade(lib.getUpgrade(15));
         this.user.addUpgrade(lib.getUpgrade(31));
         this.user.addUpgrade(lib.getUpgrade(32));
-        this.user.addUpgrade(lib.getUpgrade(22));
+        this.user.addUpgrade(lib.getUpgrade(22));*/
     }
 
     public User getUser(){
