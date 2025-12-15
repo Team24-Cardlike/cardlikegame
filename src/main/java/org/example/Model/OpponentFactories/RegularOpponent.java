@@ -5,7 +5,6 @@ public abstract class RegularOpponent extends Opponent{
     protected int maxHealth;
     public int damage;
     public String image;
-    private int health;
 
     public abstract void Create();
 

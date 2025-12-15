@@ -10,6 +10,8 @@ public class TorBoss extends BossOpponent {
         super.damage = 30;
         super.turns = 3;
         super.image = name+".png";
+        super.setHealth(maxHealth);
+
     }
     @Override
     public String getName() {

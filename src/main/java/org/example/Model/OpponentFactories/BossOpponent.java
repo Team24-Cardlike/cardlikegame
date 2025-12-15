@@ -6,7 +6,6 @@ public abstract class BossOpponent extends Opponent {
     public int damage;
     public int turns;
     public String image;
-    private int health;
 
     //public abstract void Create();
 

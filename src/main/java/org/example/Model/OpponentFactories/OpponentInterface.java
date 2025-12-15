@@ -13,4 +13,6 @@ public interface OpponentInterface {
     public void takeDamage(int damage);
 
     public float getHealthRatio();
+
+    public int getHealth();
 }
