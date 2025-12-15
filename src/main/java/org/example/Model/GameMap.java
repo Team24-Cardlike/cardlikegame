@@ -28,11 +28,11 @@ public class GameMap {
         this.map  = new Graph<>();
         this.opponents = new ArrayList<>();
         this.heimdall = new Opponent(40, 10, 3, "Heimdall");
-        this.balder = new Opponent(500*dif, 15, 3, "Balder");
+        this.balder = new Opponent(1*dif, 15, 3, "Balder");
 
-        this.freja = new Opponent(1*dif, 20, 3, "Freja");
-        this.tor = new Opponent(1000*dif, 30, 3, "Tor");
-        this.oden = new Opponent(1500*dif, 40, 2, "Oden");
+        this.freja = new Opponent(1*dif, 20, 3, "Freja"); // 600
+        this.tor = new Opponent(1*dif, 30, 3, "Tor"); // 1000
+        this.oden = new Opponent(1*dif, 40, 2, "Oden"); // 1500
         this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
 
 
@@ -59,9 +59,10 @@ public class GameMap {
 
         //Attach nodes
         map.addEdge(heimdall, balder, false);
-        map.addEdge(heimdall, freja, false);
 
         map.addEdge(balder, tor, false);
+
+        map.addEdge(balder, freja, false);
         map.addEdge(freja, tor, false);
 
         map.addEdge(tor, oden, false);
@@ -142,7 +143,6 @@ public class GameMap {
 
         for (Opponent o: ops) {
             String name = o.getName();
-            // System.out.println(o.getName());
             lvls.add(name);
         }
     }

@@ -28,7 +28,8 @@ public class MapView implements Screen, MapObserver {
     private MapController controller;
 
     ArrayList<String> lvls = new ArrayList<>();
-    private ArrayList<Sprite> opponentIcons = new ArrayList<>();
+    private ArrayList<Sprite> mapSprites = new ArrayList<>();
+    private ArrayList<Sprite> lvlSprites = new ArrayList<>();
 
     private Texture mapBackground;
     private Texture greenDot;
@@ -116,7 +117,7 @@ public class MapView implements Screen, MapObserver {
 
 
     private void drawOpponent() {
-        opponentIcons.clear();
+        mapSprites.clear();
 
         for (int i = 0; i < lvls.size(); i ++) {
 
@@ -136,7 +137,10 @@ public class MapView implements Screen, MapObserver {
                 drawRest(x,y);
 
             }
-            for (Sprite s : opponentIcons) {
+            for (Sprite s : mapSprites) {
+                s.draw(batch);
+            }
+            for (Sprite s : lvlSprites) {
                 s.draw(batch);
             }
         }
@@ -146,25 +150,25 @@ public class MapView implements Screen, MapObserver {
 
     public void drawComplete(float x, float y) {
         Sprite base =  makeSprite(greenDot,x,y);
-        opponentIcons.add(base);
+        lvlSprites.add(base);
         Sprite cross = makeSprite(redX, x, y);
-        opponentIcons.add(cross);
+        mapSprites.add(cross);
 
     }
 
     public void drawCurrent(float x, float y) {
         Sprite base =  makeSprite(greenDot,x,y);
 
-        opponentIcons.add(base);
+        lvlSprites.add(base);
         Sprite player =  makeSprite(lokiHead,x - 40,y- 20);
-        opponentIcons.add(player);
+        mapSprites.add(player);
 
 
 
     }
     public void drawRest(float x, float y) {
         Sprite base =  makeSprite(redDot,x,y);
-        opponentIcons.add(base);
+        lvlSprites.add(base);
     }
 
 
@@ -185,12 +189,17 @@ public class MapView implements Screen, MapObserver {
 
         if (Gdx.input.justTouched()) {
 
-            for (int a = lvls.size() - 1; a >= 0; a--) {
-                Polygon poly = generateHitbox(a, opponentIcons);
+
+
+            for (int a =  0; a < lvls.size(); a++) {
+
+                Polygon poly = generateHitbox(a, lvlSprites);
                 String name = lvls.get(a);
 
+
                 //Send input to roundController
-                if (poly.contains(coords.x, coords.y)) {                    
+                if (poly.contains(coords.x, coords.y)) {
+                    System.out.println(name);
                     controller.selectLvl(name);
                     break;
                 }
@@ -199,9 +208,10 @@ public class MapView implements Screen, MapObserver {
 
 
 
-        private Polygon generateHitbox(int index,ArrayList<Sprite> ops) {
-            // AI-generated solution for getting the correct hitbox
-            Sprite sprite = opponentIcons.get(index);
+        private Polygon generateHitbox(int index,ArrayList<Sprite> ops) {        
+            // AI-generated solution for getting the correct hitbox now that the
+            // cards are rotated
+            Sprite sprite = ops.get(index);
             float[] vertices = new float[]{
                     0, 0,
                     sprite.getWidth(), 0,

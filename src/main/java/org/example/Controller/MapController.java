@@ -13,7 +13,6 @@ public class MapController {
     }
 
     public void selectLvl(String opName) {
-        System.out.println(opName);
         map.levelSelect(opName);
 
     }
