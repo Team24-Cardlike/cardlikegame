@@ -68,7 +68,7 @@ public class GameManager {
         return gameMap.getAvailableLvls();
     }
 
-    public void gameLoop() {
+    public void gameLoop() {        
         state.update(this);
     }
 

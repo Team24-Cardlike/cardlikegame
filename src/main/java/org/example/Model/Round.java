@@ -169,6 +169,10 @@ public class Round {
 
     }
 
+    public boolean getWon() {
+        return roundFinished && opponent.getHealth() <= 0;
+    }
+
     public void init() {
         o.notifyHandChanged(user.getHand());
 

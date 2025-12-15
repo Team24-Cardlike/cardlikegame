@@ -637,7 +637,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     @Override
-    public void render ( float v){
+    public void render ( float v){        
         gameManager.gameLoop();
         input();
         draw();
