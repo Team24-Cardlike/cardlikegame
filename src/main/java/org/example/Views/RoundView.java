@@ -229,10 +229,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             endGame();
             // Adding next button
             if(isVictory){
+
                 nextButton.addListener(new ClickListener(){
                     @Override
                     public void clicked(InputEvent event, float x, float y){
                         roundController.nextRound();
+                        nextRound();
+
                     }
                 });
             }
@@ -505,7 +508,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     public void nextRound() {
+
         resetView();
+
         show();
     }
 
@@ -585,6 +590,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onRoundInit() {
+        this.isVictory = false;
+        this.gameEnded = false;
         Round r = gameManager.currentRound;
         this.roundController.setRound(r);
     }

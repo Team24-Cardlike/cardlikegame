@@ -30,7 +30,7 @@ public class MapView implements Screen, MapObserver {
 
     private Texture mapBackground;
     private Texture greenDot;
-    private Texture redDot;
+    private Texture lvlRune;
     private Texture redX;
     private Texture lokiHead;
 
@@ -42,12 +42,12 @@ public class MapView implements Screen, MapObserver {
 
     // Positions for lvls on map
     private final float[][] levelPositions = {
-            {90, 75}, // level 0
-            {180, 160}, // level 1
-            {350, 170}, // level 2
-            {550, 170}, // level 3
-            {600, 250}, // level 4
-            {750, 250}  // level 5
+            {100, 60}, // level 0
+            {175, 145}, // level 1
+            {400, 300}, // level 2
+            {350, 180}, // level 3
+            {490, 180}, // level 4
+            {650, 260}  // level 5
 
     };
 
@@ -70,11 +70,10 @@ public class MapView implements Screen, MapObserver {
 
         Gdx.input.setInputProcessor(stage);
         mapBackground = new Texture("assets/images/map.png");
-        greenDot = new Texture("assets/images/greenDot.png");
 
-        redDot   = new Texture("assets/images/redDot.png");
+        lvlRune   = new Texture("assets/images/LVLRune.png");
         redX     = new Texture("assets/images/redX.png");
-        lokiHead = new Texture("assets/images/lokiHead.png");
+        lokiHead = new Texture("assets/images/lokiMapIcon.png");
 
         
     }
@@ -113,19 +112,20 @@ public class MapView implements Screen, MapObserver {
                 drawRest(x,y);
 
             }
-            for (Sprite s : mapSprites) {
-                s.draw(batch);
-            }
             for (Sprite s : lvlSprites) {
                 s.draw(batch);
             }
+            for (Sprite s : mapSprites) {
+                s.draw(batch);
+            }
+
         }
 
 
     }
 
     public void drawComplete(float x, float y) {
-        Sprite base =  makeSprite(greenDot,x,y);
+        Sprite base =  makeSprite(lvlRune,x,y);
         lvlSprites.add(base);
         Sprite cross = makeSprite(redX, x, y);
         mapSprites.add(cross);
@@ -133,7 +133,8 @@ public class MapView implements Screen, MapObserver {
     }
 
     public void drawCurrent(float x, float y) {
-        Sprite base =  makeSprite(greenDot,x,y);
+        Sprite base =  makeSprite(lvlRune,x,y);
+
 
         lvlSprites.add(base);
         Sprite player =  makeSprite(lokiHead,x - 40,y- 20);
@@ -143,14 +144,14 @@ public class MapView implements Screen, MapObserver {
 
     }
     public void drawRest(float x, float y) {
-        Sprite base =  makeSprite(redDot,x,y);
+        Sprite base =  makeSprite(lvlRune,x,y);
         lvlSprites.add(base);
     }
 
 
     public Sprite makeSprite(Texture tex, float centerX,float centerY) {
         Sprite s = new Sprite(tex);
-        s.setSize(25f,25f);
+        s.setSize(80f,80f);
         s.setOriginCenter();
         s.setPosition(centerX-s.getWidth() / 2f, centerY - s.getHeight()/2f);
         return s;
@@ -176,6 +177,7 @@ public class MapView implements Screen, MapObserver {
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y)) {
                     System.out.println(name);
+                    System.out.println(lvls);
                     controller.selectLvl(name);
                     break;
                 }
@@ -185,7 +187,7 @@ public class MapView implements Screen, MapObserver {
 
 
         private Polygon generateHitbox(int index,ArrayList<Sprite> ops) {
-        System.out.println(ops);
+
             // AI-generated solution for getting the correct hitbox now that the
             // cards are rotated
             Sprite sprite = ops.get(index);
@@ -251,7 +253,6 @@ public class MapView implements Screen, MapObserver {
     public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {
 
         this.lvls = lvls;
-
         this.completedLvls = completedLvls;
         this.availableLvls = availableLvls;
     }

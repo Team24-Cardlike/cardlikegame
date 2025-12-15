@@ -4,14 +4,12 @@ public class RegularOpponent implements OpponentInterface{
     private final String name;
     private final int maxHealth;
     public int damage;
-    public int turns;
     public String image;
     private int health;
 
-    public RegularOpponent(int startHealth, int damage, int turns, String name){
+    public RegularOpponent(int startHealth, int damage, String name){
         this.maxHealth = startHealth;
         this.damage = damage;
-        this.turns = turns;
         this.health = maxHealth;
         this.name = name;
         this.image = name+".png";
@@ -19,11 +17,40 @@ public class RegularOpponent implements OpponentInterface{
 
     @Override
     public int getDamage() {
-        return 0;
+        return damage;
     }
 
     @Override
     public String getTexture() {
-        return "";
+        return "assets/images/"+name+".png";
     }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void takeDamage(int damage) {
+        this.health = this.health - damage;
+    }
+
+    @Override
+    public float getHealthRatio() {
+        return  ((float) this.health /this.maxHealth);
+
+    }
+
+    @Override
+    public int getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void reset() {
+        this.health = maxHealth;
+
+    }
+
+
 }

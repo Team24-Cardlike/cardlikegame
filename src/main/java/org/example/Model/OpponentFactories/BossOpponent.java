@@ -1,21 +1,15 @@
 package org.example.Model.OpponentFactories;
 
-public class BossOpponent implements OpponentInterface {
-    private final String name;
-    private final int maxHealth;
+public abstract class BossOpponent implements OpponentInterface {
+    protected String name;
+    protected int maxHealth;
     public int damage;
     public int turns;
     public String image;
-    private int health;
+    public int health;
 
-    public BossOpponent(int startHealth, int damage, int turns, String name){
-        this.maxHealth = startHealth;
-        this.damage = damage;
-        this.turns = turns;
-        this.health = maxHealth;
-        this.name = name;
-        this.image = name+".png";
-    }
+    public abstract void Create();
+
 
     @Override
     public int getDamage() {
@@ -26,4 +20,32 @@ public class BossOpponent implements OpponentInterface {
     public String getTexture() {
         return "";
     }
+
+    public String getName() {
+
+        return this.name;
+
+    }
+
+    @Override
+    public void takeDamage(int damage) {
+        this.health = this.health - damage;
+
+    }
+
+    @Override
+    public float getHealthRatio() {
+        return  ((float)this.health/this.maxHealth);
+    }
+
+    @Override
+    public int getHealth() {
+        return this.health;
+    }
+
+    @Override
+   public void reset() {
+        this.health = this.maxHealth;
+    }
 }
+

@@ -1,5 +1,7 @@
 package org.example.Model;
 
+import org.example.Model.OpponentFactories.BossOpponent;
+import org.example.Model.OpponentFactories.OpponentInterface;
 import org.example.Model.Upgrades.Upgrade;
 import java.util.*;
 
@@ -8,7 +10,8 @@ public class Round {
     private Deck deck = new Deck();
     Upgrade upgrades;
     private User user;
-    private Opponent opponent;
+    private OpponentInterface opponent;
+
 
     private int totalDamageToOpponent = 0;
     private int totalDamageToPlayer = 0;
@@ -20,7 +23,7 @@ public class Round {
 
     private String currentBestCombo;
 
-    public Round(User user, Opponent opponent, RoundObserver ob){
+    public Round(User user, OpponentInterface opponent, RoundObserver ob){
         this.user = user;
         this.user.resetUser();
         this.opponent = opponent;
@@ -30,7 +33,7 @@ public class Round {
         o.addObserver(ob);
     }
 
-    public Round(Opponent opponent , RoundObserver ob){
+    public Round(OpponentInterface opponent , RoundObserver ob){
         this.user = new User(1000);
         this.opponent = opponent;
         this.deck.createInGameDeck();
@@ -43,6 +46,7 @@ public class Round {
     }
     // Check states
     public void roundUpdate() {
+
 
         if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
 
@@ -59,6 +63,7 @@ public class Round {
         if (user.health <= 0 || checkDeadOpponent()) {
 
             if(opponentHealth < userHealth) {
+                System.out.println("hej");
             o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
             else {
                 o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
@@ -81,6 +86,8 @@ public class Round {
         if (user.getSelectedCards().size() > 0) {
             int damage = user.playCards();
             this.opponent.takeDamage(damage);
+            System.out.println(opponent.getHealth());
+            System.out.println(opponent.getHealthRatio());
             opponentHealth = opponent.getHealthRatio();
             totalDamageToOpponent = totalDamageToOpponent + damage;
             while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
@@ -112,7 +119,7 @@ public class Round {
 
 
     private boolean checkDeadOpponent(){
-        return opponent.health <= 0;
+        return opponent.getHealth() <= 0;
     }
 
     private String bestCombo(ArrayList<Card> cards){

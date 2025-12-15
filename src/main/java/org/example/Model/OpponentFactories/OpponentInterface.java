@@ -7,4 +7,14 @@ public interface OpponentInterface {
     public int getDamage();
 
     public String getTexture();
+
+    public String getName();
+
+    public void takeDamage(int damage);
+
+    float getHealthRatio();
+
+    int getHealth();
+
+    void reset();
 }

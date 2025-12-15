@@ -2,44 +2,50 @@ package org.example.Model;
 
 
 import org.example.Model.GameState.RoundState;
+import org.example.Model.OpponentFactories.BossFactory;
+import org.example.Model.OpponentFactories.BossOpponent;
+import org.example.Model.OpponentFactories.OpponentInterface;
 
 import java.util.*;
 public class GameMap {
-    public Graph<Opponent> map;
-    private ArrayList<Opponent> opponents;
-    private final Opponent heimdall;
-    private final  Opponent balder;
-    private final Opponent freja;
-    private final Opponent tor;
-    private final Opponent oden;
-    public Opponent currentOpponent;
+    Graph<OpponentInterface> map;
+    ArrayList<OpponentInterface> opponents;
+    BossOpponent heimdall;
+    BossOpponent balder;
+    BossOpponent freja;
+    BossOpponent tyr;
+    BossOpponent tor;
+    BossOpponent oden;
+    OpponentInterface currentOpponent;
+    OpponentInterface oPCopy;
     boolean lvlSelected = false;
-    GameManager maneger;
+    GameManager manager;
+    BossFactory bf = new BossFactory();
 
     private List<MapObserver> obs = new ArrayList<>();
     private Set<String> availableLvls = new HashSet<>();
     private Set<String> completedLvls = new HashSet<>();
     private ArrayList<String> lvls = new ArrayList<>();
-    int nextLvl  = 0;
 
 
-    GameMap(int dif, GameManager maneger, MapObserver mapObs){
+    GameMap(int dif, GameManager manager, MapObserver mapObs){
         this.map  = new Graph<>();
         this.opponents = new ArrayList<>();
-        this.heimdall = new Opponent(40, 10, 3, "Heimdall");
-        this.balder = new Opponent(500*dif, 15, 3, "Balder");
+        this.heimdall = bf.Create("Heimdall");
+        this.balder = bf.Create("Balder");
+        this.freja = bf.Create("Freja");
+        this.tyr = bf.Create("Tyr");
+        this.tor = bf.Create("Tor");
+        this.oden = bf.Create("Oden");
 
-        this.freja = new Opponent(600*dif, 20, 3, "Freja");
-        this.tor = new Opponent(1000*dif, 30, 3, "Tor");
-        this.oden = new Opponent(1500*dif, 40, 2, "Oden");
-        this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
+        this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja,this.tyr, this.tor,this.oden));
 
 
 
 
         obs.add(mapObs);
 
-        this.maneger = maneger;
+        this.manager = manager;
         createMap();
 
 
@@ -61,6 +67,7 @@ public class GameMap {
         map.addEdge(balder, tor, false);
 
         map.addEdge(balder, freja, false);
+        map.addEdge(freja, tyr, false);
         map.addEdge(freja, tor, false);
 
         map.addEdge(tor, oden, false);
@@ -68,36 +75,36 @@ public class GameMap {
         //update list of enemies, index = lvl
         getLvlOps();
         this.availableLvls.add(heimdall.getName());
+
     }
 
 
 
-    public void setLvlFalse() {
-        this.lvlSelected = false;
-        maneger.setState(new RoundState());
-    }
 
-    public List<Opponent> getNeighbours(Opponent op) {
+    public List<OpponentInterface> getNeighbours(OpponentInterface op) {
         return map.neighbours(op);
     }
 
 
 
     public void levelSelect(String s) {
-        if (currentOpponent == null &&  s.equals(heimdall.getName()) ) {   currentOpponent = heimdall;
-            maneger.initRound();
+        //Setting first lvl
+        if (currentOpponent == null &&  s.equals(heimdall.getName()) ) {   currentOpponent =  heimdall;
+            manager.initRound();
         }
-    for (Opponent op: map.neighbours(currentOpponent)) {
+    for (OpponentInterface op: map.neighbours(currentOpponent)) {
 
         if (s == op.getName()) {
             currentOpponent = op;
-            maneger.initRound();
+            manager.initRound();
         }
         else if (s == "Shop") {
             initShop();
 
         }
+
     }
+
     }
 
     private void initShop() {
@@ -111,10 +118,12 @@ public class GameMap {
 
     public void getLvlOps(){
         lvls.clear();
-        List<Opponent> ops =  map.getAllVertices(heimdall);
+        List<OpponentInterface> ops =  map.getAllVertices(heimdall);
 
-        for (Opponent o: ops) {
+        for (OpponentInterface o: ops) {
+
             String name = o.getName();
+
             lvls.add(name);
         }
     }
@@ -125,12 +134,14 @@ public class GameMap {
         //Current Opponent is complete
         if ( currentOpponent != null) {
         completedLvls.add(currentOpponent.getName());
-        for(Opponent op: getNeighbours(currentOpponent)){
+
+        for(OpponentInterface op: getNeighbours(currentOpponent)){
+
         availableLvls.add(op.getName());}}
        notifyMapUpdate();
     }
 
-    public Graph<Opponent> getMap() {
+    public Graph<OpponentInterface> getMap() {
         return this.map;
     }
 
@@ -141,6 +152,7 @@ public class GameMap {
     }
 
 
-
-
+    public void resetOp() {
+        currentOpponent.reset();
+    }
 }
