@@ -1,12 +1,7 @@
 package org.example.Model.OpponentFactories;
 
 public abstract class BossOpponent extends Opponent {
-    protected String name;
-    protected int maxHealth;
-    public int damage;
     public int turns;
-    public String image;
-    public int health;
 
     //public abstract void Create();
 

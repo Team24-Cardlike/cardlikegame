@@ -1,10 +1,6 @@
 package org.example.Model.OpponentFactories;
 
 public abstract class RegularOpponent extends Opponent{
-    protected String name;
-    protected int maxHealth;
-    public int damage;
-    public String image;
 
     public abstract void Create();
 
