@@ -26,7 +26,7 @@ public abstract class RegularOpponent extends Opponent{
 
     @Override
     public float getHealthRatio(){
-        return (float) health/maxHealth;
+        return ((float) health/maxHealth);
     }
 
 }

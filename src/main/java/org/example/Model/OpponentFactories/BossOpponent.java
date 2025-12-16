@@ -6,12 +6,15 @@ public abstract class BossOpponent extends Opponent {
     public int damage;
     public int turns;
     public String image;
+    public int health;
 
     //public abstract void Create();
 
     @Override
     public void takeDamage(int damage){
-        health = health-damage;
+
+        health = health - damage;
+
     }
 
     @Override
@@ -24,9 +27,10 @@ public abstract class BossOpponent extends Opponent {
         return "";
     }
 
+
     @Override
     public float getHealthRatio(){
-        return (float) health/maxHealth;
+        return( (float) health/maxHealth);
     }
 }
 

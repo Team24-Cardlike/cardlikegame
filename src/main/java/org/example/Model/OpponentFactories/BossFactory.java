@@ -12,6 +12,8 @@ public class BossFactory extends OpponentFactory {
                 return new BalderBoss();
             case "Freja":
                 return new FrejaBoss();
+            case "Tyr":
+                return new TyrBoss();
             case "Tor":
                 return new TorBoss();
             case "Oden":

@@ -2,15 +2,14 @@ package org.example.Model.OpponentFactories.DeclaredBosses;
 
 import org.example.Model.OpponentFactories.BossOpponent;
 
-public class BalderBoss extends BossOpponent {
+public class TyrBoss extends BossOpponent {
 
-    public BalderBoss() {
-        super.name = "Balder";
-        super.maxHealth = 50;
-        super.damage = 15;
-        super.turns = 3;
+    public TyrBoss() {
+        super.name = "Tyr";
+        super.maxHealth = 800;
+        super.damage = 20;
+        super.turns = 1;
         super.image = name+".png";
-        super.setHealth(maxHealth);
     }
     @Override
     public String getName() {

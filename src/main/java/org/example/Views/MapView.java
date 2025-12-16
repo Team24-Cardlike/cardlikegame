@@ -3,7 +3,6 @@ package org.example.Views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
@@ -12,11 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Controller.MapController;
 import org.example.Model.GameManager;
-import org.example.Model.GameMap;
 import org.example.Model.MapObserver;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class MapView implements Screen, MapObserver {
     private FitViewport viewport;
@@ -26,35 +24,40 @@ public class MapView implements Screen, MapObserver {
     private GameManager manager;
     private MapController controller;
 
-    ArrayList<String> lvls;
+    ArrayList<String> lvls = new ArrayList<>();
+    private ArrayList<Sprite> mapSprites = new ArrayList<>();
+    private ArrayList<Sprite> lvlSprites = new ArrayList<>();
+    String lastLVL;
 
-    private ArrayList<Sprite> opponentIcons = new ArrayList<>();
     private Texture mapBackground;
-
     private Texture greenDot;
-    private Texture redDot;
+    private Texture lvlRune;
     private Texture redX;
     private Texture lokiHead;
 
     private int currentLvl = 0;
+    private Set<String> completedLvls;
+    private Set<String> availableLvls;
 
     private String currentOp;
 
     // Positions for lvls on map
     private final float[][] levelPositions = {
-            {90, 75}, // level 0
-            {180, 160}, // level 1
-            {350, 170}, // level 2
-            {550, 170}, // level 3
-            {600, 250}, // level 4
-            {750, 250}  // level 5
+            {130, 68}, // level 0 Heimdall
+            {272, 185}, // level 1 Baldur
+            {605, 375}, // level 2 Tor
+            {560, 220}, // level 3 Freja
+            {940, 400}, // level 4 Oden
+            {790, 220}  // level 5 Tyr
 
     };
 
     Vector3 coords = new Vector3();
 
+
     public void setManager(GameManager m) {
         this.manager = m;
+
     }
 
     public void setController(MapController c) {
@@ -69,12 +72,12 @@ public class MapView implements Screen, MapObserver {
 
         Gdx.input.setInputProcessor(stage);
         mapBackground = new Texture("assets/images/map.png");
-        greenDot = new Texture("assets/images/greenDot.png");
-        lvls = controller.getLvlList();
 
-        redDot   = new Texture("assets/images/redDot.png");
+        lvlRune   = new Texture("assets/images/LVLRune.png");
         redX     = new Texture("assets/images/redX.png");
-        lokiHead = new Texture("assets/images/lokiHead.png");
+        lokiHead = new Texture("assets/images/lokiMapIcon.png");
+
+        
     }
 
     public void draw(){
@@ -88,57 +91,61 @@ public class MapView implements Screen, MapObserver {
 
 
     private void drawOpponent() {
-        opponentIcons.clear();
+        mapSprites.clear();
 
         for (int i = 0; i < lvls.size(); i ++) {
 
+            String name = lvls.get(i);
             float x = levelPositions[i][0];
             float y = levelPositions[i][1];
 
-            if (i < currentLvl) {
-                drawComplete(x, y);
+            if (completedLvls.contains(name)) {
+                drawComplete(x, y, name);
             }
 
-            else if (i == currentLvl) {
+            else if (availableLvls.contains(name)) {
                 drawCurrent(x,y);
 
             }
 
-            else if (i > currentLvl) {
+            else  {
                 drawRest(x,y);
 
             }
-            for (Sprite s : opponentIcons) {
+            for (Sprite s : lvlSprites) {
                 s.draw(batch);
             }
+            for (Sprite s : mapSprites) {
+                s.draw(batch);
+            }
+
         }
     }
 
-    public void drawComplete(float x, float y) {
-        Sprite base =  makeSprite(greenDot,x,y);
-        opponentIcons.add(base);
+    public void drawComplete(float x, float y,String name) {
+        Sprite base =  makeSprite(lvlRune,x,y);
+        lvlSprites.add(base);
         Sprite cross = makeSprite(redX, x, y);
-        opponentIcons.add(cross);
+        mapSprites.add(cross);
+        if (lastLVL == name) {
+        Sprite player =  makeSprite(lokiHead,x ,y);
+        mapSprites.add(player);}
 
     }
 
     public void drawCurrent(float x, float y) {
-        Sprite base =  makeSprite(greenDot,x,y);
-
-        opponentIcons.add(base);
-        Sprite player =  makeSprite(lokiHead,x - 40,y- 20);
-        opponentIcons.add(player);
+        Sprite base =  makeSprite(lvlRune,x,y);
+        lvlSprites.add(base);
     }
-
     public void drawRest(float x, float y) {
-        Sprite base =  makeSprite(redDot,x,y);
-        opponentIcons.add(base);
+        Sprite base =  makeSprite(lvlRune,x,y);
+        lvlSprites.add(base);
     }
 
 
     public Sprite makeSprite(Texture tex, float centerX,float centerY) {
         Sprite s = new Sprite(tex);
-        s.setSize(25f,25f);
+        s.setSize(80f,80f);
         s.setOriginCenter();
         s.setPosition(centerX-s.getWidth() / 2f, centerY - s.getHeight()/2f);
         return s;
@@ -150,13 +157,13 @@ public class MapView implements Screen, MapObserver {
         viewport.unproject(coords);
 
         if (Gdx.input.justTouched()) {
-
-            for (int a = lvls.size() - 1; a >= 0; a--) {
-                Polygon poly = generateHitbox(a, opponentIcons);
+            for (int a =  0; a < lvls.size(); a++) {
+                Polygon poly = generateHitbox(a, lvlSprites);
                 String name = lvls.get(a);
 
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y)) {
+                    lastLVL = name;
                     controller.selectLvl(name);
                     break;
                 }
@@ -166,9 +173,10 @@ public class MapView implements Screen, MapObserver {
 
 
         private Polygon generateHitbox(int index,ArrayList<Sprite> ops) {
+
             // AI-generated solution for getting the correct hitbox now that the
             // cards are rotated
-            Sprite sprite = opponentIcons.get(index);
+            Sprite sprite = ops.get(index);
             float[] vertices = new float[]{
                     0, 0,
                     sprite.getWidth(), 0,
@@ -218,8 +226,11 @@ public class MapView implements Screen, MapObserver {
     }
 
     @Override
-    public void onMapChanged(ArrayList<String> lvls, int currentLvl) {
+    public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {
+
+
         this.lvls = lvls;
-        this.currentLvl = currentLvl;
+        this.completedLvls = completedLvls;
+        this.availableLvls = availableLvls;
     }
 }

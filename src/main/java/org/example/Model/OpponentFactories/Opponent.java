@@ -28,7 +28,7 @@ public abstract class Opponent implements OpponentInterface {
         return this.health;
     }
 
-    public void setHealth(int health){
+    public void setHealth(int health) {
         this.health = health;
     }
 

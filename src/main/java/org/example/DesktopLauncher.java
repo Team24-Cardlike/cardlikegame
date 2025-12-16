@@ -34,7 +34,7 @@ public class DesktopLauncher {
 
         roundView.setGameManager(manager);
         RoundController roundController = new RoundController(manager);
-        manager.setRoundController(roundController);
+
         MapController mapController = new MapController(manager);
         mapController.setMap(manager.gameMap);
 
