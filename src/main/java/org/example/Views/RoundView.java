@@ -68,7 +68,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private float animationTime = 0;
     private float fallDuration = 0.3f;  // snabb fallning
     private float riseDuration = 0.6f;  // långsam uppgång
-
+    private Label opponentName;
+    private Label playerName;
     private float opponentStartY = 300;      // original Y
     private float opponentDropY = 180;
 
