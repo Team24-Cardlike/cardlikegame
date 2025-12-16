@@ -11,13 +11,6 @@ public abstract class BossOpponent extends Opponent {
     //public abstract void Create();
 
     @Override
-    public void takeDamage(int damage){
-
-        health = health - damage;
-
-    }
-
-    @Override
     public int getDamage() {
         return 0;
     }

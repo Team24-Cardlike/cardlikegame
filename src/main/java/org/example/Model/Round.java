@@ -92,8 +92,8 @@ public class Round {
         this.user.damage = this.user.playCards();
         checkUpgrades(1);
         this.opponent.takeDamage(this.user.damage);
-        opponentHealth = opponent.getHealthRatio();
-        totalDamageToOpponent = totalDamageToOpponent + this.user.damage;
+        this.opponentHealth = opponent.getHealthRatio();
+        this.totalDamageToOpponent += this.user.damage;
         while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
 
 

@@ -2,7 +2,7 @@ package org.example.Model.OpponentFactories;
 
 
 public abstract class Opponent implements OpponentInterface {
-    int health;
+    public int health;
 
     public int getDamage() {
         return 0;
@@ -17,7 +17,7 @@ public abstract class Opponent implements OpponentInterface {
     }
 
     public void takeDamage(int damage) {
-
+        this.health -= damage;
     }
 
     public float getHealthRatio() {

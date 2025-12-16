@@ -20,11 +20,6 @@ public abstract class RegularOpponent extends Opponent{
     }
 
     @Override
-    public void takeDamage(int damage){
-        health = health-damage;
-    }
-
-    @Override
     public float getHealthRatio(){
         return ((float) health/maxHealth);
     }
