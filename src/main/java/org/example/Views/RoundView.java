@@ -240,12 +240,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             endGame();
             // Adding next button
             if(isVictory){
-                nextButton.addListener(new ClickListener(){
-                    @Override
-                    public void clicked(InputEvent event, float x, float y){
-                        roundController.nextRound();
-                    }
-                });
+
+                System.out.println(isVictory);
+
             }
 
             else{
@@ -465,6 +462,15 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             nextButton.setPosition(600,200);
             nextButton.setSize(80, 50);
             stage.addActor(nextButton);
+            nextButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    System.out.println("hej hej ");
+                    roundController.nextRound();
+                    nextRound();
+
+                }
+            });
         }
         else{
             retryButton = new Image(nextButtonTexture);
@@ -608,6 +614,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     @Override
     public void onGameEnded(String resultMessage, int totalDamageToOpponent, int totalDamageToUser) {
         if(Objects.equals(resultMessage, "Victory")){
+
             this.isVictory = true;
         }
         this.gameEnded = true;
@@ -622,7 +629,16 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if (!playerTurn) {
             oppAnimation();
         }
-        System.out.println("playerturn = " + playerTurn);
+
+    }
+
+    @Override
+    public void onRoundInit() {
+
+        this.isVictory = false;
+        this.gameEnded = false;
+        Round r = gameManager.currentRound;
+        this.roundController.setRound(r);
     }
 
     @Override

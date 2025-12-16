@@ -74,4 +74,13 @@ public class RoundObsMethods {
             handToString.add(c.pic);}
         return handToString;
     }
+
+
+    // Notify new round
+    public void notifyNewRound() {
+        for (RoundObserver o : observers) {
+            o.onRoundInit();
+        }
+
+    }
 }

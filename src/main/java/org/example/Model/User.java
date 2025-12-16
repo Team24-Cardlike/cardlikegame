@@ -107,6 +107,7 @@ public class User extends Player {
         this.selectedCards = new ArrayList<>();
     }
 
+
     public int getGold(){
         return this.gold;
     }
