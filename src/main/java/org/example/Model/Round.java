@@ -88,12 +88,12 @@ public class Round {
 
             o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed
             o.notifyPlayerTurn(playerTurn); // Notify observer of changed player turn
-            o.notifySelectedChanged(user.getSelectedCards()); // Notify observer of reset selected
+            o.notifyUnselected(user.getSelectedCards()); // Notify observer of reset selected
             o.notifyHandChanged(user.getHand()); // Notify observer of new hand
         }
     }
 
-
+//Byt namn på notifyUnselected till typ notifyResetAndUnselect
 
     private void opponentTurn() {
         int oppDamage = opponent.getDamage();
@@ -105,6 +105,7 @@ public class Round {
         playerTurn = true;
 
         o.notifyHealthChanged(userHealth,opponentHealth);// Notify observer of health changed
+        o.notifyOpponentAttacked(oppDamage);//, oppopnent.name, opponent.attackName));
         o.notifyPlayerTurn(playerTurn); // notify player turn changed
     }
 
@@ -122,15 +123,14 @@ public class Round {
     public void discard(){
         removeSelectedCards();
         user.drawCards(deck.getInGameDeck(),10 - user.getHand().size());
-        o.notifySelectedChanged(user.getSelectedCards());
+        o.notifyUnselected(user.getSelectedCards());
         o.notifyHandChanged(user.getHand());
     }
 
     private void removeSelectedCards() {
         user.setSelectedCards(new ArrayList<>());
-        o.notifySelectedChanged(user.getSelectedCards());
+        o.notifyUnselected(user.getSelectedCards());
     }
-
 
     // Removing selected card from hand and adding it to selected cards
     public void addSelectedCards(int index) {
@@ -140,7 +140,7 @@ public class Round {
         user.addSelectedCard(c); // Added to selected cards
         //Notify hand changed
         o.notifyHandChanged(user.getHand());
-        o.notifySelectedChanged(user.getSelectedCards());
+        o.notifySelected(user.getSelectedCards());
     }
 
     //Removing card from selected and returning it back to the hand.
@@ -150,7 +150,7 @@ public class Round {
         temp.remove(index);
         user.setSelectedCards(temp);
 
-        o.notifySelectedChanged(user.getSelectedCards());
+        o.notifyUnselected(user.getSelectedCards());
         o.notifyHandChanged(user.getHand());
     }
 
@@ -166,7 +166,7 @@ public class Round {
     public void init() {
         o.notifyHandChanged(user.getHand());
         System.out.println(user.getHand().size());
-        o.notifySelectedChanged(user.getSelectedCards());
+        o.notifyUnselected(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
         o.notifyPlayerTurn(playerTurn);

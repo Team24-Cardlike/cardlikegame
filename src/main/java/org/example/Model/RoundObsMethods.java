@@ -30,9 +30,15 @@ public class RoundObsMethods {
     }
 
     // Selected cards changed, update view in list of strings
-    public void notifySelectedChanged(ArrayList<Card> selectedCards) {
+    public void notifySelected(ArrayList<Card> selectedCards) {
         for (RoundObserver o : observers) {
-            o.onSelectedChanged(handToString(selectedCards));
+            o.onSelectedCard(handToString(selectedCards));
+        }
+    }
+
+    public void notifyUnselected(ArrayList<Card> selectedCards) {
+        for (RoundObserver o : observers) {
+            o.onUnselectedCard(handToString(selectedCards));
         }
     }
 
@@ -73,5 +79,11 @@ public class RoundObsMethods {
 
             handToString.add(c.pic);}
         return handToString;
+    }
+
+    public void notifyOpponentAttacked(int damage){//String name, String attackName
+        for (RoundObserver o : observers) {
+            o.onOpponentAttack(damage);
+        }
     }
 }

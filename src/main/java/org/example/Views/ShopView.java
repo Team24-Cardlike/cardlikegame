@@ -63,6 +63,8 @@ public class ShopView implements Screen {
         }
     }
 
+
+
     @Override
     public void show() {
         batch = new SpriteBatch();

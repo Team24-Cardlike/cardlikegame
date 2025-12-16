@@ -12,24 +12,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Controller.RoundController;
 import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import org.example.Views.Animations.ImageAnimations;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class RoundView extends ApplicationAdapter implements RoundObserver, Screen {
     public FitViewport viewport;
-    private SpriteBatch spriteBatch;
+    //private SpriteBatch spriteBatch;
     private ShapeRenderer sr;
 
     Texture background;
@@ -48,11 +50,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public Texture lossTxt;
 
     //ArrayList containing card-sprites for selected cards and hand
-    public ArrayList<Sprite> cardSprites = new ArrayList<>();
-    public ArrayList<Sprite> selectedCardSprites = new ArrayList<>();
+    public ArrayList<Image> cardImages = new ArrayList<>();
+    public ArrayList<Image> selectedCardImages = new ArrayList<>();
 
     private Texture opponentTexture;
-    private Sprite opponentSprite;
+    private Image opponentImage;
 
     // Seving hand if LibGDX not yet initialized
     private List<String> tempHand;
@@ -88,6 +90,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private int totalDamageToOpponent;
     private int totalDamageToUser;
 
+
+    private int lastIndex;
+
     public void setGameManager (GameManager manager ) {
         this.gameManager = manager;
     }
@@ -119,7 +124,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         nextButtonTexture = new Texture("assets/images/nextbutton.png");
         retryButtonTexture = new Texture("assets/images/nextPlaceholder.png");
         sr = new ShapeRenderer();
-        spriteBatch = new SpriteBatch();
+        //spriteBatch = new SpriteBatch();
 
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, 8, 5);
@@ -127,8 +132,21 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         camera.update();
         viewport = new FitViewport(1280,720, camera);
 
-        stage = new Stage(viewport, spriteBatch);
-        cardSprites = new ArrayList<>();
+        stage = new Stage(viewport);
+
+        Image backgroundImage =
+                new Image(new Texture("assets/images/bräde.png"));
+
+        backgroundImage.setSize(
+                viewport.getWorldWidth(),
+                viewport.getWorldHeight()
+        );
+
+        backgroundImage.setPosition(0, 0);
+        backgroundImage.setZIndex(0); // längst bak
+
+        stage.addActor(backgroundImage);
+        cardImages = new ArrayList<>();
 
         shopButton = new Image(new Texture("assets/images/victoryPlaceholder.png"));
         shopButton.setSize(150, 100);
@@ -161,15 +179,14 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         stage.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
 
-
         opponentTexture = new Texture("assets/images/enemyCorrect.png");
-        opponentSprite = new Sprite(opponentTexture);
-        opponentSprite.setSize(350, 200);
-        opponentSprite.setPosition(
-                viewport.getWorldWidth() / 2f - opponentSprite.getWidth() / 2f,
-                viewport.getWorldHeight() - opponentSprite.getHeight() - 50
+        opponentImage = new Image(opponentTexture);//new Sprite(opponentTexture);
+        opponentImage.setSize(350, 200);
+        opponentImage.setPosition(
+                viewport.getWorldWidth() / 2f - opponentImage.getWidth() / 2f,
+                viewport.getWorldHeight() - opponentImage.getHeight() - 50
         );
-        background = new Texture("assets/images/bräde.png");
+        stage.addActor(opponentImage);
 
 
         startButton.addListener(new ClickListener() {
@@ -213,30 +230,30 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void input() {
         coords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(coords);
-
+/*
         if (Gdx.input.justTouched()) {
 
-            for (int a = cardSprites.size() - 1; a >= 0; a--) {
-                Polygon poly = generateHitbox(a, cardSprites);
+            for (int a = cardImages.size() - 1; a >= 0; a--) {
+                Polygon poly = generateHitbox(a, cardImages);
 
                 //Send input to roundController
-                if (poly.contains(coords.x, coords.y) && (selectedCardSprites.size() < 5)) {
+                if (poly.contains(coords.x, coords.y) && (selectedCardImages.size() < 5)) {
                     roundController.selectCard(a);
                     break;
                 }
             }
 
             //SelectLoop
-            for (int a = selectedCardSprites.size() -1; a >= 0; a--) {
-                Polygon poly = generateHitbox(a,selectedCardSprites);
+            for (int a = selectedCardImages.size() -1; a >= 0; a--) {
+                Polygon poly = generateHitbox(a,selectedCardImages);
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y)) {
-                    roundController.unselectCard(a);
+                    roundController.tCard(a);
                     break;
                 }
 
             }
-        }
+        }*/
     }
 
     public void onPlaySelectedCards(){
@@ -328,17 +345,17 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         sr.end();
     }
-    
+
     // Creates
     public void createSpriteList( ){
 
     }
 
-
-    private Polygon generateHitbox(int index,ArrayList<Sprite> cards) {
+    private Polygon generateHitbox(int index, ArrayList<Image> cards) {
         // AI-generated solution for getting the correct hitbox now that the
         // cards are rotated
-        Sprite sprite = cards.get(index);
+        //Sprite sprite = cards.get(index);
+        Image sprite = cards.get(index);
         float[] vertices = new float[]{
                 0, 0,
                 sprite.getWidth(), 0,
@@ -356,14 +373,14 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     //Check if user hovers over card
     public void getHoverdCards() {
-        for (int a = 0; a < cardSprites.size(); a++){
-            Polygon poly = generateHitbox(a, cardSprites);
+        for (int a = 0; a < cardImages.size(); a++){
+            Polygon poly = generateHitbox(a, cardImages);
             // Check if card is hovered over
             if (poly.contains(coords.x, coords.y)) {
                 // if (cardSprites.get(a).getBoundingRectangle().contains(coords.x,coords.y)) {
                 // hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
                 hoveredCards.set(a, true);
-                for (int i = 0; i < cardSprites.size(); i++) {
+                for (int i = 0; i < cardImages.size(); i++) {
                     if (i != a) hoveredCards.set(i, false);
                 }
 
@@ -377,46 +394,47 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         getHoverdCards();
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
-        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-        spriteBatch.begin();
+        //spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+        //spriteBatch.begin();
 
         // store the worldWidth and worldHeight as local variables for brevity
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
-        spriteBatch.draw(background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight()); // draw the background
+        //spriteBatch.draw(background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight()); // draw the background
         //ArrayList<Sprite> cards = user.getHand();
 
-        drawCardSprites();
+        //drawCardSprites();
         showCombo(currentBestCombo);
-        opponentSprite.draw(spriteBatch);
+        //opponentImage.draw(spriteBatch);
 
-        spriteBatch.end();
-        drawHealthBars();
+        //spriteBatch.end();
+
         stage.act(Gdx.graphics.getDeltaTime());
-
 
         if (playerTurn || gameEnded) {
             stage.draw();
         }
+        drawHealthBars();
     }
 
     public void drawCardSprites() {
-
-        for (int i = 0; i < selectedCardSprites.size(); i++) {
-            Sprite selectedCard = selectedCardSprites.get(i);
+        for (int i = 0; i < selectedCardImages.size(); i++) {
+            Image selectedCard = selectedCardImages.get(i);
 
             //float cx = 150 + i * 90;
             //float cy = 200;
 
             //selectedCard.setPosition(cx, cy);
             selectedCard.setColor(Color.GOLD);
-            selectedCard.draw(spriteBatch);
+            stage.addActor(selectedCard);
+            //selectedCard.draw(spriteBatch);
         }
-        for (int i = 0; i < cardSprites.size(); i++) {
+        for (int i = 0; i < cardImages.size(); i++) {
 
-            Sprite card = cardSprites.get(i);
+            Image card = cardImages.get(i);
             card.setColor(hoveredCards.get(i) ? Color.LIGHT_GRAY : Color.WHITE);
-            card.draw(spriteBatch);
+            //card.draw(spriteBatch);
+            stage.addActor(card);
         }
 
     }
@@ -512,7 +530,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             // t^0.5 ger snabb start, mjuk slut
             float eased = (float) Math.pow(t, 0.5);
             float newY = opponentStartY + (opponentDropY - opponentStartY) * eased;
-            opponentSprite.setY(newY);
+            opponentImage.setY(newY);
 
         } else {
             // Ease-in rise: långsam → snabb
@@ -520,7 +538,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             if (t > 1f) {
                 t = 1f;
                 animatingOpponent = false;
-                opponentSprite.setY(opponentStartY);
+                opponentImage.setY(opponentStartY);
 
                  // game.getTurnManager().swapTurn(); // animation klar → byt tur TODO Remove, should be updated in model
                 return;
@@ -528,13 +546,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             // t^2 ger långsam start, snabb slut
             float eased = (float) Math.pow(t, 2);
             float newY = opponentDropY + (opponentStartY - opponentDropY) * eased;
-            opponentSprite.setY(newY);
+            opponentImage.setY(newY);
         }
     }
 
     public void resetView() {
         if (stage != null) stage.dispose();
-        if (spriteBatch != null) spriteBatch.dispose();
+        //if (spriteBatch != null) spriteBatch.dispose();
         if (sr != null) sr.dispose();
         if (vicTxt != null) vicTxt.dispose();
         if (nextButtonTexture != null) nextButtonTexture.dispose();
@@ -552,50 +570,182 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onHandChanged(ArrayList<String> hand) {
-
-        this.cardSprites.clear(); // Clear current sprites before update
+        for (Image card : cardImages) {
+            card.remove();
+        }
+        this.cardImages.clear(); // Clear current sprites before update
 
         for (int i = 0; i < hand.size(); i++) {
             //Iterating ocher hand to get card png
-            Sprite cardSprite = new Sprite(new Texture("assets/images/" + hand.get(i)));
+            final int index = i;
+            Image cardSprite = new Image(new Texture("assets/images/" + hand.get(i)));
+            cardSprite.setName(hand.get(i));
             cardSprite.setSize(100,175);
+            cardSprite.setOrigin(Align.center);
             // Sets the card's position: x is centered based on the number of cards,
             // y is adjusted to create a slight curved spread before rotation.
             //float y = 80 - 7.5f * (float)Math.pow(Math.abs(i - hand.size()/2), 1.20f);
             // startX is position of card at index 0
             //float startX = 60* i + 80 ;
-            float cardSpacing = 150;
-            float totalWidth = cardSprites.size() * cardSpacing;
-            float startX = viewport.getWorldWidth() / 4f - totalWidth / 2f;
+            //float cardSpacing = 150;
+            //float totalWidth = cardImages.size() * cardSpacing;
+            //float startX = viewport.getWorldWidth() / 4f - totalWidth / 2f;
 
-            float x = startX + i * cardSpacing;
+            //float x = startX + i * cardSpacing;
             float y = 35;
 
-            cardSprite.setPosition(x, y);
-            cardSprite.setOriginCenter();
+            cardSprite.setPosition(handX(i, cardImages.size()), y);
             cardSprite.setRotation(5 * (hand.size()/2 - i)); // Rotating cars
+            cardSprite.setTouchable(Touchable.enabled);
 
-            cardSprites.add(cardSprite);
+            //cardImages.add(cardSprite);
+            cardSprite.addListener(new InputListener() {
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    cardSprite.setColor(Color.LIGHT_GRAY);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    cardSprite.setColor(Color.WHITE);
+                }
+            });
+            cardSprite.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+
+                    // MAX 5 cards
+                    if (selectedCardImages.size() >= 5) {
+                        return;
+                    }
+                    lastIndex = index;
+                    roundController.selectCard(index);
+                    //float targetX = selectedX(selectedCardImages.size(), index);
+                    //ImageAnimations.moveToSelected(cardSprite, targetX, 250);
+                    //cardSprite.setColor(Color.GOLD);
+                    //selectedCardImages.add(cardSprite);
+                }
+            });
+            cardImages.add(cardSprite);
+            stage.addActor(cardSprite);
             hoveredCards.add(false); //Resetting hovered if marked.
         }
     }
 
-    @Override
-    public void onSelectedChanged(ArrayList<String> selected) {
-        ArrayList<String> temp = selected;
+    private float handX(int index, int totalCards){
+        float spacing = 150;
+        float totalWidth = totalCards * spacing;
+        float startX = viewport.getWorldWidth() / 4f - totalWidth / 2f;
+        return startX + index * spacing;
+    }
 
-        selectedCardSprites.clear();
-        for (int i = 0; i < temp.size(); i++) {
-            Sprite cardSprite = new Sprite(new Texture("assets/images/" + temp.get(i)));
-            cardSprite.setSize(100, 175);
-            float spacing = 250;
-            float total = selectedCardSprites.size() * spacing;
-            float sx = viewport.getWorldWidth() / 4f - total / 2f;
-
-            cardSprite.setPosition(sx + i * spacing, 250);
-            cardSprite.setOriginCenter();
-            selectedCardSprites.add(cardSprite);
+    private float selectedX(int selectedCardImagesSize, int index){
+        float spacing = 250;
+        float total = selectedCardImagesSize*spacing;
+        float sx = viewport.getWorldWidth()/4f - total/2f;
+        return sx +index*spacing;
+    }
+    private Image findImageByName(List<Image> list, String name) {
+        for (Image img : list) {
+            if (name.equals(img.getName())) return img;
         }
+        return null;
+    }
+
+    @Override
+    public void onUnselectedCard(ArrayList<String> selected){
+        for (Image img : selectedCardImages) {
+            img.remove();
+        }
+        selectedCardImages.clear();
+        for (int i = 0; i < selected.size(); i++) {
+            generateSelectedCardImages(selected, i);
+        }
+    }
+
+    private void generateSelectedCardImages(ArrayList<String> selected, int i){
+        float spacing = 250;
+        Image cardSprite = new Image(new Texture("assets/images/" + selected.get(i)));
+        cardSprite.setName(selected.get(i));
+        cardSprite.setSize(100, 175);
+        cardSprite.setOrigin(Align.center);
+        float total = selectedCardImages.size() * spacing;
+        float sx = viewport.getWorldWidth() / 4f - total / 2f;
+        final int index = i;
+        cardSprite.setPosition(sx + i * spacing, 250);
+        cardSprite.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ImageAnimations.moveToHand(cardSprite, handX(index, cardImages.size()-1), 35 );
+                roundController.unselectCard(index);
+                cardSprite.setColor(Color.WHITE);
+            }
+        });
+
+        cardSprite.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                cardSprite.setColor(Color.LIGHT_GRAY);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                cardSprite.setColor(Color.GOLD);
+            }
+        });
+        cardSprite.setColor(Color.GOLD);
+        selectedCardImages.add(cardSprite);
+        stage.addActor(cardSprite);
+    }
+
+    @Override
+    public void onSelectedCard(ArrayList<String> selected) {
+        float spacing = 250;
+            for (Image img : selectedCardImages) {
+                img.remove();
+            }
+            selectedCardImages.clear();
+            for (int i = 0; i < selected.size(); i++) {
+                final int index = i;
+                if(i == selected.size()-1){
+                    float total = selectedCardImages.size() * spacing;
+                    float sx = viewport.getWorldWidth() / 4f - total / 2f;
+                    Image cardSprite = new Image(new Texture("assets/images/" + selected.get(i)));
+                    cardSprite.setSize(100, 175);
+                    float x = handX(lastIndex, lastIndex);
+                    cardSprite.setPosition(x,35);
+                    stage.addActor(cardSprite);
+
+                    ImageAnimations.moveToSelected(cardSprite, sx + i*spacing, 250);
+
+                    cardSprite.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            ImageAnimations.moveToHand(cardSprite, handX(index, cardImages.size()-1), 35 );
+                            roundController.unselectCard(index);
+                            cardSprite.setColor(Color.WHITE);
+                        }
+                    });
+
+                    cardSprite.addListener(new InputListener() {
+                        @Override
+                        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                            cardSprite.setColor(Color.LIGHT_GRAY);
+                        }
+
+                        @Override
+                        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                            cardSprite.setColor(Color.GOLD);
+                        }
+                    });
+                    cardSprite.setColor(Color.GOLD);
+                    selectedCardImages.add(cardSprite);
+                }
+                else{
+                generateSelectedCardImages(selected, index);
+                }
+            }
     }
 
     @Override
@@ -625,13 +775,24 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if (!playerTurn) {
             oppAnimation();
         }
-        System.out.println(playerTurn);
+        //System.out.println(playerTurn);
+    }
+
+    @Override
+    public void onOpponentAttack(int damage) {
+            Label oppAttack = new Label("Name attacked you!\n" +
+                    "You took "+damage+ " damage!\n" +
+                    "layers turn.", style);
+            oppAttack.setPosition(400,400);
+            stage.addActor(oppAttack);
     }
 
     @Override
     public void render ( float v){
         gameManager.gameLoop();
         input();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
         draw();
     }
 
