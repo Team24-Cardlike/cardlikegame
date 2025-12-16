@@ -45,11 +45,9 @@ public class Save {
         try (FileReader reader = new FileReader(fileName)) {
                     
             GameData loadedData = GSON.fromJson(reader, GameData.class);
-            if (loadedData != null) loadedData.setGameManager(gameData.getGameManager());
-                                    
-            // System.out.println("Game loaded successfully. Health: " + loadedData.getHealth());
-            
+            if (loadedData != null) loadedData.setGameManager(gameData.getGameManager());                                                            
             setLoadedData(loadedData);
+
 
         } catch (FileNotFoundException e) {            
             System.out.println("No save file found. Starting a new game.");    
@@ -71,7 +69,7 @@ public class Save {
             loadedData.setAvailableLvls();
             // loadedData.getGameManager().gameMap.updateMap();            
         } catch (NullPointerException e) {
-            System.out.println("Funkar ej med ladda in completedlvls");
+            System.out.println("No previous data stored, you may have forgotten to save.");
         }
 
     }

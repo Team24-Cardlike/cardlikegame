@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * Serializable class that takes the latest data from the model
- * and sets data that's been loaded in 
+ * Serializable class that saves the latest data from the model
+ * and initializes data when the game is started 
  */
 public class GameData {
     private transient GameManager gameManager; // Should not be serialized, we don't need everything from gameManager
-    // private int health;
-    // TODO: Add new attributes here
+
+    // TODO: Add new attributes here (e.g. money)
+    // These attributes get saved when saveGame() in Save.java
+    // gets called
     private Set<String> completedLvls;
     private Set<String> availableLvls;    
 
@@ -18,21 +20,17 @@ public class GameData {
         this.gameManager = gameManager;        
     }
 
-    void updateData() {        
-        // this.health = gameManager.getUser().getHealth(); // For testing
+
+    /**
+     * Retrieves data from gameManager and 
+     * saves it here as an attribute
+     */
+    void updateData() {                
         // TODO: Add more getters here!
         this.completedLvls = gameManager.getCompletedLvls();
         this.availableLvls = gameManager.getAvailableLvls();        
 
     }
-
-
-    // int getHealth() {
-    //     return health;
-    // }
-    // void setHealth() {        
-    //     gameManager.getUser().setHealth(health);
-    // }
 
     void setCompletedLvls() {        
         gameManager.gameMap.setCompletedLvls(completedLvls);
