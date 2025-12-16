@@ -16,7 +16,7 @@ public class ComboDmgAmp extends Upgrade{
      * @param cost the cost of the upgrade in the shop.
      */
     ComboDmgAmp(String name, Combo ampedCombo, float ampAmount, int cost, String pic, int id) {
-        super(name, "Gain " + ampAmount + " damage-amp on " + ampedCombo.name + " combos.", cost, "Damage", pic, id);
+        super(name, "Gain " + ampAmount + "x damage-amp on " + ampedCombo.name + " combos.", cost, "Damage", pic, id);
         this.ampedCombo = ampedCombo;
         this.ampAmount = ampAmount;
     }

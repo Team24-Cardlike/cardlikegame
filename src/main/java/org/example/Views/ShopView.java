@@ -50,7 +50,7 @@ public class ShopView implements Screen {
     }
 
     private void updateList(){
-        for(int i = items.size(); i < 10; i++){
+        while(items.size() < 10){
             Upgrade random = upgradeLibrary.getRandomUpgrade();
             if(shopController.getUserUpgrades() != null){
                 if((items.isEmpty() || !items.contains(random)) && !shopController.getUserUpgrades().contains(random.getName())){
@@ -75,7 +75,7 @@ public class ShopView implements Screen {
         background.setFillParent(true);
         stage.addActor(background);
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Impact.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Italic.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 24;
         font = generator.generateFont(parameter);
