@@ -72,6 +72,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private Label playerName;
     private float opponentStartY = 300;      // original Y
     private float opponentDropY = 180;
+    private boolean animatingCard = false;
 
     private float opponentHealthPercentage;
     private float userHealthPercentage;
@@ -237,8 +238,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             }
         }
     }
-
-
 
     public void onPlaySelectedCards(){
         roundController.playCards();
@@ -551,7 +550,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         show();
     }
 
-        @Override
+    @Override
     public void onHandChanged(ArrayList<String> hand) {
 
         this.cardSprites.clear(); // Clear current sprites before update
@@ -578,9 +577,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
             cardSprites.add(cardSprite);
             hoveredCards.add(false); //Resetting hovered if marked.
-
         }
-
     }
 
     @Override
