@@ -198,6 +198,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 roundController.switchView("shop");
             }
         });
+
+        Label opponentName = new Label("Opponent", style);
+        opponentName.setPosition(850, 600);
+        stage.addActor(opponentName);
+        Label playerName = new Label("Player", style);
+        playerName.setPosition(150, 600);
+        stage.addActor(playerName);
         input();
     }
 
