@@ -23,7 +23,7 @@ public abstract class Upgrade {
         this.desc = desc;
         this.cost = cost;
         this.category = category;
-        this.pic = "assets/images/"+pic+".png";
+        this.pic = "assets/images/upgradePics/"+pic+".png";
         this.idNum = id;
     }
 
@@ -42,6 +42,8 @@ public abstract class Upgrade {
     public int getCost(){
         return this.cost;
     }
+
+    public int getIdNum(){return this.idNum;}
 
     public String getCategory() {
         return this.category;

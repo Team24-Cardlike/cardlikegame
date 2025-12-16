@@ -20,7 +20,7 @@ import org.example.Views.ShopView;
 public class DesktopLauncher {
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle(("Maven LibGDX test"));
+        config.setTitle(("Rouges of Midgaard"));
         config.setWindowedMode(1280,720);
 
         //Opponent opp = new Opponent(2000, 25, 3, "enemyEvil");

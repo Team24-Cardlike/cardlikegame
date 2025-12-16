@@ -37,13 +37,7 @@ public class Round {
         o.addObserver(ob);
 
         //TODO: REMOVE THESE TEMPORARY ADDS
-        /*this.user.addUpgrade(lib.getUpgrade(11));
-        this.user.addUpgrade(lib.getUpgrade(14));
-        this.user.addUpgrade(lib.getUpgrade(21));
-        this.user.addUpgrade(lib.getUpgrade(15));
-        this.user.addUpgrade(lib.getUpgrade(31));
-        this.user.addUpgrade(lib.getUpgrade(32));
-        this.user.addUpgrade(lib.getUpgrade(22));*/
+        //this.user.addUpgrade(lib.getUpgrade(1101));
     }
 
     public Round(Opponent opponent , RoundObserver ob){
@@ -54,13 +48,7 @@ public class Round {
         o.addObserver(ob);
 
         //TODO: REMOVE THESE TEMPORARY ADDS
-        /*this.user.addUpgrade(lib.getUpgrade(11));
-        this.user.addUpgrade(lib.getUpgrade(14));
-        this.user.addUpgrade(lib.getUpgrade(21));
-        this.user.addUpgrade(lib.getUpgrade(15));
-        this.user.addUpgrade(lib.getUpgrade(31));
-        this.user.addUpgrade(lib.getUpgrade(32));
-        this.user.addUpgrade(lib.getUpgrade(22));*/
+        //this.user.addUpgrade(lib.getUpgrade(1101));
     }
 
     public User getUser(){
@@ -98,9 +86,7 @@ public class Round {
         this.turnNumber += 1;
         this.user.damage = 0;
         this.user.damage = this.user.playCards();
-        for(Upgrade upg : this.user.upgrades){
-            checkUpgrade(upg);
-        }
+        checkUpgrades(1);
         this.opponent.takeDamage(this.user.damage);
         opponentHealth = opponent.getHealthRatio();
         totalDamageToOpponent = totalDamageToOpponent + this.user.damage;
@@ -108,9 +94,8 @@ public class Round {
 
 
         System.out.println("Din motståndare tog "+this.user.damage+" skada! "+ this.opponent.getHealth()+ " kvar");
-        checkUpgrade(lib.getUpgrade(15));
-        checkUpgrade(lib.getUpgrade(31));
-        checkUpgrade(lib.getUpgrade(32));
+        //After damaging
+        checkUpgrades(3);
         this.user.selectedCards = new ArrayList<>();
         this.user.damage = 0;
         playerTurn = false;
@@ -131,7 +116,8 @@ public class Round {
         totalDamageToPlayer += oppDamage;
 
         System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " HP kvar");
-        checkUpgrade(lib.getUpgrade(22));
+        //After taking damage
+        checkUpgrades(2);
         checkDeadPlayer();
         playerTurn = true;
 
@@ -209,10 +195,26 @@ public class Round {
         return this.opponent;
     }
 
-    public void checkUpgrade(Upgrade upgrade){
-        if(this.getUser().getUpgrades().contains(upgrade))
-            this.upgradeManager.checkUpgrade(upgrade, this);
-    }
+    /**
+     * IDs coded by four-sequences int (cxyz)
+     * <ul>
+     * <li>c - The category: <ul>(1 - damage, 2 - sustain, 3 - economy)</ul></li>
+     * <li>x - When to check it:
+     *     <ul>
+     *     <li>0 - when round starts</li> <li>1 - when damaging</li> <li>2 - when taking damage</li> <li>3 - after damaging</li> <li>... (not implemented)</li>  <li>9 - when round ends</li>
+     *     </ul>
+     * <li>yz - number in the sequence (01 -> 99)</li>
+     * </ul>
+     * @param id2ndNum a number that decides what upgrades we check (x in list above)
+     *
+     */
+    public void checkUpgrades(int id2ndNum){
+        for(Upgrade upgrade : this.getUser().getUpgrades()) {
+            int triggerNum = (upgrade.getIdNum() / 100) % 10;
+            if (triggerNum == id2ndNum)
+                this.upgradeManager.checkUpgrade(upgrade, this);
+        }
+        }
     public void restart(){
 
     }
