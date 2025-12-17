@@ -42,9 +42,7 @@ public class MainMenuView implements Screen {
 
     @Override
     public void show() {
-
-
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(1280, 720));
         Gdx.input.setInputProcessor(stage);
 
         background = new Texture("assets/images/mainmenu.png");
@@ -53,8 +51,8 @@ public class MainMenuView implements Screen {
         stage.addActor(bg);
 
         menuButton = new Image(new Texture("assets/images/playbutton.png"));
-        menuButton.setPosition(300, 150);
         menuButton.setSize(200, 50);
+        menuButton.setPosition(stage.getWidth()/2 -100, 150);
         stage.addActor(menuButton);
 
         menuButton.addListener(new ClickListener() {
@@ -64,8 +62,6 @@ public class MainMenuView implements Screen {
                 controller.startGame();
             }
         });
-
-
     }
 
     @Override
@@ -77,8 +73,9 @@ public class MainMenuView implements Screen {
     }
 
     @Override
-    public void resize(int i, int i1) {
-
+    public void resize(int width, int height) {
+        if (width <= 0 || height <= 0) return;
+        stage.getViewport().update(width, height, true); // true centers the camera
     }
 
     @Override

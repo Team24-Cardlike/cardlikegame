@@ -1,11 +1,16 @@
 package org.example.Controller;
 
+import org.example.Model.GameManager;
 import org.example.Model.GameMap;
 import org.example.Model.Save;
 
 public class MapController {
     GameMap map;
     private Save save;
+    GameManager manager;
+    public MapController(GameManager manager){
+        this.manager = manager;
+    }
 
     public void setMap(GameMap gameMap, Save save) {
         this.map = gameMap;
@@ -14,9 +19,8 @@ public class MapController {
 
     public void selectLvl(String opName) {
         map.levelSelect(opName);
-
     }
     public void save() {
         save.saveGame();
-    }
+    }    
 }

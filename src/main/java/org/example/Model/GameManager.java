@@ -6,17 +6,19 @@ import org.example.Model.GameState.MapState;
 import org.example.Model.GameState.MenuState;
 import org.example.Model.GameState.RoundState;
 import org.example.Model.GameState.ShopState;
+import org.example.Model.OpponentFactories.OpponentInterface;
+import org.example.Model.OpponentFactories.Opponent;
+import org.example.Model.OpponentFactories.OpponentInterface;
 
 import java.util.ArrayList;
 import java.util.Set;
 
 public class GameManager {
-
-
     private  MapObserver mapObs;
     public Round currentRound;
     public GameMap gameMap;
     private User user;
+
 
 
     private RoundState roundState;
@@ -49,7 +51,21 @@ public class GameManager {
         this.gameMap = map;
         this.roundObs = roundObs;
         this.mapObs = mapObs;
+    }
+    void setCompletedLvls(Set<String> completedLvls) {
+        gameMap.setCompletedLvls(completedLvls);
+    }
 
+    void setAvailableLvls(Set<String> availableLvls) {
+        gameMap.setAvailableLvls(availableLvls);
+    }
+
+    Set<String> getCompletedLvls() {
+        return gameMap.getCompletedLvls();
+    }
+
+    Set<String> getAvailableLvls() {
+        return gameMap.getAvailableLvls();
     }
 
     void setCompletedLvls(Set<String> completedLvls) {
@@ -82,12 +98,18 @@ public class GameManager {
         notifyState();
     }
 
+    public void setHandbookState(){        
+        setState(new HandbookState());
+        notifyState();
+    }
+
     public String getState() {
-        return state.getName();
+        return this.state.getName();
     }
 
     public void resetRound(){
-        this.currentRound = new Round(user, new Opponent(400,15,1, "bossman"), roundObs);
+
+        this.currentRound = new Round(user, gameMap.currentOpponent, roundObs);
         notifyState();
         currentRound.init();
     }
@@ -95,11 +117,13 @@ public class GameManager {
     public void initRound() {
         Opponent op = gameMap.currentOpponent;        
         this.currentRound = new Round(this.user,op,roundObs);
-
-        setState(new RoundState());
+        this.roundState = new RoundState();
+        System.out.println("This round: "+ currentRound.getOpponent().getName());
+        setState(this.roundState);
         notifyState();
-        currentRound.init();
+        currentRound.init();    
     }
+
     public void initMap() {
         this.gameMap.updateMap();
 
@@ -107,17 +131,22 @@ public class GameManager {
 
     public User getUser(){return user;}
 
-    public void closeShop(){
+    public void closeShop(){         
         setState(this.roundState);
         notifyState();
-        initRound();
+        initRound();        
+    }
+
+    public void closeHandbook(){
+        setState(this.roundState);
+        notifyState();
+        currentRound.init();
     }
 
     public void startGame( ){
         initMap();
         setState(new MapState());;
         notifyState();
-
     }
 
     public void setStateObs(StateObserver obs) {

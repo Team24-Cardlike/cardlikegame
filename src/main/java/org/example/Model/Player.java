@@ -7,11 +7,11 @@ public abstract class Player {
     int health;
     abstract int getDamage();
 
-    int getHealth(){
-        return health;
+    public int getHealth(){
+        return this.health;
     }
 
-    void setHealth(int health) {
+    public void setHealth(int health) {
         this.health = health;
     }
 
@@ -22,5 +22,6 @@ public abstract class Player {
     public float getHealthRatio(){
         return (float) health/maxHealth;
     }
+
 
 }

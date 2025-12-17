@@ -1,9 +1,13 @@
-package org.example.Model;
+package org.example.Controller;
 
+import org.example.Model.GameManager;
+import org.example.Model.Round;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
+import org.example.Model.User;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ShopController {
     Round round;
@@ -23,8 +27,9 @@ public class ShopController {
         return ul;
     }
 
-    public void upgradeBaught(Upgrade upgrade){
-        user.setUsersUpgrades(upgrade);
+    public void upgradeBought(Upgrade upgrade){
+        user.addUpgrade(upgrade);
+        user.getUpgrades().sort(Comparator.comparingInt(Upgrade::getIdNum));
     }
 
     public void closeShop(){
@@ -33,8 +38,8 @@ public class ShopController {
 
     public ArrayList<String> getUserUpgrades(){
         stringList.clear();
-        for(int i = 0; i < user.usersUpgrades.size(); i++){
-            stringList.add(user.usersUpgrades.get(i).getName());
+        for(int i = 0; i < user.upgrades.size(); i++){
+            stringList.add(user.upgrades.get(i).getName());
         }
         return stringList;
     }

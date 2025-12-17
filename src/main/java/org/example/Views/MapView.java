@@ -24,16 +24,17 @@ public class MapView implements Screen, MapObserver {
     private SpriteBatch batch;
     private Stage stage;
 
-    private GameManager maneger;
+    private GameManager manager;
     private MapController controller;
 
     ArrayList<String> lvls = new ArrayList<>();
     private ArrayList<Sprite> mapSprites = new ArrayList<>();
     private ArrayList<Sprite> lvlSprites = new ArrayList<>();
+    String lastLVL;
 
     private Texture mapBackground;
     private Texture greenDot;
-    private Texture redDot;
+    private Texture lvlRune;
     private Texture redX;
     private Texture lokiHead;
     private Image saveButton;
@@ -46,39 +47,37 @@ public class MapView implements Screen, MapObserver {
 
     // Positions for lvls on map
     private final float[][] levelPositions = {
-            {90, 75}, // level 0
-            {180, 160}, // level 1
-            {350, 170}, // level 2
-            {550, 170}, // level 3
-            {600, 250}, // level 4
-            {750, 250}  // level 5
+            {130, 68}, // level 0 Heimdall
+            {272, 185}, // level 1 Baldur
+            {605, 375}, // level 2 Tor
+            {560, 220}, // level 3 Freja
+            {940, 400}, // level 4 Oden
+            {790, 220}  // level 5 Tyr
 
     };
 
     Vector3 coords = new Vector3();
 
 
-    public void setManeger(GameManager m) {
-        this.maneger = m;
+    public void setManager(GameManager m) {
+        this.manager = m;
 
     }
+
     public void setController(MapController c) {
         this.controller = c;
     }
 
     @Override
     public void show() {
-        
-
-        viewport = new FitViewport(800,600);
+        viewport = new FitViewport(1280,720);
         batch = new SpriteBatch();
         stage = new Stage(viewport,batch);
 
         Gdx.input.setInputProcessor(stage);
         mapBackground = new Texture("assets/images/map.png");
-        greenDot = new Texture("assets/images/greenDot.png");
 
-        redDot   = new Texture("assets/images/redDot.png");
+        lvlRune   = new Texture("assets/images/LVLRune.png");
         redX     = new Texture("assets/images/redX.png");
         lokiHead = new Texture("assets/images/lokiHead.png");
         
@@ -94,11 +93,12 @@ public class MapView implements Screen, MapObserver {
             
             }
         });
+        lokiHead = new Texture("assets/images/lokiMapIcon.png");
+
         
     }
 
     public void draw(){
-
         batch.begin();
         batch.draw(mapBackground,0,0,viewport.getWorldWidth(),viewport.getWorldHeight());
         
@@ -107,7 +107,6 @@ public class MapView implements Screen, MapObserver {
         drawSaveButton();
 
         batch.end();
-
         stage.draw();
     }
 
@@ -121,66 +120,61 @@ public class MapView implements Screen, MapObserver {
 
         for (int i = 0; i < lvls.size(); i ++) {
 
-            String op = lvls.get(i);
+            String name = lvls.get(i);
             float x = levelPositions[i][0];
             float y = levelPositions[i][1];
 
-            if (completedLvls.contains(op)) {
-                drawComplete(x, y);
+            if (completedLvls.contains(name)) {
+                drawComplete(x, y, name);
             }
 
-            else if (availableLvls.contains(op)) {
+            else if (availableLvls.contains(name)) {
                 drawCurrent(x,y);
+
             }
 
             else  {
                 drawRest(x,y);
 
             }
-            for (Sprite s : mapSprites) {
-                s.draw(batch);
-            }
             for (Sprite s : lvlSprites) {
                 s.draw(batch);
             }
+            for (Sprite s : mapSprites) {
+                s.draw(batch);
+            }
+
         }
-
-
     }
 
-    public void drawComplete(float x, float y) {
-        Sprite base =  makeSprite(greenDot,x,y);
+    public void drawComplete(float x, float y,String name) {
+        Sprite base =  makeSprite(lvlRune,x,y);
         lvlSprites.add(base);
         Sprite cross = makeSprite(redX, x, y);
         mapSprites.add(cross);
+        if (lastLVL == name) {
+        Sprite player =  makeSprite(lokiHead,x ,y);
+        mapSprites.add(player);}
 
     }
 
     public void drawCurrent(float x, float y) {
-        Sprite base =  makeSprite(greenDot,x,y);
-
+        Sprite base =  makeSprite(lvlRune,x,y);
         lvlSprites.add(base);
-        Sprite player =  makeSprite(lokiHead,x - 40,y- 20);
-        mapSprites.add(player);
-
-
-
     }
     public void drawRest(float x, float y) {
-        Sprite base =  makeSprite(redDot,x,y);
+        Sprite base =  makeSprite(lvlRune,x,y);
         lvlSprites.add(base);
     }
 
 
     public Sprite makeSprite(Texture tex, float centerX,float centerY) {
         Sprite s = new Sprite(tex);
-        s.setSize(25f,25f);
+        s.setSize(80f,80f);
         s.setOriginCenter();
         s.setPosition(centerX-s.getWidth() / 2f, centerY - s.getHeight()/2f);
         return s;
     }
-
-
 
     private void input() {
         // Hämta muskoordinater
@@ -188,18 +182,13 @@ public class MapView implements Screen, MapObserver {
         viewport.unproject(coords);
 
         if (Gdx.input.justTouched()) {
-
-
-
             for (int a =  0; a < lvls.size(); a++) {
-
                 Polygon poly = generateHitbox(a, lvlSprites);
                 String name = lvls.get(a);
 
-
                 //Send input to roundController
                 if (poly.contains(coords.x, coords.y)) {
-                    // System.out.println(name);
+                    lastLVL = name;
                     controller.selectLvl(name);
                     break;
                 }
@@ -227,23 +216,15 @@ public class MapView implements Screen, MapObserver {
             return poly;
         }
 
-
-
-
-
     @Override
     public void render(float v) {
 
         maneger.gameLoop();        
+        manager.gameLoop();
 
         input();
         draw();
-
-
     }
-
-
-
 
     @Override
     public void resize(int i, int i1) {
@@ -273,8 +254,8 @@ public class MapView implements Screen, MapObserver {
     @Override
     public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {
 
-        this.lvls = lvls;
 
+        this.lvls = lvls;
         this.completedLvls = completedLvls;
         this.availableLvls = availableLvls;
     }

@@ -12,11 +12,10 @@ public class RoundController {
 
     public RoundController(GameManager manager){
         this.manager = manager;
-
     }
 
     public void setRound(Round r) {
-       this.round = r;
+        this.round = manager.currentRound;
     }
 
     public void nextRound(){
@@ -45,6 +44,13 @@ public class RoundController {
 
     }
 
+    public void closeHandBook(){
+        manager.closeHandbook();
+    }
+
+    public void openHandbook(){manager.setHandbookState();}
+
     public void restart(){manager.resetRound();}
+
     public void switchView(String view){manager.setShopState();}
 }

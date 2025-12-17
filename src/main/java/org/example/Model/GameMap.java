@@ -3,47 +3,48 @@ package org.example.Model;
 
 import org.example.Model.GameState.RoundState;
 
+import org.example.Model.OpponentFactories.*;
+
 import java.util.*;
 public class GameMap {
-    public Graph<Opponent> map;
-    private ArrayList<Opponent> opponents;
-    private final Opponent heimdall;
-    private final  Opponent balder;
-    private final Opponent freja;
-    private final Opponent tor;
-    private final Opponent oden;
-    public Opponent currentOpponent;    
+    Graph<Opponent> map;
+    ArrayList<BossOpponent> opponents;
+    BossOpponent heimdall;
+    BossOpponent balder;
+    BossOpponent freja;
+    BossOpponent tyr;
+    BossOpponent tor;
+    BossOpponent oden;
+    Opponent currentOpponent;
     boolean lvlSelected = false;
     GameManager manager;
+    BossFactory bf = new BossFactory();
+    RegularFactory rf = new RegularFactory();
+
 
     private List<MapObserver> obs = new ArrayList<>();
     private Set<String> availableLvls = new HashSet<>();
     private Set<String> completedLvls = new HashSet<>();
     private ArrayList<String> lvls = new ArrayList<>();
-    int nextLvl  = 0;
 
 
     GameMap(int dif, GameManager manager, MapObserver mapObs){
         this.map  = new Graph<>();
         this.opponents = new ArrayList<>();
-        this.heimdall = new Opponent(40, 10, 3, "Heimdall");
-        this.balder = new Opponent(1*dif, 15, 3, "Balder");
-
-        this.freja = new Opponent(1*dif, 20, 3, "Freja"); // 600
-        this.tor = new Opponent(1*dif, 30, 3, "Tor"); // 1000
-        this.oden = new Opponent(1*dif, 40, 2, "Oden"); // 1500
-        this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));        
-
+        this.heimdall = bf.Create("Heimdall");
+        this.balder = bf.Create("Balder");
+        this.freja = bf.Create("Freja");
+        this.tyr = bf.Create("Tyr");
+        this.tor = bf.Create("Tor");
+        this.oden = bf.Create("Oden");
 
 
+        this.opponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
 
         obs.add(mapObs);
 
         this.manager = manager;
         createMap();
-
-
-
     }
 
     void createMap(){        
@@ -52,6 +53,7 @@ public class GameMap {
         map.addVertex(heimdall);
         map.addVertex(balder);
         map.addVertex(freja);
+        map.addVertex(tyr);
         map.addVertex(tor);
         map.addVertex(oden);
 
@@ -60,15 +62,18 @@ public class GameMap {
         map.addEdge(heimdall, balder, false);
 
         map.addEdge(balder, tor, false);
-
         map.addEdge(balder, freja, false);
-        map.addEdge(freja, tor, false); // true?
+
+
+        map.addEdge(freja, tyr, false);
+        map.addEdge(tyr, tor, false);
 
         map.addEdge(tor, oden, false);
         
         //update list of enemies, index = lvl
         getLvlOps();
         this.availableLvls.add(heimdall.getName());
+
     }
 
     Set<String> getCompletedLvls() {
@@ -101,7 +106,9 @@ public class GameMap {
         return map.neighbours(op);
     }
 
-
+    public ArrayList<String> getLvls(){
+        return lvls;
+    }
 
     public void levelSelect(String s) {    
            
@@ -132,16 +139,12 @@ public class GameMap {
 
     }
 
-
-
-
-
-
     public void getLvlOps(){
         lvls.clear();
         List<Opponent> ops =  map.getAllVertices(heimdall);        
 
         for (Opponent o: ops) {
+
             String name = o.getName();
             lvls.add(name);
         }
