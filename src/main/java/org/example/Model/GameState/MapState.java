@@ -15,6 +15,6 @@ public class MapState implements GameState{
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 }

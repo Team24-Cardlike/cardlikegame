@@ -13,6 +13,6 @@ public class MenuState implements GameState{
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 }
