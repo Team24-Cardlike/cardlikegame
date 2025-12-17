@@ -10,6 +10,8 @@ public class HeimdallBoss extends BossOpponent {
         super.damage = 10;
         super.turns = 3;
         super.image = name+".png";
+
+        super.setHealth(maxHealth);
     }
 
     @Override

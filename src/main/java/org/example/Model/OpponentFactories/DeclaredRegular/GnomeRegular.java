@@ -9,6 +9,7 @@ public class GnomeRegular extends RegularOpponent {
         super.maxHealth = 200;
         super.damage = 10;
         super.image = name+".png";
+        super.setHealth(maxHealth);
     }
 
     @Override

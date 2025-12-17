@@ -10,6 +10,7 @@ public class OdenBoss extends BossOpponent {
         super.damage = 40;
         super.turns = 2;
         super.image = name+".png";
+        super.setHealth(maxHealth);
     }
     @Override
     public String getName() {

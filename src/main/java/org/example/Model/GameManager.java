@@ -1,11 +1,11 @@
 package org.example.Model;
 
-import org.example.Controller.RoundController;
 import org.example.Model.GameState.*;
 import org.example.Model.GameState.GameState;
 import org.example.Model.GameState.MapState;
 import org.example.Model.GameState.MenuState;
 import org.example.Model.GameState.RoundState;
+import org.example.Model.OpponentFactories.OpponentInterface;
 import org.example.Model.OpponentFactories.Opponent;
 import org.example.Model.OpponentFactories.OpponentInterface;
 
@@ -16,16 +16,23 @@ public class GameManager {
     public Round currentRound;
     public GameMap gameMap;
     private User user;
+
+
+
     private RoundState roundState;
     private ShopState shopState;
     private MenuState menuState;
-    private RoundController roundController;
+
     RoundObserver roundObs;
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
 
-    public GameManager(RoundObserver roundObs, MapObserver mapObs) {
-        this.gameMap = new GameMap(100, user,this, mapObs);
+
+
+
+    public  GameManager(RoundObserver roundObs, MapObserver mapObs) {
+
+        this.gameMap = new GameMap(100, this, mapObs);
         this.roundObs = roundObs;
         this.mapObs = mapObs;
         this.user = new User(1000);
@@ -51,10 +58,7 @@ public class GameManager {
 
     public  void setState(GameState state) {
         this.state = state;
-    }
-
-    public void setRoundController(RoundController roundController){
-        this.roundController = roundController;
+        notifyState();
     }
 
     public void setShopState(){
@@ -72,17 +76,16 @@ public class GameManager {
     }
 
     public void resetRound(){
-        //this.currentRound = new Round(user, gameMap.levelSelect("Freja"), roundObs);
-        System.out.println("Reset");
+
+        this.currentRound = new Round(user, gameMap.currentOpponent, roundObs);
         notifyState();
         currentRound.init();
     }
 
     public void initRound() {
         Opponent op = gameMap.currentOpponent;
-        System.out.println(op.getName());
         this.currentRound = new Round(this.user,op,roundObs);
-        roundController.setRound(currentRound);
+
         System.out.println("This round: "+ currentRound.getOpponent().getName());
         setState(new RoundState());
         notifyState();
@@ -90,6 +93,7 @@ public class GameManager {
     }
 
     public void initMap() {
+        this.gameMap.updateMap();
 
     }
 

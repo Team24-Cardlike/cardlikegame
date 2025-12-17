@@ -1,6 +1,8 @@
 package org.example.Model;
 
 import org.example.Model.OpponentFactories.BossOpponent;
+import org.example.Model.OpponentFactories.OpponentInterface;
+import org.example.Model.OpponentFactories.BossOpponent;
 import org.example.Model.OpponentFactories.Opponent;
 import org.example.Model.OpponentFactories.OpponentInterface;
 import org.example.Model.Upgrades.Upgrade;
@@ -56,6 +58,7 @@ public class Round {
     }
     // Check states
     public void roundUpdate() {
+
         if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
 
 
@@ -72,6 +75,7 @@ public class Round {
 
 
     }
+
 
     /**
      *  <b>Does the following:</b>
@@ -132,7 +136,6 @@ public class Round {
 
     private void checkDeadPlayer(){
         if (checkDeadUser() || checkDeadOpponent()) {
-            this.roundFinished = true;
             if(checkDeadOpponent()) {
                 o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
             else {
@@ -205,13 +208,10 @@ public class Round {
         if(this.getUser().getUpgrades().contains(upgrade))
             this.upgradeManager.checkUpgrade(upgrade, this);
     }
-    public void restart(){
 
-    }
 
     public void init() {
         o.notifyHandChanged(user.getHand());
-        System.out.println(user.getHand().size());
         o.notifyUnselected(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);

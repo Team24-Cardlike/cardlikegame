@@ -10,6 +10,7 @@ public class FrejaBoss extends BossOpponent {
         super.damage = 20;
         super.turns = 3;
         super.image = name+".png";
+        super.setHealth(maxHealth);
     }
     @Override
     public String getName() {

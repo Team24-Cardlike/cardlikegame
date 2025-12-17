@@ -16,13 +16,7 @@ public class MapController {
         this.map = gameMap;
     }
 
-    public ArrayList<String> getLvlList(){
-        return map.getLvls();
-    }
-
     public void selectLvl(String opName) {
         map.levelSelect(opName);
-        System.out.println(opName);
-        manager.initRound();
     }
 }
