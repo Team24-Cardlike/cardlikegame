@@ -61,32 +61,8 @@ public class MainMenuView implements Screen {
                 controller.startGame();
             }
         });
-
-
     }
-/*
-    public void input() {
-        if (Gdx.input.justTouched()) {
-            // Få muskoordinater
-            float touchX = Gdx.input.getX();
-            float touchY = Gdx.input.getY();
 
-            // Omvandla till Stage-koordinater
-            Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(touchX, touchY));
-
-            // Hämta knappens position och storlek
-            float btnX = menuButton.getX();
-            float btnY = menuButton.getY();
-            float btnWidth = menuButton.getWidth();
-            float btnHeight = menuButton.getHeight();
-
-            // Kolla om musen är över knappen
-            if (stageCoords.x >= btnX && stageCoords.x <= btnX + btnWidth &&
-                    stageCoords.y >= btnY && stageCoords.y <= btnY + btnHeight) {
-                controller.startGame(); // skicka till controller
-            }
-        }
-    }*/
     @Override
     public void render(float v) {
         gameManager.gameLoop();

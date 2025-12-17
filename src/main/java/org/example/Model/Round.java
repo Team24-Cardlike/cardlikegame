@@ -1,5 +1,8 @@
 package org.example.Model;
 
+import org.example.Model.OpponentFactories.BossOpponent;
+import org.example.Model.OpponentFactories.Opponent;
+import org.example.Model.OpponentFactories.OpponentInterface;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
 import org.example.Model.Upgrades.UpgradeManager;
@@ -28,6 +31,7 @@ public class Round {
 
     public int turnNumber = 0;
     public boolean beenAttacked = false;
+
     public Round(User user, Opponent opponent, RoundObserver ob){
         this.user = user;
         this.user.resetUser();
@@ -37,14 +41,6 @@ public class Round {
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         o.addObserver(ob);
 
-        //TODO: REMOVE THESE TEMPORARY ADDS
-        this.user.addUpgrade(lib.getUpgrade(11));
-        this.user.addUpgrade(lib.getUpgrade(14));
-        this.user.addUpgrade(lib.getUpgrade(21));
-        this.user.addUpgrade(lib.getUpgrade(15));
-        this.user.addUpgrade(lib.getUpgrade(31));
-        this.user.addUpgrade(lib.getUpgrade(32));
-        this.user.addUpgrade(lib.getUpgrade(22));
     }
 
     public Round(Opponent opponent , RoundObserver ob){
@@ -53,15 +49,6 @@ public class Round {
         this.deck.createInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         o.addObserver(ob);
-
-        //TODO: REMOVE THESE TEMPORARY ADDS
-        this.user.addUpgrade(lib.getUpgrade(11));
-        this.user.addUpgrade(lib.getUpgrade(14));
-        this.user.addUpgrade(lib.getUpgrade(21));
-        this.user.addUpgrade(lib.getUpgrade(15));
-        this.user.addUpgrade(lib.getUpgrade(31));
-        this.user.addUpgrade(lib.getUpgrade(32));
-        this.user.addUpgrade(lib.getUpgrade(22));
     }
 
     public User getUser(){
@@ -123,7 +110,8 @@ public class Round {
         checkDeadPlayer();
     }
 
-    //TODO: Make user attack first
+
+
     private void opponentTurn() {
         this.beenAttacked = true;
         int oppDamage = opponent.getDamage();
@@ -155,7 +143,7 @@ public class Round {
     }
 
     private boolean checkDeadOpponent(){
-        return this.opponent.health <= 0;
+        return opponent.getHealth() <= 0;
     }
 
     private boolean checkDeadUser(){
@@ -179,6 +167,7 @@ public class Round {
         user.setSelectedCards(new ArrayList<>());
         o.notifyUnselected(user.getSelectedCards());
     }
+
 
     // Removing selected card from hand and adding it to selected cards
     public void addSelectedCards(int index) {
@@ -204,6 +193,7 @@ public class Round {
 
     // Round ended
     public void endRound() {
+        user.addGold(totalDamageToOpponent);
         this.roundFinished = true;
     }
 
@@ -226,7 +216,11 @@ public class Round {
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
         o.notifyPlayerTurn(playerTurn);
+        o.notifyNewRound();
     }
+
+
+
 
 }
 

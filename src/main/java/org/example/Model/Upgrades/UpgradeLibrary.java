@@ -5,13 +5,13 @@ import java.util.*;
 
 public class UpgradeLibrary {
     CardCombos combos = new CardCombos();
-    public final List<Upgrade> damageUpgrades = new ArrayList<>();
-    public final List<Upgrade> sustainUpgrades = new ArrayList<>();
-    public final List<Upgrade> economyUpgrades = new ArrayList<>();
+    public final ArrayList<Upgrade> damageUpgrades = new ArrayList<>();
+    public final ArrayList<Upgrade> sustainUpgrades = new ArrayList<>();
+    public final ArrayList<Upgrade> economyUpgrades = new ArrayList<>();
 
-    public final List<Upgrade> allUpgrades = new ArrayList<>();
+    public final ArrayList<Upgrade> allUpgrades = new ArrayList<>();
 
-    public List<Upgrade> ownedUpgrades = new ArrayList<>();
+    public ArrayList<Upgrade> ownedUpgrades = new ArrayList<>();
 
     public UpgradeLibrary() {
         registerDamageUpgrades();
@@ -23,10 +23,10 @@ public class UpgradeLibrary {
     }
 
     private void registerDamageUpgrades() {
-        this.damageUpgrades.add(new ComboDmgAmp("Lone Wolf", combos.single, 4f, 15, "lonewolf", 11));
-        this.damageUpgrades.add(new ComboDmgAmp("Twin Synergy", combos.pair,2f, 15, "twinsynnergy", 12));
-        this.damageUpgrades.add(new ComboDmgAmp("Three Musketeers", combos.three_of_a_kind, 1.75f, 15, "lonewolf", 13));
-        this.damageUpgrades.add(new ComboDmgAmp("Jhin's Blessing", combos.four_of_a_kind,1.4444f, 15, "jhinsblessing", 14));
+        this.damageUpgrades.add(new ComboDmgAmp("Lone Wolf", combos.single, 4f, 15, "lone_wolf", 11));
+        this.damageUpgrades.add(new ComboDmgAmp("Twin Synergy", combos.pair,2f, 15, "twin_synergy", 12));
+        this.damageUpgrades.add(new ComboDmgAmp("Three Musketeers", combos.three_of_a_kind, 1.75f, 15, "three_musketeers", 13));
+        this.damageUpgrades.add(new ComboDmgAmp("Jhin's Blessing", combos.four_of_a_kind,1.4444f, 15, "jhins_blessing", 14));
 
         this.damageUpgrades.add(new ExecuteUpgrade("Fatality", 0.10f, 10, "fatality", 15));
     }
@@ -56,7 +56,7 @@ public class UpgradeLibrary {
                 return upgrade;
             }
         }
-        return new ReviveUpgrade("Upgrade 404", "This upgrade is merely a placveholder. The upgrade you are searching for doesn't exist.", 1, 1, "upgrade_404", 0);
+        return new ReviveUpgrade("Upgrade 404", "This upgrade is merely a placeholder. The upgrade you are searching for doesn't exist.", 1, 1, "upgrade_404", 0);
     }
 
     public void buyUpgrade(Upgrade upgrade){

@@ -86,4 +86,13 @@ public class RoundObsMethods {
             o.onOpponentAttack(damage);
         }
     }
+
+
+    // Notify new round
+    public void notifyNewRound() {
+        for (RoundObserver o : observers) {
+            o.onRoundInit();
+        }
+
+    }
 }

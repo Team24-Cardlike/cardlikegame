@@ -230,6 +230,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         //TODO: Why is the gameEnd-check in onPlaySelectedCards()?
         if (gameEnded) {
             //Display match stats
+            System.out.println("fsd");
             endGame();
             // Adding next button
             if(isVictory){
@@ -620,7 +621,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if (!playerTurn) {
             oppAnimation();
         }
-        System.out.println("playerturn = " + playerTurn);
+        System.out.println(playerTurn);
+    }
+
+    @Override
+    public void onRoundInit() {
+
     }
 
     @Override

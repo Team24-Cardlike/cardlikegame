@@ -13,6 +13,7 @@ public interface RoundObserver {
     void onPlayerTurn(boolean playerTurn);
     void onOpponentAttack(int damage);
     void onUnselectedCard(ArrayList<String> selected);
+    void onRoundInit();
 }
 
 
