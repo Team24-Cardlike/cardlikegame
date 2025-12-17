@@ -222,7 +222,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             }
         });
 
-        discardButton.addListener(new ClickListener(){
         this.discardNum = new Label("Discards left: " + this.discardUsesLeft, lilStyle);
         this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 22, 82);
         stage.addActor(this.discardNum);
