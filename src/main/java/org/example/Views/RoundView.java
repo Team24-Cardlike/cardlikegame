@@ -251,26 +251,26 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if(!selectedCardSprites.isEmpty())
             roundController.playCards();
         //TODO: Why is the gameEnd-check in onPlaySelectedCards()?
-        if (gameEnded) {
-            //Display match stats
-            endGame();
-            // Adding next button
-            if(isVictory){
+        // if (gameEnded) {
+        //     //Display match stats
+        //     endGame();
+        //     // Adding next button
+        //     if(isVictory){
 
-                System.out.println(isVictory);
+        //         System.out.println(isVictory);
 
-            }
+        //     }
 
-            else{
-                retryButton.addListener(new ClickListener(){
-                    @Override
-                    public void clicked(InputEvent event, float x, float y){
-                        roundController.restart();
-                        nextRound();
-                    }
-                });
-            }
-        }
+        //     else{
+        //         retryButton.addListener(new ClickListener(){
+        //             @Override
+        //             public void clicked(InputEvent event, float x, float y){
+        //                 roundController.restart();
+        //                 nextRound();
+        //             }
+        //         });
+        //     }
+        // }
         else if(playerTurn){
             opponentAnimation();
         }
@@ -486,8 +486,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             stage.addActor(nextButton);
             nextButton.addListener(new ClickListener(){
                 @Override
-                public void clicked(InputEvent event, float x, float y){
-                    System.out.println("hej hej ");
+                public void clicked(InputEvent event, float x, float y){                    
                     roundController.nextRound();
                     nextRound();
 
@@ -669,8 +668,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
         this.gameEnded = true;
         this.totalDamageToOpponent = totalDamageToOpponent;
-        this.totalDamageToUser = totalDamageToUser;
-        endGame();
+        this.totalDamageToUser = totalDamageToUser;        
         endGame();
     }
 

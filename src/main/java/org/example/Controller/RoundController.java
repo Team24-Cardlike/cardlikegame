@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.example.Model.GameManager;
 import org.example.Model.Round;
+import org.example.Model.GameState.MapState;
 
 public class RoundController {
     public Round round;
@@ -19,6 +20,7 @@ public class RoundController {
     }
 
     public void nextRound(){
+        manager.setState(new MapState());
         round.endRound();
 
     }

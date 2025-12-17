@@ -112,12 +112,13 @@ public class GameMap {
 
     public void levelSelect(String s) {    
            
-        if (s.equals(heimdall.getName()) ) {   
-            currentOpponent = heimdall;
-            manager.initRound();
-        }                
+        // if (s.equals(heimdall.getName()) ) {   
+        //     currentOpponent = heimdall;
+        //     manager.initRound();
+        // }                
         // currentOpponent and the opp might be different objects        
         // for (Opponent op: map.neighbours(opponents.get(oppIdx))) { // currentOpponent  
+        System.out.println(availableLvls + " " + completedLvls);
         for (int i = 0; i < opponents.size(); i++) {            
             Opponent op = opponents.get(i);
             // if (map.neighbours(opponents.get(oppIdx)).contains(op)) {

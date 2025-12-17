@@ -74,18 +74,18 @@ public class Round {
         }
         // round ends
         
-        if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {                              
-            if(opponentHealth < userHealth) {
-                this.won = true;             
-                o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
-            else {
-                this.won = false;
-                o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
-            }
-            // roundFinished = true;
-            user.setHealth(user.maxHealth); // Terrible temp solution to winning-immediately-bug
-            opponent.setHealth(opponent.getMaxHealth());
-        }
+        // if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {                              
+        //     if(opponentHealth < userHealth) {                
+        //         this.won = true;             
+        //         o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
+        //     else {
+        //         this.won = false;
+        //         o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
+        //     }
+        //     // roundFinished = true;
+        //     user.setHealth(user.maxHealth); // Terrible temp solution to winning-immediately-bug
+        //     opponent.setHealth(opponent.getMaxHealth());
+        // }
 
     }
 
@@ -148,8 +148,10 @@ public class Round {
         if (checkDeadUser() || checkDeadOpponent()) {
             this.roundFinished = true;
             if(checkDeadOpponent()) {
+                this.won = true;   
                 o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
             else {
+                this.won = false;   
                 System.out.println("hejhej");
                 o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
             }
@@ -206,6 +208,7 @@ public class Round {
 
     // Round ended
     public void endRound() {
+        
         user.addGold(totalDamageToOpponent);
         this.roundFinished = true;
     }
