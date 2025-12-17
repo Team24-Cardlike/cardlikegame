@@ -65,7 +65,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     Label.LabelStyle style;
 
-    private String opponentName;
+    private Label opponentName;
     private Label playerName;
     private float opponentStartY = 300;      // original Y
     private float opponentDropY = 180;
@@ -173,15 +173,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         stage.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
 
-        opponentTexture = new Texture("assets/images/opponents/Heimdall.png");
-        opponentImage = new Image(opponentTexture);//new Sprite(opponentTexture);
-        opponentImage.setSize(350, 200);
-        opponentImage.setPosition(
-                viewport.getWorldWidth() / 2f - opponentImage.getWidth() / 2f,
-                viewport.getWorldHeight() - opponentImage.getHeight() -10
-        );
-        stage.addActor(opponentImage);
-
 
         startButton.addListener(new ClickListener() {
             @Override
@@ -225,6 +216,16 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onNewOpponent(String name, int damage, String image){
         Label opponentName = new Label(name, style);
         opponentName.setPosition(915, 615);
+
+        if(opponentImage != null){opponentImage.remove();}
+        opponentTexture = new Texture("assets/images/opponents/"+image+".png");
+        opponentImage = new Image(opponentTexture);//new Sprite(opponentTexture);
+        opponentImage.setSize(350, 200);
+        opponentImage.setPosition(
+                viewport.getWorldWidth() / 2f - opponentImage.getWidth() / 2f,
+                viewport.getWorldHeight() - opponentImage.getHeight() -10
+        );
+        stage.addActor(opponentImage);
 
         stage.addActor(opponentName);
     }
