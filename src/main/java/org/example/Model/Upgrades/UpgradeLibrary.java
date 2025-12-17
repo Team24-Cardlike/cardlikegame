@@ -53,7 +53,7 @@ public class UpgradeLibrary {
         this.sustainUpgrades.add(new ComboLifesteal("Warband's Blood Rite", combos.three_of_a_kind, 0.10f, 15, "warbands_blood_rite",2303));
         this.sustainUpgrades.add(new ComboLifesteal("Feast of the Einherjar", combos.four_of_a_kind, 0.03f, 15, "feats_of_the_einherjar",2304));
         //When taking damage:
-        this.sustainUpgrades.add(new ReviveUpgrade("Helbound Rebirth", "Hel uses her powers to give you another chance. Come back to life with 1HP.", 10, 1, "helbound_rebirth", 2201));
+        this.sustainUpgrades.add(new ReviveUpgrade("Helbound Rebirth", "Hel uses her powers to give you another chance. Come back to life with 1HP.", 10, 20, "helbound_rebirth", 2201));
         //After round is over:
 
     }

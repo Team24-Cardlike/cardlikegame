@@ -64,7 +64,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private Image panel;
 
     Label.LabelStyle style;
-
+    Label.LabelStyle lilStyle;
     private Label opponentName;
     private Label playerName;
     private float opponentStartY = 300;      // original Y
@@ -84,6 +84,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private String currentBestCombo;
     private int totalDamageToOpponent;
     private int totalDamageToUser;
+    private int discardUsesLeft = 3;
+    Label discardNum;
 
     public final Image[] upgradeSlots = new Image[4];
     private int lastIndex;
@@ -96,6 +98,19 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         this.roundController = roundController;
     }
 
+
+
+    private void reduceDiscards(){
+
+        this.discardUsesLeft -= 1;
+        this.discardNum = new Label("Discards left: " + this.discardUsesLeft, lilStyle);
+        this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 22, 82);
+        stage.addActor(this.discardNum);
+    }
+
+    public int getDiscardUsesLeft() {
+        return this.discardUsesLeft;
+    }
 
     /**
      * Initialize buttons and add listeners
@@ -117,6 +132,25 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         style = new Label.LabelStyle();
         style.font = comboFont;
+
+
+        FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Italic.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter2.size = 20;
+        parameter2.borderColor = Color.BLACK;
+        parameter2.borderWidth = 1f;
+        parameter2.color = new Color(1f, 1f, 0f, 1f);
+        parameter2.shadowOffsetX = 4;
+        parameter2.shadowOffsetY = 4;
+        parameter2.shadowColor = new Color(0,0,0,0.75f);
+
+        BitmapFont lilFont = generator2.generateFont(parameter2);
+        generator2.dispose();
+
+        lilStyle = new Label.LabelStyle();
+        lilStyle.font = lilFont;
+
+
 
         vicTxt = new Texture("assets/images/victoryBanner.png");
         lossTxt = new Texture("assets/images/defeatBanner.png");
@@ -189,10 +223,18 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         });
 
         discardButton.addListener(new ClickListener(){
+        this.discardNum = new Label("Discards left: " + this.discardUsesLeft, lilStyle);
+        this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 22, 82);
+        stage.addActor(this.discardNum);
+        discardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //throwCards();
-                roundController.discardCards(removedIndices);
+                if(getDiscardUsesLeft() > 0){
+                    discardNum.remove();
+                    reduceDiscards();
+                    roundController.discardCards(removedIndices);
+                }
             }
         });
         /*
@@ -741,10 +783,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if (!playerTurn) {
             oppAnimation();
         }
+
     }
 
     @Override
     public void onRoundInit() {
+
         this.isVictory = false;
         this.gameEnded = false;
         Round r = gameManager.currentRound;

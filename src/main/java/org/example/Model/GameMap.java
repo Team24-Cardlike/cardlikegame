@@ -20,7 +20,7 @@ public class GameMap {
     GameManager manager;
     BossFactory bf = new BossFactory();
     RegularFactory rf = new RegularFactory();
-
+    Shop shop;
 
     private List<MapObserver> obs = new ArrayList<>();
     private Set<String> availableLvls = new HashSet<>();
@@ -44,6 +44,7 @@ public class GameMap {
         obs.add(mapObs);
 
         this.manager = manager;
+        this.shop = new Shop(manager);
         createMap();
     }
 
@@ -164,6 +165,10 @@ public class GameMap {
 
     public Graph<Opponent> getMap() {
         return this.map;
+    }
+
+    public Shop getShop() {
+        return this.shop;
     }
 
     public void notifyMapUpdate() {

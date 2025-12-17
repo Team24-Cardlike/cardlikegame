@@ -18,6 +18,8 @@ public class BossFactory extends OpponentFactory {
                 return new TorBoss();
             case "Oden":
                 return new OdenBoss();
+            case "TESTBOSS":
+                return new TestBoss();
         }
         return null;
     }

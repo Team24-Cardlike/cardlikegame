@@ -5,6 +5,7 @@ import org.example.Model.Upgrades.UpgradeManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Stack;
 
 public class User extends Player {
@@ -133,13 +134,18 @@ public class User extends Player {
             this.upgrades.add(upgrade);
     }
 
-    public void buyUpgrade(Upgrade upgrade){
+    public boolean buyUpgrade(Upgrade upgrade){
+        boolean successful = false;
         if(this.gold >= upgrade.getCost()) {
             this.gold -= upgrade.getCost();
             this.upgrades.add(upgrade);
+            System.out.println("Bought: " + upgrade.getName() + " with " + upgrade.getCost() + " gold!");
+            successful = true;
+            getUpgrades().sort(Comparator.comparingInt(Upgrade::getIdNum));
         }
         else{
             System.out.println("Too poor!");
         }
+        return successful;
     }
 }
