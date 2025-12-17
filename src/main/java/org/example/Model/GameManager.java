@@ -68,22 +68,6 @@ public class GameManager {
         return gameMap.getAvailableLvls();
     }
 
-    void setCompletedLvls(Set<String> completedLvls) {
-        gameMap.setCompletedLvls(completedLvls);
-    }
-
-    void setAvailableLvls(Set<String> availableLvls) {
-        gameMap.setAvailableLvls(availableLvls);
-    }
-
-    Set<String> getCompletedLvls() {
-        return gameMap.getCompletedLvls();
-    }
-
-    Set<String> getAvailableLvls() {
-        return gameMap.getAvailableLvls();
-    }
-
     public void gameLoop() {        
         state.update(this);
     }

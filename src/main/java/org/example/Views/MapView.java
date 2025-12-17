@@ -79,7 +79,7 @@ public class MapView implements Screen, MapObserver {
 
         lvlRune   = new Texture("assets/images/LVLRune.png");
         redX     = new Texture("assets/images/redX.png");
-        lokiHead = new Texture("assets/images/lokiHead.png");
+        lokiHead = new Texture("assets/images/lokiMapIcon.png");
         
         saveButton = new Image(new Texture("assets/images/save.png"));
         saveButton.setPosition(viewport.getWorldWidth()-110, viewport.getWorldHeight()-90);
@@ -219,7 +219,6 @@ public class MapView implements Screen, MapObserver {
     @Override
     public void render(float v) {
 
-        maneger.gameLoop();        
         manager.gameLoop();
 
         input();

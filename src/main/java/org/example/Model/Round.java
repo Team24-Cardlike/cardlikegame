@@ -84,7 +84,7 @@ public class Round {
             }
             // roundFinished = true;
             user.setHealth(user.maxHealth); // Terrible temp solution to winning-immediately-bug
-            opponent.setHealth(opponent.maxHealth);
+            opponent.setHealth(opponent.getMaxHealth());
         }
 
     }
