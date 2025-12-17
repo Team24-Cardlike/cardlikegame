@@ -46,7 +46,7 @@ public class DesktopLauncher {
         MenuController menuController = new MenuController(manager, save);
 
         HandbookView handbookView = new HandbookView();        
-        ShopController shopController = new ShopController(manager.getUser(), manager);
+        ShopController shopController = new ShopController(manager);
         handbookView.setController(roundController);
         shopView.setShopController(shopController);
         GameRender gameRender = new GameRender(roundView, menuView, shopView, handbookView, mapView);

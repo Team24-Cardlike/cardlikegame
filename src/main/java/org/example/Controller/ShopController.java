@@ -2,6 +2,7 @@ package org.example.Controller;
 
 import org.example.Model.GameManager;
 import org.example.Model.Round;
+import org.example.Model.Shop;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
 import org.example.Model.User;
@@ -10,38 +11,32 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class ShopController {
-    Round round;
+    Shop shop;
     ArrayList<String> stringList;
     User user;
-    UpgradeLibrary ul;
     GameManager manager;
-    public ShopController(User user, GameManager manager){
+    public ShopController(GameManager manager){
         //this.round = round;
-        this.user = user;
+        this.user = manager.getUser();
         this.manager = manager;
-        stringList = new ArrayList<>();
-        ul = new UpgradeLibrary();
+        this.stringList = new ArrayList<>();
+        this.shop = manager.gameMap.getShop();
     }
 
     public UpgradeLibrary getUpgradeLibrary(){
-        return ul;
+        return this.shop.getUpgradeLibrary();
     }
 
     public void upgradeBought(Upgrade upgrade){
-        user.addUpgrade(upgrade);
-        user.getUpgrades().sort(Comparator.comparingInt(Upgrade::getIdNum));
+        this.shop.upgradeBought(upgrade, this.user);
     }
 
     public void closeShop(){
-        manager.closeShop();
+       this.manager.closeShop();
     }
 
     public ArrayList<String> getUserUpgrades(){
-        stringList.clear();
-        for(int i = 0; i < user.upgrades.size(); i++){
-            stringList.add(user.upgrades.get(i).getName());
-        }
-        return stringList;
+        return this.stringList = shop.getUserUpgrades(this.user);
     }
 
     public void switchState(){

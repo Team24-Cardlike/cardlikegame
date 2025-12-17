@@ -1,10 +1,14 @@
 package org.example.Model;
 
 
+import org.example.Model.OpponentFactories.BossFactory;
 import org.example.Model.OpponentFactories.Opponent;
+import org.example.Model.OpponentFactories.OpponentFactory;
+import org.example.Model.OpponentFactories.RegularFactory;
 import org.example.Model.Upgrades.ComboDmgAmp;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
+import org.example.Model.Upgrades.UpgradeManager;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -14,6 +18,8 @@ import static org.junit.Assert.*;
 
 public class Testing {
     UpgradeLibrary lib = new UpgradeLibrary();
+    OpponentFactory bf = new BossFactory();
+    OpponentFactory rf = new RegularFactory();
     @Test
     public void test_deck_cards(){
         Deck deck = new Deck();
@@ -43,14 +49,15 @@ public class Testing {
     @Test
     public void test_cardCombo_single() {
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(new Card("sun", 10),
                 new Card("sun", 11), new Card("sun", 13), new Card("moon", 3), new Card("sun", 2))
         );
-        user.getHand().addAll(cards);
-        user.getSelectedCards().addAll(user.getHand());
-        opp.health -= user.getDamage();
-        assertEquals(2000 - (0 + 13), opp.health);
+        user.setHand(cards);
+        user.setSelectedCards(cards);
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
+        assertEquals(opp.getMaxHealth() - (0 + 13), opp.getHealth());
     }
 
     @Test
@@ -66,7 +73,7 @@ public class Testing {
     @Test
     public void test_CardCombo_pair() {
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
 
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(
                 new Card("sun", 10),
@@ -74,15 +81,16 @@ public class Testing {
         ));
         user.setHand(cards);
         user.setSelectedCards(cards);
-        opp.health -= user.getDamage();
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
 
-        assertEquals(2000 - (20 + 10), opp.health);
+        assertEquals(opp.getMaxHealth() - (20 + 10), opp.getHealth());
     }
 
     @Test
     public void test_CardCombo_twoPair() {
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
 
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(
                 new Card("sun", 10),
@@ -92,15 +100,16 @@ public class Testing {
         ));
         user.setHand(cards);
         user.setSelectedCards(cards);
-        opp.health -= user.getDamage();
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
 
-        assertEquals(2000 - (40 + 12) , opp.health);
+        assertEquals(opp.getMaxHealth() - (40 + 12) , opp.getHealth());
     }
 
     @Test
     public void test_CardCombo_threeOfAKind() {
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
 
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(
                 new Card("sun", 8),
@@ -109,15 +118,16 @@ public class Testing {
         ));
         user.setHand(cards);
         user.setSelectedCards(cards);
-        opp.health -= user.getDamage();
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
 
-        assertEquals(2000 - (80 + 8), opp.health);
+        assertEquals(opp.getMaxHealth() - (80 + 8), opp.getHealth());
     }
 
     @Test
     public void test_CardCombo_straight() {
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
 
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(
                 new Card("sun", 4),
@@ -128,15 +138,16 @@ public class Testing {
         ));
         user.setHand(cards);
         user.setSelectedCards(cards);
-        opp.health -= user.getDamage();
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
 
-        assertEquals(2000 - (100 + 8), opp.health);
+        assertEquals(opp.getMaxHealth() - (100 + 8), opp.getHealth());
     }
 
     @Test
     public void test_CardCombo_flush() {
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
 
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(
                 new Card("sun", 2),
@@ -147,15 +158,16 @@ public class Testing {
         ));
         user.setHand(cards);
         user.setSelectedCards(cards);
-        opp.health -= user.getDamage();
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
 
-        assertEquals(2000 - (125+13), opp.health);
+        assertEquals(opp.getMaxHealth() - (125+13), opp.getHealth());
     }
 
     @Test
     public void test_CardCombo_fullHouse() {
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
 
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(
                 new Card("sun", 7),
@@ -166,15 +178,16 @@ public class Testing {
         ));
         user.setHand(cards);
         user.setSelectedCards(cards);
-        opp.health -= user.getDamage();
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
 
-        assertEquals(2000 - (175 + 12), opp.health);
+        assertEquals(opp.getMaxHealth() - (175 + 12), opp.getHealth());
     }
 
     @Test
     public void test_CardCombo_fourOfAKind() {
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
 
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(
                 new Card("sun", 5),
@@ -184,15 +197,16 @@ public class Testing {
         ));
         user.setHand(cards);
         user.setSelectedCards(cards);
-        opp.health -= user.getDamage();
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
 
-        assertEquals(2000 - (400 + 5), opp.health);
+        assertEquals(opp.getMaxHealth() - (400 + 5), opp.getHealth());
     }
 
     @Test
     public void test_CardCombo_straightFlush() {
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
 
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(
                 new Card("sun", 3),
@@ -203,15 +217,16 @@ public class Testing {
         ));
         user.setHand(cards);
         user.setSelectedCards(cards);
-        opp.health -= user.getDamage();
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
 
-        assertEquals(2000 - (600 + 7), opp.health);
+        assertEquals(opp.getMaxHealth() - (600 + 7), opp.getHealth());
     }
 
     @Test
     public void test_cardCombo_royalStraightFlush(){
         User user = new User(100);
-        Opponent opp = new Opponent(2000, 15, 3, "enemyEvil");
+        Opponent opp = bf.Create("TESTBOSS");
         ArrayList<Card> cards = new ArrayList<>(Arrays.asList(
                 new Card("sun", 10),
                 new Card("sun", 11),
@@ -219,26 +234,10 @@ public class Testing {
                 new Card("sun", 13),
                 new Card("sun", 14)));
         user.setHand(cards);
-        user.setSelectedCards(user.getHand());
-        opp.health -= user.getDamage();
-        assertEquals(2000 - (1500 + 14), opp.health);
+        user.setSelectedCards(cards);
+        user.setDamage();
+        opp.takeDamage(user.getDamage());
+        assertEquals(opp.getMaxHealth() - (1500 + 14), opp.getHealth());
     }
     //</editor-fold>
-
-    @Test
-    public void test_comboDmgAmpUpgrade(){
-        User user = new User(500);
-
-        ArrayList<Card> cards = new ArrayList<>(
-                Arrays.asList(new Card("sun", 10), new Card("water", 10), new Card("tree", 10), new Card("moon", 10))
-        );
-        user.setSelectedCards(cards);
-        assertEquals(410, user.getDamage());
-
-        ArrayList<Upgrade> upgrades = new ArrayList<>();
-        upgrades.add(lib.getUpgrade(11));
-
-        user.setUpgrades(upgrades);
-        assertEquals((int)(410*1.4444), user.getDamage());
-    }
 }

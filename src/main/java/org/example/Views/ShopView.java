@@ -92,8 +92,8 @@ public class ShopView implements Screen {
         shopGrid();
 
         closeShop = new Image(new Texture("assets/images/xButton.png"));
-        closeShop.setSize(150, 100);
-        closeShop.setPosition(stage.getWidth() - 60, stage.getHeight() - 60); // Top-right
+        closeShop.setSize(100, 100);
+        closeShop.setPosition(stage.getWidth() - 120, stage.getHeight() - 120); // Top-right
         stage.addActor(closeShop);
 
         closeShop.addListener(new ClickListener() {
@@ -137,7 +137,7 @@ public class ShopView implements Screen {
 
         Group popup = new Group();
 
-        Texture backgroundTexture = new Texture("assets/images/background.png");
+        Texture backgroundTexture = new Texture("assets/images/itemBG.png");
         Image background = new Image(backgroundTexture);
         popup.addActor(background);
 
@@ -160,17 +160,26 @@ public class ShopView implements Screen {
 
 
         Label desc = new Label(item.getDesc(), ls);
-        desc.setPosition(20, popupHeight - 80);
+        desc.setPosition(20, popupHeight - 100);
         desc.setWidth(popupWidth - 40);
         desc.setWrap(true);
         popup.addActor(desc);
-        //TODO: ADD BUY BUTTON
-        Image buyButton = new Image(new Texture("assets/images/endTurn.png"));
+
+        Label cost = new Label("Cost: " + item.getCost() + "g", ls);
+        cost.setPosition(popupWidth/2f - cost.getWidth()/2, 85);
+        //cost.setPosition(popupWidth/2f + 80, 40);
+        //cost.setPosition(popupWidth/2f + 70, 35);
+        cost.setWidth(popupWidth - 40);
+        cost.setWrap(true);
+        popup.addActor(cost);
+
+        Image buyButton = new Image(new Texture("assets/images/buyButton.png"));
         buyButton.setSize(120, 60);
         buyButton.setPosition(popupWidth/2f - 60, 20);
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                //TODO: MAKE SURE THAT U CANT BUY WITH INSUFFICIENT GOLD!
                 System.out.println("Köpte: " + item.getName());
                 shopController.upgradeBought(item);
                 popup.remove();
@@ -182,9 +191,9 @@ public class ShopView implements Screen {
         });
         popup.addActor(buyButton);
 
-        Image backButton = new Image(new Texture("assets/images/endTurn.png"));
-        backButton.setSize(60, 60);
-        backButton.setPosition(popupWidth-60, popupHeight-60);
+        Image backButton = new Image(new Texture("assets/images/redX.png"));
+        backButton.setSize(30, 30);
+        backButton.setPosition(popupWidth-31, popupHeight-31);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
