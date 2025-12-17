@@ -72,7 +72,7 @@ public class GameManager {
     }
 
     public String getState() {
-        return state.getName();
+        return this.state.getName();
     }
 
     public void resetRound(){
@@ -85,9 +85,9 @@ public class GameManager {
     public void initRound() {
         Opponent op = gameMap.currentOpponent;
         this.currentRound = new Round(this.user,op,roundObs);
-
+        this.roundState = new RoundState();
         System.out.println("This round: "+ currentRound.getOpponent().getName());
-        setState(new RoundState());
+        setState(this.roundState);
         notifyState();
         currentRound.init();
     }
@@ -103,6 +103,12 @@ public class GameManager {
         setState(this.roundState);
         notifyState();
         initRound();
+    }
+
+    public void closeHandbook(){
+        setState(this.roundState);
+        notifyState();
+        currentRound.init();
     }
 
     public void startGame( ){
