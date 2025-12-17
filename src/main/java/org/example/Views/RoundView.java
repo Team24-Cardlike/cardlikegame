@@ -12,8 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -32,7 +31,6 @@ import java.util.Objects;
 
 public class RoundView extends ApplicationAdapter implements RoundObserver, Screen {
     public FitViewport viewport;
-    //private SpriteBatch spriteBatch;
     private ShapeRenderer sr;
 
     Texture background;
@@ -58,19 +56,14 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private Image opponentImage;
 
     // Seving hand if LibGDX not yet initialized
-    private List<String> tempHand;
     private Stage stage;
     public ArrayList<Boolean> hoveredCards = new ArrayList<>();;
     private Label currentComboLabel;
     public Vector3 coords;
     private Image panel;
 
-    private boolean animatingOpponent = false;
-    private boolean falling = true;
     Label.LabelStyle style;
-    private float animationTime = 0;
-    private float fallDuration = 0.3f;  // snabb fallning
-    private float riseDuration = 0.6f;  // långsam uppgång
+
     private Label opponentName;
     private Label playerName;
     private float opponentStartY = 300;      // original Y
@@ -231,30 +224,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void input() {
         coords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(coords);
-/*
-        if (Gdx.input.justTouched()) {
-
-            for (int a = cardImages.size() - 1; a >= 0; a--) {
-                Polygon poly = generateHitbox(a, cardImages);
-
-                //Send input to roundController
-                if (poly.contains(coords.x, coords.y) && (selectedCardImages.size() < 5)) {
-                    roundController.selectCard(a);
-                    break;
-                }
-            }
-
-            //SelectLoop
-            for (int a = selectedCardImages.size() -1; a >= 0; a--) {
-                Polygon poly = generateHitbox(a,selectedCardImages);
-                //Send input to roundController
-                if (poly.contains(coords.x, coords.y)) {
-                    roundController.tCard(a);
-                    break;
-                }
-
-            }
-        }*/
     }
 
     public void onPlaySelectedCards(){
@@ -349,67 +318,17 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     // Creates
-    public void createSpriteList( ){
-
-    }
-
-    private Polygon generateHitbox(int index, ArrayList<Image> cards) {
-        // AI-generated solution for getting the correct hitbox now that the
-        // cards are rotated
-        //Sprite sprite = cards.get(index);
-        Image sprite = cards.get(index);
-        float[] vertices = new float[]{
-                0, 0,
-                sprite.getWidth(), 0,
-                sprite.getWidth(), sprite.getHeight(),
-                0, sprite.getHeight()
-        };
-        Polygon poly = new Polygon(vertices);
-
-        poly.setOrigin(sprite.getOriginX(), sprite.getOriginY());
-        poly.setPosition(sprite.getX(), sprite.getY());
-        poly.setRotation(sprite.getRotation());
-        poly.setScale(sprite.getScaleX(), sprite.getScaleY());
-        return poly;
-    }
-
-    //Check if user hovers over card
-    public void getHoverdCards() {
-        for (int a = 0; a < cardImages.size(); a++){
-            Polygon poly = generateHitbox(a, cardImages);
-            // Check if card is hovered over
-            if (poly.contains(coords.x, coords.y)) {
-                // if (cardSprites.get(a).getBoundingRectangle().contains(coords.x,coords.y)) {
-                // hoveredCards.set(a,cardSprites.get(a).getBoundingRectangle().contains(cords.x,cords.y));
-                hoveredCards.set(a, true);
-                for (int i = 0; i < cardImages.size(); i++) {
-                    if (i != a) hoveredCards.set(i, false);
-                }
-
-            } else {
-                hoveredCards.set(a, false);
-            }
-        }
-    }
+    public void createSpriteList( ){}
 
     public void draw() {
-        getHoverdCards();
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
-        //spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-        //spriteBatch.begin();
 
         // store the worldWidth and worldHeight as local variables for brevity
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
-        //spriteBatch.draw(background, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight()); // draw the background
-        //ArrayList<Sprite> cards = user.getHand();
 
-        //drawCardSprites();
         showCombo(currentBestCombo);
-        //opponentImage.draw(spriteBatch);
-
-        //spriteBatch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
 
@@ -420,33 +339,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         drawHealthBars();
     }
 
-    public void drawCardSprites() {
-        for (int i = 0; i < selectedCardImages.size(); i++) {
-            Image selectedCard = selectedCardImages.get(i);
 
-            //float cx = 150 + i * 90;
-            //float cy = 200;
-
-            //selectedCard.setPosition(cx, cy);
-            selectedCard.setColor(Color.GOLD);
-            stage.addActor(selectedCard);
-            //selectedCard.draw(spriteBatch);
-        }
-        for (int i = 0; i < cardImages.size(); i++) {
-
-            Image card = cardImages.get(i);
-            card.setColor(hoveredCards.get(i) ? Color.LIGHT_GRAY : Color.WHITE);
-            //card.draw(spriteBatch);
-            stage.addActor(card);
-        }
-
-    }
-
-    public void oppAnimation() {
-        animatingOpponent = true;
-        falling = true;
-        animationTime = 0;
-    }
+    public void oppAnimation() {}
 
     public void throwCards() {
         removedIndices = new ArrayList<>();
@@ -517,41 +411,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         stage.addActor(currentComboLabel);
     }
 
-    public void updateOpponentAnimation(float delta) {
-        if (!animatingOpponent) return;
-
-        animationTime += delta;
-        if (falling) {
-            // Ease-out fall: snabbt → långsamt
-            float t = animationTime / fallDuration;
-            if (t > 1f) {
-                t = 1f;
-                falling = false;
-                animationTime = 0f; // reset for rise
-            }
-
-            // t^0.5 ger snabb start, mjuk slut
-            float eased = (float) Math.pow(t, 0.5);
-            float newY = opponentStartY + (opponentDropY - opponentStartY) * eased;
-            opponentImage.setY(newY);
-
-        } else {
-            // Ease-in rise: långsam → snabb
-            float t = animationTime / riseDuration;
-            if (t > 1f) {
-                t = 1f;
-                animatingOpponent = false;
-                opponentImage.setY(opponentStartY);
-
-                 // game.getTurnManager().swapTurn(); // animation klar → byt tur TODO Remove, should be updated in model
-                return;
-            }
-            // t^2 ger långsam start, snabb slut
-            float eased = (float) Math.pow(t, 2);
-            float newY = opponentDropY + (opponentStartY - opponentDropY) * eased;
-            opponentImage.setY(newY);
-        }
-    }
 
     public void resetView() {
         if (stage != null) stage.dispose();
@@ -576,32 +435,20 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         for (Image card : cardImages) {
             card.remove();
         }
-        this.cardImages.clear(); // Clear current sprites before update
+        this.cardImages.clear();
 
         for (int i = 0; i < hand.size(); i++) {
-            //Iterating ocher hand to get card png
             final int index = i;
             Image cardSprite = new Image(new Texture("assets/images/" + hand.get(i)));
             cardSprite.setName(hand.get(i));
             cardSprite.setSize(100,175);
             cardSprite.setOrigin(Align.center);
-            // Sets the card's position: x is centered based on the number of cards,
-            // y is adjusted to create a slight curved spread before rotation.
-            //float y = 80 - 7.5f * (float)Math.pow(Math.abs(i - hand.size()/2), 1.20f);
-            // startX is position of card at index 0
-            //float startX = 60* i + 80 ;
-            //float cardSpacing = 150;
-            //float totalWidth = cardImages.size() * cardSpacing;
-            //float startX = viewport.getWorldWidth() / 4f - totalWidth / 2f;
-
-            //float x = startX + i * cardSpacing;
             float y = 35;
 
             cardSprite.setPosition(handX(i, cardImages.size()), y);
             cardSprite.setRotation(5 * (hand.size()/2 - i)); // Rotating cars
             cardSprite.setTouchable(Touchable.enabled);
 
-            //cardImages.add(cardSprite);
             cardSprite.addListener(new InputListener() {
 
                 @Override
@@ -624,10 +471,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                     }
                     lastIndex = index;
                     roundController.selectCard(index);
-                    //float targetX = selectedX(selectedCardImages.size(), index);
-                    //ImageAnimations.moveToSelected(cardSprite, targetX, 250);
-                    //cardSprite.setColor(Color.GOLD);
-                    //selectedCardImages.add(cardSprite);
                 }
             });
             cardImages.add(cardSprite);
@@ -648,12 +491,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         float total = selectedCardImagesSize*spacing;
         float sx = viewport.getWorldWidth()/4f - total/2f;
         return sx +index*spacing;
-    }
-    private Image findImageByName(List<Image> list, String name) {
-        for (Image img : list) {
-            if (name.equals(img.getName())) return img;
-        }
-        return null;
     }
 
     @Override
@@ -786,8 +623,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onOpponentAttack(int damage) {
             Label oppAttack = new Label("Name attacked you!\n" +
                     "You took "+damage+ " damage!\n" +
-                    "layers turn.", style);
-            oppAttack.setPosition(400,400);
+                    "Players turn.", style);
+            oppAttack.setPosition(800,275);
             stage.addActor(oppAttack);
     }
 

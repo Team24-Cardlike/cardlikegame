@@ -9,6 +9,7 @@ import java.util.*;
 public class Round {
     private RoundObsMethods o = new RoundObsMethods(this);
     private Deck deck = new Deck();
+    Upgrade upgrades;
     private User user;
     private Opponent opponent;
 
