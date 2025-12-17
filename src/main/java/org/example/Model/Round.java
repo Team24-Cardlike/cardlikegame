@@ -104,7 +104,6 @@ public class Round {
         this.user.damage = 0;
         this.user.damage = this.user.playCards();
         for(Upgrade upg : this.user.upgrades){
-            checkUpgrade(upg);
             upgradeNames.add(upg.getPic());
         }
         this.opponent.takeDamage(this.user.damage);
@@ -250,7 +249,7 @@ public class Round {
         o.notifyUnselected(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
-        o.notifyCurrentOpponent(this.opponent.getName(), this.opponent.image, this.opponent.getDamage());
+        o.notifyCurrentOpponent(this.opponent.getName(), this.opponent.getName(), this.opponent.getDamage());
         o.notifyPlayerTurn(playerTurn, upgradeNames);
         o.notifyNewRound();
     }

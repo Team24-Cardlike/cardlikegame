@@ -95,13 +95,11 @@ public class MapView implements Screen, MapObserver {
         });
         lokiHead = new Texture("assets/images/lokiMapIcon.png");
 
-        
     }
 
     public void draw(){
         batch.begin();
         batch.draw(mapBackground,0,0,viewport.getWorldWidth(),viewport.getWorldHeight());
-        
 
         drawOpponent();
         drawSaveButton();
@@ -162,6 +160,7 @@ public class MapView implements Screen, MapObserver {
         Sprite base =  makeSprite(lvlRune,x,y);
         lvlSprites.add(base);
     }
+
     public void drawRest(float x, float y) {
         Sprite base =  makeSprite(lvlRune,x,y);
         lvlSprites.add(base);
@@ -182,6 +181,13 @@ public class MapView implements Screen, MapObserver {
         viewport.unproject(coords);
 
         if (Gdx.input.justTouched()) {
+            Polygon backgroundPoly = new Polygon(new float[]{
+                    400, 300,
+                    575, 300,
+                    575, 400,
+                    400, 400
+            });
+
             for (int a =  0; a < lvls.size(); a++) {
                 Polygon poly = generateHitbox(a, lvlSprites);
                 String name = lvls.get(a);
@@ -193,13 +199,13 @@ public class MapView implements Screen, MapObserver {
                     break;
                 }
             }
+            if(backgroundPoly.contains(coords.x, coords.y)){
+                controller.openShop();
+            }
     }  }
 
-
-
         private Polygon generateHitbox(int index,ArrayList<Sprite> ops) {        
-            // AI-generated solution for getting the correct hitbox now that the
-            // cards are rotated
+            // AI-generated solution for getting the correct hitbox
             Sprite sprite = ops.get(index);
             float[] vertices = new float[]{
                     0, 0,
@@ -218,7 +224,6 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void render(float v) {
-
         manager.gameLoop();
 
         input();
@@ -252,8 +257,6 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {
-
-
         this.lvls = lvls;
         this.completedLvls = completedLvls;
         this.availableLvls = availableLvls;

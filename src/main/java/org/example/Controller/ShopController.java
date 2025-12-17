@@ -43,8 +43,4 @@ public class ShopController {
         }
         return stringList;
     }
-
-    public void switchState(){
-        //manager.setState();
-    }
 }

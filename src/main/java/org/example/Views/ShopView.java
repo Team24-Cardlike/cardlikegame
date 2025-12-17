@@ -211,7 +211,6 @@ public class ShopView implements Screen {
     @Override public void resize(int w, int h){
         if(w <= 0 || h <= 0) return;
         stage.getViewport().update(w,h,true);
-
     }
 
     @Override

@@ -197,7 +197,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             }
         });
 
-        discardButton.addListener(new ClickListener() {
+        discardButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //throwCards();
@@ -220,13 +220,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         input();
     }
 
-    /**
-     * Handles selecting and unselecting cards
-     */
+
     @Override
     public void onNewOpponent(String name, int damage, String image){
         Label opponentName = new Label(name, style);
         opponentName.setPosition(915, 615);
+
         stage.addActor(opponentName);
     }
 
@@ -236,7 +235,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     public void onPlaySelectedCards(){
-        if(!selectedCardSprites.isEmpty())
+        if(!selectedCardImages.isEmpty())
             roundController.playCards();
         //TODO: Why is the gameEnd-check in onPlaySelectedCards()?
         // if (gameEnded) {
@@ -390,7 +389,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     /**
      * Check if user hovers over card
      */
-    public void getHoverdCards() {
+    /*public void getHoverdCards() {
         for (int a = 0; a < cardSprites.size(); a++){
             Polygon poly = generateHitbox(a, cardSprites);
             if (poly.contains(coords.x, coords.y)) {
@@ -403,7 +402,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 hoveredCards.set(a, false);
             }
         }
-    }
+    }*/
 
     public void draw() {
         ScreenUtils.clear(Color.BLACK);
