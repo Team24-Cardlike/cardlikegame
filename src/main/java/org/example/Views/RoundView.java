@@ -233,7 +233,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
 
     public void onPlaySelectedCards(){
-        roundController.playCards();
+        if(!selectedCardSprites.isEmpty())
+            roundController.playCards();
         //TODO: Why is the gameEnd-check in onPlaySelectedCards()?
         if (gameEnded) {
             //Display match stats
@@ -278,7 +279,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         sr.setProjectionMatrix(viewport.getCamera().combined);
 
         // USER HEALTH BAR (bottom-left)
-        float x = 50;
+        float x = 150;
         float y = 650;
         float width = 250;
         float height = 30;
@@ -302,7 +303,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
 
         // ENEMY HEALTH BAR (top-right)
-        float ex = 1000;
+        float ex = 900;
         float ey = 650;
 
         float clampedOpponentHealth = Math.clamp(opponentHealthPercentage, 0f, 1f);

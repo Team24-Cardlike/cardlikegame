@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import org.example.Controller.RoundController;
 import org.example.Model.Round;
 import org.example.Controller.ShopController;
 
@@ -21,11 +22,11 @@ public class HandbookView implements Screen {
     private Image closeButton;
     private BitmapFont font;
     private SpriteBatch batch;
-    private ShopController shopController;
+    private RoundController roundController;
 
    // public HandbookView(){}
-    public void setController(ShopController ctrl){
-        this.shopController = ctrl;
+    public void setController(RoundController ctrl){
+        this.roundController = ctrl;
     }
     @Override
     public void show() {
@@ -59,8 +60,8 @@ public class HandbookView implements Screen {
 
         closeButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {                
-                shopController.closeShop();
+            public void clicked(InputEvent event, float x, float y) {
+                roundController.closeHandBook();
             }
         });
         table.add(sacrollPane).expand().fill().pad(20).row();

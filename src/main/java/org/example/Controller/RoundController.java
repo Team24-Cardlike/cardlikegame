@@ -43,6 +43,10 @@ public class RoundController {
 
     }
 
+    public void closeHandBook(){
+        manager.closeHandbook();
+    }
+
     public void openHandbook(){manager.setHandbookState();}
 
     public void restart(){manager.resetRound();}
