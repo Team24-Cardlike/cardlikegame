@@ -30,7 +30,7 @@ public class Round {
 
     private UpgradeManager upgradeManager = new UpgradeManager();
     private UpgradeLibrary lib = new UpgradeLibrary();
-
+    private ArrayList<String> upgradeNames = new ArrayList<>();
     public int turnNumber = 0;
     public boolean beenAttacked = false;
 
@@ -92,6 +92,7 @@ public class Round {
         this.user.damage = this.user.playCards();
         for(Upgrade upg : this.user.upgrades){
             checkUpgrade(upg);
+            upgradeNames.add(upg.getPic());
         }
         this.opponent.takeDamage(this.user.damage);
         opponentHealth = opponent.getHealthRatio();
@@ -108,7 +109,7 @@ public class Round {
         playerTurn = false;
 
         o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed
-        o.notifyPlayerTurn(playerTurn); // Notify observer of changed player turn
+        o.notifyPlayerTurn(playerTurn, upgradeNames); // Notify observer of changed player turn
         o.notifyUnselected(user.getSelectedCards()); // Notify observer of reset selected
         o.notifyHandChanged(user.getHand());// Notify observer of new hand
         checkDeadPlayer();
@@ -130,7 +131,7 @@ public class Round {
 
         o.notifyHealthChanged(userHealth,opponentHealth);// Notify observer of health changed
         o.notifyOpponentAttacked(oppDamage);//, oppopnent.name, opponent.attackName));
-        o.notifyPlayerTurn(playerTurn); // notify player turn changed
+        o.notifyPlayerTurn(playerTurn, upgradeNames); // notify player turn changed
 
     }
 
@@ -216,12 +217,8 @@ public class Round {
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
         o.notifyCurrentOpponent(this.opponent.getName(), this.opponent.image, this.opponent.getDamage());
-        o.notifyPlayerTurn(playerTurn);
+        o.notifyPlayerTurn(playerTurn, upgradeNames);
         o.notifyNewRound();
     }
-
-
-
-
 }
 

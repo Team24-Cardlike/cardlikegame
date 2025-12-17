@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Controller.RoundController;
@@ -41,7 +42,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public Image nextButton;
     public Image retryButton;
     public Image shopButton;
-
+    private Image backgroundImage;
     Texture background;
     public Texture shopButtonTexture;
     public Texture retryButtonTexture;
@@ -84,7 +85,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private int totalDamageToOpponent;
     private int totalDamageToUser;
 
-    private final Image[] upgradeSlots = new Image[4];
+    public final Image[] upgradeSlots = new Image[4];
     private int lastIndex;
     private int currentUpgradeIndex = 0;
     public void setGameManager (GameManager manager ) {
@@ -128,7 +129,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         stage = new Stage(viewport);
 
-        Image backgroundImage =
+        backgroundImage =
                 new Image(new Texture("assets/images/background.png"));
 
         backgroundImage.setSize(
@@ -380,6 +381,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         else{
             panel = new Image(new TextureRegionDrawable(lossTxt));
         }
+
         panel.setSize(600, 400);
         panel.setPosition(
                 viewport.getWorldWidth() / 2f - panel.getWidth() / 2f,
@@ -438,7 +440,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         currentComboLabel = new Label(comboName, style);
 
-        float x = viewport.getWorldWidth() - currentComboLabel.getPrefWidth() - 335;
+        float x = viewport.getWorldWidth()-1000;
         float y = viewport.getWorldHeight() - currentComboLabel.getPrefHeight() - 240;
 
         currentComboLabel.setPosition(x, y);
@@ -647,7 +649,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     @Override
-    public void onPlayerTurn(boolean playerTurn) {
+    public void onPlayerTurn(boolean playerTurn, ArrayList<String> upgrades) {
+        for(int i = 0; i < upgrades.size(); i++){
+            addUpgradeImage(upgrades.get(i));
+        }
         this.playerTurn = playerTurn;
         if (!playerTurn) {
             oppAnimation();

@@ -65,9 +65,9 @@ public class RoundObsMethods {
 
 
     // Notify player turn changed
-    public void notifyPlayerTurn(boolean playerTurn) {
+    public void notifyPlayerTurn(boolean playerTurn, ArrayList<String> upgrades) {
         for (RoundObserver o : observers) {
-            o.onPlayerTurn(playerTurn);
+            o.onPlayerTurn(playerTurn, upgrades);
         }
     }
 

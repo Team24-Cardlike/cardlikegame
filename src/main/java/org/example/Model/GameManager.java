@@ -28,8 +28,6 @@ public class GameManager {
     GameState state;
 
 
-
-
     public  GameManager(RoundObserver roundObs, MapObserver mapObs) {
 
         this.gameMap = new GameMap(100, this, mapObs);
