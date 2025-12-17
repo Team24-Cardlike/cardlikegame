@@ -190,8 +190,7 @@ public class MapView implements Screen, MapObserver {
         if (Gdx.input.justTouched()) {
             for (int a =  0; a < lvls.size(); a++) {
                 Polygon poly = generateHitbox(a, lvlSprites);
-                String name = lvls.get(a);
-
+                String name = lvls.get(a);                
                 // Send input to roundController
                 if (poly.contains(coords.x, coords.y)) {                                                        
                     if (availableLvls.contains(name)) {                        
