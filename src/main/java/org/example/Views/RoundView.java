@@ -33,7 +33,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public FitViewport viewport;
     private ShapeRenderer sr;
 
-    Texture background;
 
     public Image startButton;
     public Image handbookButton;
@@ -42,6 +41,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public Image retryButton;
     public Image shopButton;
 
+    Texture background;
     public Texture shopButtonTexture;
     public Texture retryButtonTexture;
     public Texture nextButtonTexture;
@@ -55,7 +55,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private Texture opponentTexture;
     private Image opponentImage;
 
-    // Seving hand if LibGDX not yet initialized
     private Stage stage;
     public ArrayList<Boolean> hoveredCards = new ArrayList<>();;
     private Label currentComboLabel;
@@ -340,7 +339,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
 
-    public void oppAnimation() {}
+    public void oppAnimation() {
+        float initX = opponentImage.getX();
+        float initY = opponentImage.getY();
+        ImageAnimations.opponentAnimation(opponentImage, initX, initY,viewport.getWorldHeight()/2);
+        stage.getRoot().addAction(ImageAnimations.screenShake(10f, 0.3f));
+    }
 
     public void throwCards() {
         removedIndices = new ArrayList<>();
