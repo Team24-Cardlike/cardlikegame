@@ -164,7 +164,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         Gdx.input.setInputProcessor(stage);
 
 
-        opponentTexture = new Texture("assets/images/Heimdall.png");
+        opponentTexture = new Texture("assets/images/bossPics/Heimdall.png");
         opponentSprite = new Sprite(opponentTexture);
         opponentSprite.setSize(350, 200);
         opponentSprite.setPosition(
