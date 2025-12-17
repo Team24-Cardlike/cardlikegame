@@ -24,6 +24,6 @@ public class RoundState implements GameState{
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 }
