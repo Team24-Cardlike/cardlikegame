@@ -171,7 +171,7 @@ public class ShopView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Köpte: " + item.getName());
-                shopController.upgradeBaught(item);
+                shopController.upgradeBought(item);
                 popup.remove();
                 items.remove(item);
                 updateList();

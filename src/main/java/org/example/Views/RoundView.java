@@ -12,7 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -258,10 +259,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     public void onPlaySelectedCards(){
         roundController.playCards();
-
-        if(playerTurn){
-            opponentAnimation();
-        }
+        //TODO: Why is the gameEnd-check in onPlaySelectedCards()?
         if (gameEnded) {
             //Display match stats
             endGame();
@@ -285,6 +283,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 });
             }
         }
+        else if(playerTurn){
+            opponentAnimation();
+        }
+
     }
 
 
@@ -411,6 +413,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         stage.act(Gdx.graphics.getDeltaTime());
 
+
         if (playerTurn || gameEnded) {
             stage.draw();
         }
@@ -451,7 +454,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     public void endGame(){
         if(isVictory){
-         panel = new Image(new TextureRegionDrawable(vicTxt));
+            panel = new Image(new TextureRegionDrawable(vicTxt));
         }
         else{
             panel = new Image(new TextureRegionDrawable(lossTxt));
@@ -767,6 +770,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         this.gameEnded = true;
         this.totalDamageToOpponent = totalDamageToOpponent;
         this.totalDamageToUser = totalDamageToUser;
+        endGame();
     }
 
     @Override
@@ -775,7 +779,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         if (!playerTurn) {
             oppAnimation();
         }
-        //System.out.println(playerTurn);
+        System.out.println("playerturn = " + playerTurn);
     }
 
     @Override
