@@ -38,4 +38,7 @@ public class ShopController {
     public ArrayList<String> getUserUpgrades(){
         return this.stringList = shop.getUserUpgrades(this.user);
     }
+    public getUpdatedList(){
+        shop.getUpdatedList();
+    }
 }

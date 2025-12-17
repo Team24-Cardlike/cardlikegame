@@ -46,21 +46,7 @@ public class ShopView implements Screen {
     }
 
     public void update(){
-        updateList();
-    }
-
-    private void updateList(){
-        while(items.size() < 10){
-            Upgrade random = upgradeLibrary.getRandomUpgrade();
-            if(shopController.getUserUpgrades() != null){
-                if((items.isEmpty() || !items.contains(random)) && !shopController.getUserUpgrades().contains(random.getName())){
-                    items.add(random);
-                }
-            }
-            else if(items.isEmpty() || !items.contains(random)){
-                items.add(random);
-            }
-        }
+        //shopController.getUpdatedList();
     }
 
     /**
@@ -184,7 +170,7 @@ public class ShopView implements Screen {
                 if(shopController.upgradeBought(item)){
                     popup.remove();
                     items.remove(item);
-                    updateList();
+                    update();
                     shopGrid();
                     table.setTouchable(Touchable.enabled);
                 }

@@ -36,4 +36,20 @@ public class Shop {
     public void switchState(){
         //manager.setState();
     }
+
+    /*public void getUpdatedList(){
+        private void updateList(){
+            while(items.size() < 10){
+                Upgrade random = upgradeLibrary.getRandomUpgrade();
+                if(shopController.getUserUpgrades() != null){
+                    if((items.isEmpty() || !items.contains(random)) && !shopController.getUserUpgrades().contains(random.getName())){
+                        items.add(random);
+                    }
+                }
+                else if(items.isEmpty() || !items.contains(random)){
+                    items.add(random);
+                }
+            }
+        }
+    }*/
 }
