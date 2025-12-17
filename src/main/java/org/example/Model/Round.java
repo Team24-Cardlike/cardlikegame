@@ -151,8 +151,7 @@ public class Round {
                 this.won = true;   
                 o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
             else {
-                this.won = false;   
-                System.out.println("hejhej");
+                this.won = false;
                 o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
             }
         }
