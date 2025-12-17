@@ -23,7 +23,7 @@ public abstract class Upgrade {
         this.desc = desc;
         this.cost = cost;
         this.category = category;
-        this.pic = "assets/images/"+pic+".png";
+        this.pic = "assets/images/upgradePics/"+pic+".png";
         this.idNum = id;
     }
 

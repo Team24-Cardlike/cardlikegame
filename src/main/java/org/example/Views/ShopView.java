@@ -88,7 +88,7 @@ public class ShopView implements Screen {
 
         shopGrid();
 
-        closeShop = new Image(new Texture("assets/images/endTurn.png"));
+        closeShop = new Image(new Texture("assets/images/xButton.png"));
         closeShop.setSize(150, 100);
         closeShop.setPosition(stage.getWidth() - 60, stage.getHeight() - 60); // Top-right
         stage.addActor(closeShop);
