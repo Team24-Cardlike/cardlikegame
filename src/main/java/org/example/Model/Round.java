@@ -73,10 +73,10 @@ public class Round {
             opponentTurn();
         }
         // round ends
-
-        // if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {
-        //     if(opponentHealth < userHealth) {
-        //         this.won = true;
+        
+        // if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {                              
+        //     if(opponentHealth < userHealth) {                
+        //         this.won = true;             
         //         o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
         //     else {
         //         this.won = false;
@@ -106,6 +106,7 @@ public class Round {
         for(Upgrade upg : this.user.upgrades){
             upgradeNames.add(upg.getPic());
         }
+        checkUpgrades(1);
         this.opponent.takeDamage(this.user.damage);
         this.opponentHealth = opponent.getHealthRatio();
         this.totalDamageToOpponent += this.user.damage;

@@ -67,6 +67,7 @@ public class Save {
         try {            
             loadedData.setCompletedLvls();
             loadedData.setAvailableLvls();
+            loadedData.setGold();
             // loadedData.getGameManager().gameMap.updateMap();            
         } catch (NullPointerException e) {
             System.out.println("No previous data stored, you may have forgotten to save.");

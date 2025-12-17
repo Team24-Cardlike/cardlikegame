@@ -30,7 +30,6 @@ public class MapView implements Screen, MapObserver {
     ArrayList<String> lvls = new ArrayList<>();
     private ArrayList<Sprite> mapSprites = new ArrayList<>();
     private ArrayList<Sprite> lvlSprites = new ArrayList<>();
-    String lastLVL;
 
     private Texture mapBackground;
     private Texture greenDot;
@@ -42,6 +41,8 @@ public class MapView implements Screen, MapObserver {
     private int currentLvl = 0;
     private Set<String> completedLvls;
     private Set<String> availableLvls;
+
+    private String lastLVL;
 
     private String currentOp;
 
@@ -84,8 +85,9 @@ public class MapView implements Screen, MapObserver {
         saveButton = new Image(new Texture("assets/images/save.png"));
         saveButton.setPosition(viewport.getWorldWidth()-110, viewport.getWorldHeight()-90);
         saveButton.setSize(100, 100);
-        stage.addActor(saveButton);
 
+
+        stage.addActor(saveButton);
         saveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {                
@@ -127,7 +129,7 @@ public class MapView implements Screen, MapObserver {
             }
 
             else if (availableLvls.contains(name)) {
-                drawCurrent(x,y);
+                drawCurrent(x, y, name);
 
             }
 
@@ -151,16 +153,21 @@ public class MapView implements Screen, MapObserver {
         Sprite cross = makeSprite(redX, x, y);
         mapSprites.add(cross);
         if (lastLVL == name) {
-        Sprite player =  makeSprite(lokiHead,x ,y);
-        mapSprites.add(player);}
+            Sprite player =  makeSprite(lokiHead, x, y);
+            mapSprites.add(player);
+        }
 
     }
 
-    public void drawCurrent(float x, float y) {
+    public void drawCurrent(float x, float y, String name) {
         Sprite base =  makeSprite(lvlRune,x,y);
         lvlSprites.add(base);
-    }
+        if (lastLVL == name) {
+            Sprite player =  makeSprite(lokiHead, x, y);
+            mapSprites.add(player);
+        }
 
+    }
     public void drawRest(float x, float y) {
         Sprite base =  makeSprite(lvlRune,x,y);
         lvlSprites.add(base);
@@ -191,10 +198,11 @@ public class MapView implements Screen, MapObserver {
             for (int a =  0; a < lvls.size(); a++) {
                 Polygon poly = generateHitbox(a, lvlSprites);
                 String name = lvls.get(a);
-
-                //Send input to roundController
+                // Send input to roundController
                 if (poly.contains(coords.x, coords.y)) {
-                    lastLVL = name;
+                    if (availableLvls.contains(name)) {
+                        lastLVL = name;
+                    }
                     controller.selectLvl(name);
                     break;
                 }
@@ -224,15 +232,18 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void render(float v) {
+        stage.act(v);
         manager.gameLoop();
+        Gdx.input.setInputProcessor(stage);
 
-        input();
         draw();
+        input();
     }
 
     @Override
-    public void resize(int i, int i1) {
-
+    public void resize(int width, int height) {
+        if (width <= 0 || height <= 0) return;
+        viewport.update(width, height, true); // true centers the camera
     }
 
     @Override
@@ -247,7 +258,9 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void hide() {
-
+        if (batch != null) batch.dispose();
+        if (stage != null) stage.dispose();
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override
@@ -257,6 +270,7 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {
+
         this.lvls = lvls;
         this.completedLvls = completedLvls;
         this.availableLvls = availableLvls;

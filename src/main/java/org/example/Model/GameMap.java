@@ -117,13 +117,12 @@ public class GameMap {
         //     manager.initRound();
         // }                
         // currentOpponent and the opp might be different objects        
-        // for (Opponent op: map.neighbours(opponents.get(oppIdx))) { // currentOpponent  
-        System.out.println(availableLvls + " " + completedLvls);
+        // for (Opponent op: map.neighbours(opponents.get(oppIdx))) { // currentOpponent          
         for (int i = 0; i < opponents.size(); i++) {            
             Opponent op = opponents.get(i);
             // if (map.neighbours(opponents.get(oppIdx)).contains(op)) {
                 // System.out.println(op.getName() + "granne");                     
-                if (s == op.getName() && availableLvls.contains(op.getName())) {                                                        
+                if (s == op.getName() && availableLvls.contains(op.getName()) && !completedLvls.contains(op.getName())) {                                                        
                     currentOpponent = op;
                     // setOppIdx(i);                        
                     manager.initRound();

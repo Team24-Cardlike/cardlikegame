@@ -15,6 +15,7 @@ public class GameData {
     // gets called
     private Set<String> completedLvls;
     private Set<String> availableLvls;    
+    private int gold;
 
     public GameData(GameManager gameManager) {        
         this.gameManager = gameManager;        
@@ -28,8 +29,13 @@ public class GameData {
     void updateData() {                
         // TODO: Add more getters here!
         this.completedLvls = gameManager.getCompletedLvls();
-        this.availableLvls = gameManager.getAvailableLvls();        
+        this.availableLvls = gameManager.getAvailableLvls();    
+        this.gold = gameManager.getUser().getGold();    
 
+    }
+
+    void setGold() {        
+        gameManager.getUser().setGold(gold);
     }
 
     void setCompletedLvls() {        
