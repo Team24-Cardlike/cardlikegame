@@ -20,7 +20,7 @@ public class RoundController {
     }
 
     public void nextRound(){
-        manager.setState(new MapState());
+        manager.setState(new MapState());        
         round.endRound();
 
     }
