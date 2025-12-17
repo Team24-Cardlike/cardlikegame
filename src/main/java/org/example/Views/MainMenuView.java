@@ -50,7 +50,7 @@ public class MainMenuView implements Screen {
         bg.setFillParent(true);
         stage.addActor(bg);
 
-        menuButton = new Image(new Texture("assets/images/playbutton.png"));
+        menuButton = new Image(new Texture("assets/images/playButton.png"));
         menuButton.setSize(200, 50);
         menuButton.setPosition(stage.getWidth()/2 -100, 150);
         stage.addActor(menuButton);

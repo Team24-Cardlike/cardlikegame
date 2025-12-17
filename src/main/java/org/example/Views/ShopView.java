@@ -91,9 +91,9 @@ public class ShopView implements Screen {
 
         shopGrid();
 
-        closeShop = new Image(new Texture("assets/images/endTurn.png"));
-        closeShop.setSize(100, 100);
-        closeShop.setPosition(stage.getWidth() - 100, stage.getHeight() - 100); // Top-right
+        closeShop = new Image(new Texture("assets/images/xButton.png"));
+        closeShop.setSize(150, 100);
+        closeShop.setPosition(stage.getWidth() - 60, stage.getHeight() - 60); // Top-right
         stage.addActor(closeShop);
 
         closeShop.addListener(new ClickListener() {
@@ -137,7 +137,7 @@ public class ShopView implements Screen {
 
         Group popup = new Group();
 
-        Texture backgroundTexture = new Texture("assets/images/itemPopupBG.png");
+        Texture backgroundTexture = new Texture("assets/images/background.png");
         Image background = new Image(backgroundTexture);
         popup.addActor(background);
 
@@ -164,7 +164,7 @@ public class ShopView implements Screen {
         desc.setWidth(popupWidth - 40);
         desc.setWrap(true);
         popup.addActor(desc);
-
+        //TODO: ADD BUY BUTTON
         Image buyButton = new Image(new Texture("assets/images/endTurn.png"));
         buyButton.setSize(120, 60);
         buyButton.setPosition(popupWidth/2f - 60, 20);
