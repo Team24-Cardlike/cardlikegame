@@ -215,6 +215,7 @@ public class Round {
         o.notifyUnselected(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
+        o.notifyCurrentOpponent(this.opponent.getName(), this.opponent.image, this.opponent.getDamage());
         o.notifyPlayerTurn(playerTurn);
         o.notifyNewRound();
     }

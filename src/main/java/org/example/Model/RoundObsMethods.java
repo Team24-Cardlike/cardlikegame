@@ -95,4 +95,10 @@ public class RoundObsMethods {
         }
 
     }
+
+    public void notifyCurrentOpponent(String name, String image, int damage){
+        for (RoundObserver o : observers) {
+            o.onNewOpponent(name, damage, image);
+        }
+    }
 }

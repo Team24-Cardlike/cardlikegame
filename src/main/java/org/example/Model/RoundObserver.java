@@ -14,6 +14,7 @@ public interface RoundObserver {
     void onOpponentAttack(int damage);
     void onUnselectedCard(ArrayList<String> selected);
     void onRoundInit();
+    void onNewOpponent(String name, int damage, String image);
 }
 
 
