@@ -7,6 +7,7 @@ import org.example.Model.Upgrades.UpgradeLibrary;
 import org.example.Model.User;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ShopController {
     Round round;
@@ -28,6 +29,7 @@ public class ShopController {
 
     public void upgradeBought(Upgrade upgrade){
         user.addUpgrade(upgrade);
+        user.getUpgrades().sort(Comparator.comparingInt(Upgrade::getIdNum));
     }
 
     public void closeShop(){

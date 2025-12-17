@@ -7,7 +7,7 @@ public class ShopState implements GameState{
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void update(GameManager manager) {

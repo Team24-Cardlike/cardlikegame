@@ -22,30 +22,32 @@ import org.example.Views.ShopView;
 public class DesktopLauncher {
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle(("Maven LibGDX test"));
+        config.setTitle(("Rouges of Midgaard"));
         config.setWindowedMode(1280,720);
 
         //Creating View, Controler for round
-        RoundView roundView = new RoundView();
+        RoundView roundView = new RoundView();        
         MapView mapView = new MapView();
-
+        ShopView shopView = new ShopView();
         GameManager manager = new GameManager(roundView,mapView);
         mapView.setManager(manager);
 
-        roundView.setGameManager(manager);
+        roundView.setGameManager(manager);        
+        Save save = new Save(new GameData(manager));
         RoundController roundController = new RoundController(manager);
 
+        roundView.setGameManager(manager);        
+
         MapController mapController = new MapController(manager);
-        mapController.setMap(manager.gameMap);
+        mapController.setMap(manager.gameMap, save);
 
         MainMenuView menuView = new MainMenuView();
         menuView.setGameManager(manager);
-        MenuController menuController = new MenuController(manager);
+        MenuController menuController = new MenuController(manager, save);
 
-        HandbookView handbookView = new HandbookView();
-        ShopView shopView = new ShopView();
+        HandbookView handbookView = new HandbookView();        
         ShopController shopController = new ShopController(manager.getUser(), manager);
-        handbookView.setController(shopController);
+        handbookView.setController(roundController);
         shopView.setShopController(shopController);
         GameRender gameRender = new GameRender(roundView, menuView, shopView, handbookView, mapView);
 

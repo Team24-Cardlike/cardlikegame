@@ -50,7 +50,7 @@ public class ShopView implements Screen {
     }
 
     private void updateList(){
-        for(int i = items.size(); i < 10; i++){
+        while(items.size() < 10){
             Upgrade random = upgradeLibrary.getRandomUpgrade();
             if(shopController.getUserUpgrades() != null){
                 if((items.isEmpty() || !items.contains(random)) && !shopController.getUserUpgrades().contains(random.getName())){
@@ -63,8 +63,9 @@ public class ShopView implements Screen {
         }
     }
 
-
-
+    /**
+     * Initialize shop view
+     */
     @Override
     public void show() {
         batch = new SpriteBatch();
@@ -77,7 +78,7 @@ public class ShopView implements Screen {
         background.setFillParent(true);
         stage.addActor(background);
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Impact.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Italic.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 24;
         font = generator.generateFont(parameter);
@@ -163,8 +164,8 @@ public class ShopView implements Screen {
         desc.setWidth(popupWidth - 40);
         desc.setWrap(true);
         popup.addActor(desc);
-
-        Image buyButton = new Image(new Texture(item.getPic()));
+        //TODO: ADD BUY BUTTON
+        Image buyButton = new Image(new Texture("assets/images/endTurn.png"));
         buyButton.setSize(120, 60);
         buyButton.setPosition(popupWidth/2f - 60, 20);
         buyButton.addListener(new ClickListener() {
@@ -180,6 +181,19 @@ public class ShopView implements Screen {
             }
         });
         popup.addActor(buyButton);
+
+        Image backButton = new Image(new Texture("assets/images/endTurn.png"));
+        backButton.setSize(60, 60);
+        backButton.setPosition(popupWidth-60, popupHeight-60);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                popup.remove();
+                shopGrid();
+                table.setTouchable(Touchable.enabled);
+            }
+        });
+        popup.addActor(backButton);
 
         stage.addActor(popup);
         popup.setZIndex(Integer.MAX_VALUE); // säkerställ att det ligger överst

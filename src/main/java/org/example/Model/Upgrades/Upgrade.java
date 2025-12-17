@@ -43,6 +43,8 @@ public abstract class Upgrade {
         return this.cost;
     }
 
+    public int getIdNum(){return this.idNum;}
+
     public String getCategory() {
         return this.category;
     }

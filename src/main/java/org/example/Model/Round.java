@@ -22,6 +22,7 @@ public class Round {
     private int totalDamageToPlayer = 0;
     private boolean playerTurn = true;
     public boolean roundFinished = false;
+    private boolean won = false;
 
     private float userHealth = 1;
     private float opponentHealth = 1;
@@ -71,8 +72,20 @@ public class Round {
         else if(!playerTurn && !this.roundFinished){
             opponentTurn();
         }
-        //round ends
+        // round ends
 
+        // if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {
+        //     if(opponentHealth < userHealth) {
+        //         this.won = true;
+        //         o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
+        //     else {
+        //         this.won = false;
+        //         o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
+        //     }
+        //     // roundFinished = true;
+        //     user.setHealth(user.maxHealth); // Terrible temp solution to winning-immediately-bug
+        //     opponent.setHealth(opponent.getMaxHealth());
+        // }
 
     }
 
@@ -95,15 +108,14 @@ public class Round {
             upgradeNames.add(upg.getPic());
         }
         this.opponent.takeDamage(this.user.damage);
-        opponentHealth = opponent.getHealthRatio();
-        totalDamageToOpponent = totalDamageToOpponent + this.user.damage;
+        this.opponentHealth = opponent.getHealthRatio();
+        this.totalDamageToOpponent += this.user.damage;
         while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
 
 
         System.out.println("Din motståndare tog "+this.user.damage+" skada! "+ this.opponent.getHealth()+ " kvar");
-        checkUpgrade(lib.getUpgrade(15));
-        checkUpgrade(lib.getUpgrade(31));
-        checkUpgrade(lib.getUpgrade(32));
+        //After damaging
+        checkUpgrades(3);
         this.user.selectedCards = new ArrayList<>();
         this.user.damage = 0;
         playerTurn = false;
@@ -125,7 +137,8 @@ public class Round {
         totalDamageToPlayer += oppDamage;
 
         System.out.println("Du tog " + opponent.getDamage() + " skada! Du har " + this.user.health + " HP kvar");
-        checkUpgrade(lib.getUpgrade(22));
+        //After taking damage
+        checkUpgrades(2);
         checkDeadPlayer();
         playerTurn = true;
 
@@ -137,17 +150,19 @@ public class Round {
 
     private void checkDeadPlayer(){
         if (checkDeadUser() || checkDeadOpponent()) {
+            this.roundFinished = true;
             if(checkDeadOpponent()) {
+                this.won = true;
                 o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
             else {
-                System.out.println("hejhej");
+                this.won = false;
                 o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
             }
         }
     }
 
     private boolean checkDeadOpponent(){
-        return opponent.getHealth() <= 0;
+        return this.opponent.getHealth() <= 0;
     }
 
     private boolean checkDeadUser(){
@@ -171,7 +186,6 @@ public class Round {
         user.setSelectedCards(new ArrayList<>());
         o.notifyUnselected(user.getSelectedCards());
     }
-
 
     // Removing selected card from hand and adding it to selected cards
     public void addSelectedCards(int index) {
@@ -197,6 +211,7 @@ public class Round {
 
     // Round ended
     public void endRound() {
+
         user.addGold(totalDamageToOpponent);
         this.roundFinished = true;
     }
@@ -205,11 +220,30 @@ public class Round {
         return this.opponent;
     }
 
-    public void checkUpgrade(Upgrade upgrade){
-        if(this.getUser().getUpgrades().contains(upgrade))
-            this.upgradeManager.checkUpgrade(upgrade, this);
+    /**
+     * IDs coded by four-sequences int (cxyz)
+     * <ul>
+     * <li>c - The category: <ul>(1 - damage, 2 - sustain, 3 - economy)</ul></li>
+     * <li>x - When to check it:
+     *     <ul>
+     *     <li>0 - when round starts</li> <li>1 - when damaging</li> <li>2 - when taking damage</li> <li>3 - after damaging</li> <li>... (not implemented)</li>  <li>9 - when round ends</li>
+     *     </ul>
+     * <li>yz - number in the sequence (01 -> 99)</li>
+     * </ul>
+     * @param id2ndNum a number that decides what upgrades we check (x in list above)
+     *
+     */
+    public void checkUpgrades(int id2ndNum){
+        for(Upgrade upgrade : this.getUser().getUpgrades()) {
+            int triggerNum = (upgrade.getIdNum() / 100) % 10;
+            if (triggerNum == id2ndNum)
+                this.upgradeManager.checkUpgrade(upgrade, this);
+        }
     }
 
+    public boolean getWon() {
+        return won;
+    }
 
     public void init() {
         o.notifyHandChanged(user.getHand());

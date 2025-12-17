@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import org.example.Model.GameManager;
 import org.example.Model.Round;
+import org.example.Model.GameState.MapState;
 
 public class RoundController {
     public Round round;
     public GameManager manager;
+    
 
     public RoundController(GameManager manager){
         this.manager = manager;
@@ -18,6 +20,7 @@ public class RoundController {
     }
 
     public void nextRound(){
+        manager.setState(new MapState());
         round.endRound();
     }
 
@@ -33,8 +36,12 @@ public class RoundController {
         this.round.discard();
     }
 
-    public void playCards() {
+    public void playCards() {        
         this.round.playCards();
+    }
+
+    public void closeHandBook(){
+        manager.closeHandbook();
     }
 
     public void openHandbook(){manager.setHandbookState();}

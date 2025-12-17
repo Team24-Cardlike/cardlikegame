@@ -96,6 +96,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         this.roundController = roundController;
     }
 
+
+    /**
+     * Initialize buttons and add listeners
+     */
     @Override
     public void show() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/impact.ttf"));
@@ -216,6 +220,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         input();
     }
 
+    /**
+     * Handles selecting and unselecting cards
+     */
     @Override
     public void onNewOpponent(String name, int damage, String image){
         Label opponentName = new Label(name, style);
@@ -229,26 +236,29 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     public void onPlaySelectedCards(){
-        roundController.playCards();
+        if(!selectedCardSprites.isEmpty())
+            roundController.playCards();
         //TODO: Why is the gameEnd-check in onPlaySelectedCards()?
-        if (gameEnded) {
-            //Display match stats
-            endGame();
-            // Adding next button
-            if(isVictory){
-                System.out.println(isVictory);
-            }
+        // if (gameEnded) {
+        //     //Display match stats
+        //     endGame();
+        //     // Adding next button
+        //     if(isVictory){
 
-            else{
-                retryButton.addListener(new ClickListener(){
-                    @Override
-                    public void clicked(InputEvent event, float x, float y){
-                        roundController.restart();
-                        nextRound();
-                    }
-                });
-            }
-        }
+        //         System.out.println(isVictory);
+
+        //     }
+
+        //     else{
+        //         retryButton.addListener(new ClickListener(){
+        //             @Override
+        //             public void clicked(InputEvent event, float x, float y){
+        //                 roundController.restart();
+        //                 nextRound();
+        //             }
+        //         });
+        //     }
+        // }
         else if(playerTurn){
             opponentAnimation();
         }
@@ -349,6 +359,52 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     public void createSpriteList( ){}
 
+
+    /**
+     * AI-generated solution for getting the correct hitbox now that the
+     * cards are rotated
+     * @param index index of the card
+     * @param cards all cards in hand
+     * @return
+     */
+    private Polygon generateHitbox(int index,ArrayList<Sprite> cards) {
+        // AI-generated solution for getting the correct hitbox now that the
+        // cards are rotated
+        Sprite sprite = cards.get(index);
+        float[] vertices = new float[]{
+                0, 0,
+                sprite.getWidth(), 0,
+                sprite.getWidth(), sprite.getHeight(),
+                0, sprite.getHeight()
+        };
+        Polygon poly = new Polygon(vertices);
+
+        poly.setOrigin(sprite.getOriginX(), sprite.getOriginY());
+        poly.setPosition(sprite.getX(), sprite.getY());
+        poly.setRotation(sprite.getRotation());
+        poly.setScale(sprite.getScaleX(), sprite.getScaleY());
+        return poly;
+    }
+
+
+    /**
+     * Check if user hovers over card
+     */
+    public void getHoverdCards() {
+        for (int a = 0; a < cardSprites.size(); a++){
+            Polygon poly = generateHitbox(a, cardSprites);
+            if (poly.contains(coords.x, coords.y)) {
+                hoveredCards.set(a, true);
+                for (int i = 0; i < cardSprites.size(); i++) {
+                    if (i != a) hoveredCards.set(i, false);
+                }
+
+            } else {
+                hoveredCards.set(a, false);
+            }
+        }
+    }
+
     public void draw() {
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
@@ -375,6 +431,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     public void endGame(){
+
         if(isVictory){
             panel = new Image(new TextureRegionDrawable(vicTxt));
         }
@@ -418,7 +475,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             nextButton.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y){
-                    System.out.println("hej hej ");
                     roundController.nextRound();
                     nextRound();
 
@@ -430,6 +486,32 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             retryButton.setPosition(600,200);
             retryButton.setSize(80, 50);
             stage.addActor(retryButton);
+        }
+
+        if (gameEnded) {
+            //Display match stats
+            // endGame();
+            // Adding next button
+            if(true){
+                nextButton.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        roundController.nextRound();
+                        isVictory = false;
+                        gameEnded = false;
+                    }
+                });
+            }
+
+            else{
+                retryButton.addListener(new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        roundController.restart();
+                        nextRound();
+                    }
+                });
+            }
         }
     }
 
@@ -641,7 +723,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
             this.isVictory = true;
         }
-
+        else {
+            this.isVictory = false;
+        }
         this.gameEnded = true;
         this.totalDamageToOpponent = totalDamageToOpponent;
         this.totalDamageToUser = totalDamageToUser;

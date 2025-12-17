@@ -10,11 +10,10 @@ public class MapState implements GameState{
     public void update(GameManager maneger) {
         map = maneger.gameMap;
 
-
     }
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 }

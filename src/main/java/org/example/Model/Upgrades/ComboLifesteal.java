@@ -10,8 +10,8 @@ public class ComboLifesteal extends Upgrade{
     final float vampAmount;
     ComboLifesteal(String name, Combo combo, float vampAmount, int cost, String pic, int id) {
         super(name,
-                "Gain " + vampAmount*100 + "% lifesteal on " + combo.name + " combos.",
-                cost, "Sustain", pic, id);
+                "Gain " + (int)(vampAmount*100) + "% lifesteal on " + combo.name + " combos.",
+                cost, "Sustain", pic, id);        
         this.vampCombo = combo;
         this.vampAmount = vampAmount;
     }

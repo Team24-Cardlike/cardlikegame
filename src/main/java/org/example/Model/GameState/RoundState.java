@@ -14,8 +14,12 @@ public class RoundState implements GameState{
     public void update(GameManager manager) {
         r = manager.currentRound;
         r.roundUpdate();
-        if (r.roundFinished) {manager.initMap();
-            manager.setState(new MapState());
+        if (r.roundFinished) {                             
+            if (manager.currentRound.getWon()) {                                            
+                manager.initMap();                       
+            }
+            // System.out.println();
+            // manager.setState(new MapState());
 
 
         }
@@ -24,6 +28,6 @@ public class RoundState implements GameState{
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 }

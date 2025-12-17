@@ -12,7 +12,7 @@ public class ExecuteUpgrade extends Upgrade{
      * @param cost
      */
     ExecuteUpgrade(String name, float threshold, int cost, String pic, int id) {
-        super(name, "Executes the opponent when it reaches" + threshold*100 + "% of it's maxhealth.", cost, "Sustain", pic, id);
+        super(name, "Executes the opponent when it reaches " + threshold*100 + "% of it's maxhealth.", cost, "Sustain", pic, id);
         if(threshold>1 || threshold < 0){
             throw new IllegalArgumentException("Threshold needs to be between 0.0 and 1.0");
         }
