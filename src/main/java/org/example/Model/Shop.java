@@ -21,9 +21,8 @@ public class Shop {
         return ul;
     }
 
-    public void upgradeBought(Upgrade upgrade, User user){
-        user.buyUpgrade(upgrade);
-        user.getUpgrades().sort(Comparator.comparingInt(Upgrade::getIdNum));
+    public boolean upgradeBought(Upgrade upgrade, User user){
+        return user.buyUpgrade(upgrade);
     }
 
     public ArrayList<String> getUserUpgrades(User user){

@@ -167,11 +167,12 @@ public class ShopView implements Screen {
 
         Label cost = new Label("Cost: " + item.getCost() + "g", ls);
         cost.setPosition(popupWidth/2f - cost.getWidth()/2, 85);
-        //cost.setPosition(popupWidth/2f + 80, 40);
-        //cost.setPosition(popupWidth/2f + 70, 35);
-        cost.setWidth(popupWidth - 40);
         cost.setWrap(true);
         popup.addActor(cost);
+
+        Label insufficientGold = new Label("Insufficient gold amount.", ls);
+        insufficientGold.setPosition(popupWidth/2f - insufficientGold.getWidth()/2, 85);
+        insufficientGold.setWrap(true);
 
         Image buyButton = new Image(new Texture("assets/images/buyButton.png"));
         buyButton.setSize(120, 60);
@@ -180,13 +181,17 @@ public class ShopView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //TODO: MAKE SURE THAT U CANT BUY WITH INSUFFICIENT GOLD!
-                System.out.println("Köpte: " + item.getName());
-                shopController.upgradeBought(item);
-                popup.remove();
-                items.remove(item);
-                updateList();
-                shopGrid();
-                table.setTouchable(Touchable.enabled);
+                if(shopController.upgradeBought(item)){
+                    popup.remove();
+                    items.remove(item);
+                    updateList();
+                    shopGrid();
+                    table.setTouchable(Touchable.enabled);
+                }
+                else{
+                    cost.remove();
+                    popup.addActor(insufficientGold);
+                }
             }
         });
         popup.addActor(buyButton);

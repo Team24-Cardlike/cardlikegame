@@ -27,8 +27,8 @@ public class ShopController {
         return this.shop.getUpgradeLibrary();
     }
 
-    public void upgradeBought(Upgrade upgrade){
-        this.shop.upgradeBought(upgrade, this.user);
+    public boolean upgradeBought(Upgrade upgrade){
+        return this.shop.upgradeBought(upgrade, this.user);
     }
 
     public void closeShop(){
