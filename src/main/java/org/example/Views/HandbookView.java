@@ -59,7 +59,7 @@ public class HandbookView implements Screen {
 
         closeButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {                
                 shopController.closeShop();
             }
         });
