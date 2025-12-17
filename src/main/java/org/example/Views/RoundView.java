@@ -12,7 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -112,9 +113,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         style = new Label.LabelStyle();
         style.font = comboFont;
 
-        vicTxt = new Texture("assets/images/victory.png");
-        lossTxt = new Texture("assets/images/gameover.png");
-        nextButtonTexture = new Texture("assets/images/nextbutton.png");
+        vicTxt = new Texture("assets/images/victoryBanner.png");
+        lossTxt = new Texture("assets/images/defeatBanner.png");
+        nextButtonTexture = new Texture("assets/images/nextButton.png");
         retryButtonTexture = new Texture("assets/images/nextPlaceholder.png");
         sr = new ShapeRenderer();
         //spriteBatch = new SpriteBatch();
@@ -158,7 +159,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         );
         stage.addActor(handbookButton);
 
-        discardButton = new Image(new Texture("assets/images/discard.png"));
+        discardButton = new Image(new Texture("assets/images/discardButton.png"));
         discardButton.setSize(140, 60);
         discardButton.setPosition(
                 viewport.getWorldWidth() - discardButton.getWidth() - 20,
@@ -166,7 +167,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         );
         stage.addActor(discardButton);
 
-        startButton = new Image(new Texture("assets/images/endTurn.png"));
+        startButton = new Image(new Texture("assets/images/playCards.png"));
         startButton.setPosition(20, 20);
         startButton.setSize(140, 60);
         stage.addActor(startButton);
@@ -178,7 +179,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         opponentImage.setPosition(
                 viewport.getWorldWidth() / 2f - opponentImage.getWidth() / 2f,
                 viewport.getWorldHeight() - opponentImage.getHeight() - 50
-        );
         stage.addActor(opponentImage);
 
 
