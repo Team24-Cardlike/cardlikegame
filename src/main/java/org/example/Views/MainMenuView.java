@@ -127,8 +127,11 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if(controller.loadGame())
                     controller.startGame();
-                else
+                else {
                     stage.addActor(loadFail);
+                    loadButton.setColor(0.5f, 0.5f, 0.5f, 0.6f);
+                    loadButton.setTouchable(Touchable.disabled);
+                }
             }
         });
 
