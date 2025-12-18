@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import jdk.jfr.Percentage;
 import org.example.Controller.RoundController;
 import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -684,7 +685,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             System.out.println(upgrades.get(i));
         }
 
-    public void onRoundInit() {
         this.roundController.initRound();
         this.isVictory = false;
         this.gameEnded = false;
@@ -700,7 +700,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     @Override
-    public void render  float v){
+    public void render (float v){
         roundController.updateManager();
         input();
         stage.act(Gdx.graphics.getDeltaTime());

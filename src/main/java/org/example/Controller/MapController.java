@@ -29,7 +29,7 @@ public class MapController {
     public void openShop(){
         manager.setShopState();
     }
-    }
+
 
     public void updateManager() {
         manager.gameLoop();
