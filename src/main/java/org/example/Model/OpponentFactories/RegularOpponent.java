@@ -1,27 +1,11 @@
 package org.example.Model.OpponentFactories;
 
 public abstract class RegularOpponent extends Opponent{
-
-
-
-    @Override
-    public int getDamage() {
-        return 0;
+    public RegularOpponent(String name, int maxHealth, int damage){
+        this.name = name;
+        this.maxHealth = maxHealth;
+        this.damage = damage;
+        setHealth(getMaxHealth());
+        setImage();
     }
-
-    @Override
-    public String getTexture() {
-        return "";
-    }
-
-    @Override
-    public void takeDamage(int damage){
-        health = health-damage;
-    }
-
-    @Override
-    public float getHealthRatio(){
-        return ((float) health/maxHealth);
-    }
-
 }

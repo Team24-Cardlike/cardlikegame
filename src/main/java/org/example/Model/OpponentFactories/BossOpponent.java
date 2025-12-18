@@ -1,30 +1,16 @@
 package org.example.Model.OpponentFactories;
 
 public abstract class BossOpponent extends Opponent {
-    public int turns;
-
-    //public abstract void Create();
-
-    @Override
-    public void takeDamage(int damage){
-
-        health = health - damage;
-
+    int turns;
+    public BossOpponent(String name, int maxHealth, int damage, int turns){
+        this.name = name;
+        this.maxHealth = maxHealth;
+        this.damage = damage;
+        this.turns = turns;
+        setHealth(getMaxHealth());
+        setImage();
     }
-
-    @Override
-    public int getDamage() {
-        return 0;
-    }
-
-    @Override
-    public String getTexture() {
-        return "";
-    }
-
-
-    @Override
-    public float getHealthRatio(){
-        return( (float) health/maxHealth);
+    public int getTurns(){
+        return this.turns;
     }
 }
