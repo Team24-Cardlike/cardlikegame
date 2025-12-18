@@ -12,6 +12,7 @@ import org.example.Model.OpponentFactories.Opponent;
 
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 
 public class GameManager {
@@ -30,10 +31,10 @@ public class GameManager {
     RoundObserver roundObs;
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
-
+    String difficulty = "Normal";
 
     public GameManager(RoundObserver roundObs, MapObserver mapObs) {
-        this.gameMap = new GameMap(100, this, mapObs);
+        this.gameMap = new GameMap(1.5f, 2.0f , this, mapObs);
         this.roundObs = roundObs;
         this.mapObs = mapObs;
         this.user = new User(50);
@@ -128,6 +129,7 @@ public class GameManager {
 
     public void startGame( ){
         initMap();
+        gameMap.setDifficulty(this.difficulty);
         this.mapState = new MapState();
         setState(mapState);;
         notifyState();
@@ -145,5 +147,9 @@ public class GameManager {
 
     public Round getRound() {
        return this.currentRound;
+    }
+
+    public void setDifficulty(String s){
+        this.difficulty = s;
     }
 }

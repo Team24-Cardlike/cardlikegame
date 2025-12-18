@@ -9,9 +9,13 @@ public class MenuController {
     GameManager manager;
     Save save;
 
-    public MenuController(GameManager maneger, Save save) {
-        this.manager = maneger;
+    public MenuController(GameManager manager, Save save) {
+        this.manager = manager;
         this.save = save;
+    }
+
+    public void setDifficulty(String s){
+        manager.setDifficulty(s);
     }
 
     public void startGame() {
