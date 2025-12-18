@@ -52,4 +52,9 @@ public class RoundController {
     public void updateManager() {
         manager.gameLoop();
     }
+
+    public void initRound() {
+        Round r = this.manager.getRound();
+        this.round = r;
+    }
 }

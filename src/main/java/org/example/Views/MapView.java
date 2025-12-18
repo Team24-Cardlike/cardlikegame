@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Controller.MapController;
-import org.example.Model.GameManager;
 import org.example.Model.MapObserver;
 
 import java.util.ArrayList;
@@ -20,8 +19,6 @@ public class MapView implements Screen, MapObserver {
     private FitViewport viewport;
     private SpriteBatch batch;
     private Stage stage;
-
-    private GameManager manager;
     private MapController controller;
 
     ArrayList<String> lvls = new ArrayList<>();
@@ -54,11 +51,6 @@ public class MapView implements Screen, MapObserver {
 
     Vector3 coords = new Vector3();
 
-
-    public void setManager(GameManager m) {
-        this.manager = m;
-
-    }
 
     public void setController(MapController c) {
         this.controller = c;

@@ -87,6 +87,7 @@ public class Round {
      * @param //playedCards cards played from the front end
      */
     public void playCards(){
+        if (user.getSelectedCards().isEmpty()) {return;}
         this.turnNumber += 1;
         this.user.damage = 0;
         this.user.damage = this.user.playCards();

@@ -1,26 +1,20 @@
 package org.example.Views;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.Controller.MenuController;
-import org.example.Controller.RoundController;
-import org.example.Model.GameManager;
+
 
 public class MainMenuView implements Screen {
     public Image menuButton;
@@ -28,11 +22,8 @@ public class MainMenuView implements Screen {
     Texture background;
     Viewport viewport;
     MenuController controller;
-    GameManager gameManager;
 
-    public void setGameManager (GameManager manager ) {
-        this.gameManager = manager;
-    }
+
 
     public void setController(MenuController controller) {
         this.controller = controller;
