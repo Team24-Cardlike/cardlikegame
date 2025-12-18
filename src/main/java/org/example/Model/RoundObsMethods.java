@@ -87,7 +87,10 @@ public class RoundObsMethods {
     }
 
 
-    // Notify new round
+    /**
+     * Observer between Model and RoundView letting RoundView get notified when a in-round state has changed
+     * @param upgrades
+     */
     public void notifyNewRound(ArrayList<String> upgrades) {
         for (RoundObserver o : observers) {
             o.onRoundInit(upgrades);

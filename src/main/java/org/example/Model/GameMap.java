@@ -29,6 +29,12 @@ public class GameMap {
     private ArrayList<String> lvls = new ArrayList<>();
 
 
+    
+    /**
+     * Create all opponents and call createMap
+     * @param manager
+     * @param mapObs
+     */
     GameMap(GameManager manager, MapObserver mapObs){
         this.map  = new Graph<>();
         this.bossOpponents = new ArrayList<>();
@@ -87,6 +93,10 @@ public class GameMap {
         }
     }
 
+
+    /**
+     * Add all opponents to map graph
+     */
     void createMap(){
 
          //Add BossOpponents to nodes
@@ -149,12 +159,7 @@ public class GameMap {
         this.availableLvls = availableLvls;
         notifyMapUpdate(); // ?
     }
-    
-
-    // public void setLvlFalse() {
-    //     this.lvlSelected = false;
-    //     manager.setState(new RoundState());
-    // }
+        
 
     public List<Opponent> getNeighbours(Opponent op) {
         return this.map.neighbours(op);
@@ -164,6 +169,11 @@ public class GameMap {
         return this.lvls;
     }
 
+
+    /**
+     * calls initRound based on where you click
+     * @param s name of level clicked
+     */
     public void levelSelect(String s) {    
                         
         for (int i = 0; i < this.regularOpponents.size(); i++) {
@@ -206,8 +216,10 @@ public class GameMap {
         }
     }
 
-    // Method called after a round has been won
-    // Updates with new visible enemies.
+    /**
+     * Method called after a round has been won 
+     * Updates with new visible enemies.
+     */
     public void updateMap( ){
         // Current Opponent is complete        
         if ( this.currentOpponent != null) {
