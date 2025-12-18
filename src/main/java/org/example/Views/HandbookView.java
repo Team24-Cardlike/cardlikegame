@@ -65,7 +65,7 @@ public class HandbookView implements Screen {
         ScrollPane sacrollPane = new ScrollPane(handbookText, scrollStyle);
         sacrollPane.setFadeScrollBars(false);
 
-        closeButton = new Image(new Texture("assets/images/xButton.png"));
+        closeButton = new Image(new Texture("assets/images/buttons/xButton.png"));
 
         closeButton.addListener(new ClickListener() {
             @Override
