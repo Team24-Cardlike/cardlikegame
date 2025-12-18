@@ -38,7 +38,12 @@ public class ShopController {
     public ArrayList<String> getUserUpgrades(){
         return this.stringList = shop.getUserUpgrades(this.user);
     }
-    public getUpdatedList(){
-        //shop.getUpdatedList();
+
+    public ArrayList<Upgrade> getUpdatedList(){
+        return shop.getUpdatedList(user);
+    }
+
+    public void removeFromItems(Upgrade item){
+        shop.removeFromItemList(item);
     }
 }

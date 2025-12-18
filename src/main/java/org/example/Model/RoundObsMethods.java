@@ -2,7 +2,6 @@ package org.example.Model;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RoundObsMethods {
 
@@ -65,9 +64,9 @@ public class RoundObsMethods {
 
 
     // Notify player turn changed
-    public void notifyPlayerTurn(boolean playerTurn, ArrayList<String> upgrades) {
+    public void notifyPlayerTurn(boolean playerTurn, int gold) {
         for (RoundObserver o : observers) {
-            o.onPlayerTurn(playerTurn, upgrades);
+            o.onPlayerTurn(playerTurn, gold);
         }
     }
 
@@ -89,9 +88,9 @@ public class RoundObsMethods {
 
 
     // Notify new round
-    public void notifyNewRound() {
+    public void notifyNewRound(ArrayList<String> upgrades) {
         for (RoundObserver o : observers) {
-            o.onRoundInit();
+            o.onRoundInit(upgrades);
         }
 
     }

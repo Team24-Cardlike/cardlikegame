@@ -24,15 +24,14 @@ public class GameManager {
     private RoundState roundState;
     private ShopState shopState;
     private MenuState menuState;
+    private MapState mapState;
 
     RoundObserver roundObs;
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
 
 
-
     public GameManager(RoundObserver roundObs, MapObserver mapObs) {
-
         this.gameMap = new GameMap(100, this, mapObs);
         this.roundObs = roundObs;
         this.mapObs = mapObs;
@@ -116,9 +115,8 @@ public class GameManager {
     public User getUser(){return user;}
 
     public void closeShop(){
-        setState(this.roundState);
+        setState(this.mapState);
         notifyState();
-        initRound();
     }
 
     public void closeHandbook(){
@@ -129,7 +127,8 @@ public class GameManager {
 
     public void startGame( ){
         initMap();
-        setState(new MapState());;
+        this.mapState = new MapState();
+        setState(mapState);;
         notifyState();
     }
 

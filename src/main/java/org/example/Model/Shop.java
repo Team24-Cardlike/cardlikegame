@@ -11,10 +11,12 @@ public class Shop {
     ArrayList<String> stringList;
     UpgradeLibrary ul;
     GameManager manager;
+    ArrayList<Upgrade> items;
     public Shop(GameManager manager){
         this.manager = manager;
         stringList = new ArrayList<>();
         ul = new UpgradeLibrary();
+        items = new ArrayList<>();
     }
 
     public UpgradeLibrary getUpgradeLibrary(){
@@ -37,12 +39,11 @@ public class Shop {
         //manager.setState();
     }
 
-    /*public void getUpdatedList(){
-        private void updateList(){
+    public ArrayList<Upgrade> getUpdatedList(User user){
             while(items.size() < 10){
-                Upgrade random = upgradeLibrary.getRandomUpgrade();
-                if(shopController.getUserUpgrades() != null){
-                    if((items.isEmpty() || !items.contains(random)) && !shopController.getUserUpgrades().contains(random.getName())){
+                Upgrade random = ul.getRandomUpgrade();
+                if(getUserUpgrades(user) != null){
+                    if((items.isEmpty() || !items.contains(random)) && !getUserUpgrades(user).contains(random.getName())){
                         items.add(random);
                     }
                 }
@@ -50,6 +51,10 @@ public class Shop {
                     items.add(random);
                 }
             }
-        }
-    }*/
+            return items;
+    }
+
+    public void removeFromItemList(Upgrade item){
+        items.remove(item);
+    }
 }

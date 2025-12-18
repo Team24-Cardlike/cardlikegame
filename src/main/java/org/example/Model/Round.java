@@ -1,10 +1,6 @@
 package org.example.Model;
 
-import org.example.Model.OpponentFactories.BossOpponent;
-import org.example.Model.OpponentFactories.OpponentInterface;
-import org.example.Model.OpponentFactories.BossOpponent;
 import org.example.Model.OpponentFactories.Opponent;
-import org.example.Model.OpponentFactories.OpponentInterface;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
 import org.example.Model.Upgrades.UpgradeManager;
@@ -103,9 +99,6 @@ public class Round {
         this.turnNumber += 1;
         this.user.damage = 0;
         this.user.damage = this.user.playCards();
-        for(Upgrade upg : this.user.upgrades){
-            upgradeNames.add(upg.getPic());
-        }
         checkUpgrades(1);
         this.opponent.takeDamage(this.user.damage);
         this.opponentHealth = opponent.getHealthRatio();
@@ -121,7 +114,7 @@ public class Round {
         playerTurn = false;
 
         o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed
-        o.notifyPlayerTurn(playerTurn, upgradeNames); // Notify observer of changed player turn
+        o.notifyPlayerTurn(playerTurn, user.getGold()); // Notify observer of changed player turn
         o.notifyUnselected(user.getSelectedCards()); // Notify observer of reset selected
         o.notifyHandChanged(user.getHand());// Notify observer of new hand
         checkDeadPlayer();
@@ -144,7 +137,7 @@ public class Round {
 
         o.notifyHealthChanged(userHealth,opponentHealth);// Notify observer of health changed
         o.notifyOpponentAttacked(oppDamage);//, oppopnent.name, opponent.attackName));
-        o.notifyPlayerTurn(playerTurn, upgradeNames); // notify player turn changed
+        o.notifyPlayerTurn(playerTurn, user.getGold()); // notify player turn changed
 
     }
 
@@ -211,7 +204,6 @@ public class Round {
 
     // Round ended
     public void endRound() {
-
         user.addGold(totalDamageToOpponent);
         this.roundFinished = true;
     }
@@ -246,13 +238,16 @@ public class Round {
     }
 
     public void init() {
+        for(Upgrade upg : this.user.upgrades){
+            upgradeNames.add(upg.getPic());
+        }
         o.notifyHandChanged(user.getHand());
         o.notifyUnselected(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
         o.notifyHealthChanged(userHealth, opponentHealth);
         o.notifyCurrentOpponent(this.opponent.getName(), this.opponent.getName(), this.opponent.getDamage());
-        o.notifyPlayerTurn(playerTurn, upgradeNames);
-        o.notifyNewRound();
+        o.notifyPlayerTurn(playerTurn, user.getGold());
+        o.notifyNewRound(upgradeNames);
     }
 }
 

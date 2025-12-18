@@ -42,11 +42,11 @@ public class ShopView implements Screen {
 
     public void setShopController(ShopController ctrl){
         this.shopController = ctrl;
-        this.upgradeLibrary = shopController.getUpgradeLibrary();
+        //this.upgradeLibrary = shopController.getUpgradeLibrary();
     }
 
     public void update(){
-        //shopController.getUpdatedList();
+        items = shopController.getUpdatedList();
     }
 
     /**
@@ -169,7 +169,8 @@ public class ShopView implements Screen {
                 //TODO: MAKE SURE THAT U CANT BUY WITH INSUFFICIENT GOLD!
                 if(shopController.upgradeBought(item)){
                     popup.remove();
-                    items.remove(item);
+                    //items.remove(item);
+                    shopController.removeFromItems(item);
                     update();
                     shopGrid();
                     table.setTouchable(Touchable.enabled);

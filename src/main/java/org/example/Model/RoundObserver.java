@@ -10,10 +10,10 @@ public interface RoundObserver {
     void onBestComboChanged(String bestCombo);
     void onHealthChanged(float userHealth, float opponentHealth);
     void onGameEnded(String resultMessage, int totalDamageUser, int totalDamageOpponent);
-    void onPlayerTurn(boolean playerTurn, ArrayList<String> upgrades);
+    void onPlayerTurn(boolean playerTurn, int gold);
     void onOpponentAttack(int damage);
     void onUnselectedCard(ArrayList<String> selected);
-    void onRoundInit();
+    void onRoundInit(ArrayList<String> upgrades);
     void onNewOpponent(String name, int damage, String image);
 }
 
