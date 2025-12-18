@@ -13,18 +13,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Controller.MapController;
-import org.example.Model.GameManager;
 import org.example.Model.MapObserver;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class MapView implements Screen, MapObserver {
     private FitViewport viewport;
     private SpriteBatch batch;
     private Stage stage;
-
-    private GameManager manager;
     private MapController controller;
 
     ArrayList<String> lvls = new ArrayList<>();
@@ -32,13 +30,12 @@ public class MapView implements Screen, MapObserver {
     private ArrayList<Sprite> lvlSprites = new ArrayList<>();
 
     private Texture mapBackground;
-    private Texture greenDot;
     private Texture lvlRune;
+    private Texture lvlRuneBoss;
     private Texture redX;
     private Texture lokiHead;
     private Image saveButton;
 
-    private int currentLvl = 0;
     private Set<String> completedLvls;
     private Set<String> availableLvls;
 
@@ -48,22 +45,22 @@ public class MapView implements Screen, MapObserver {
 
     // Positions for lvls on map
     private final float[][] levelPositions = {
+            //[Heimdall, Wolf, Balder, Imp, Imp, Gnome, Freja, Tyr, Tor, Oden]
             {130, 68}, // level 0 Heimdall
-            {272, 185}, // level 1 Baldur
-            {605, 375}, // level 2 Tor
-            {560, 220}, // level 3 Freja
-            {940, 400}, // level 4 Oden
-            {790, 220}  // level 5 Tyr
+            {272, 185}, // level 1 Wolf
+            {550, 215}, // level 2 Balder
+            {300, 400}, // level 3 Imp
+            {785, 215}, // level 4 Imp
+            {610,370},  // level 5 Gnome
+            {1000, 300} , // level 5 Freja
+            {940, 410} , // level 5 Tyr
+            {760, 450} , // level 5 Tor
+            {860, 540}  // level 5  Oden
 
     };
 
     Vector3 coords = new Vector3();
 
-
-    public void setManager(GameManager m) {
-        this.manager = m;
-
-    }
 
     public void setController(MapController c) {
         this.controller = c;
@@ -79,6 +76,7 @@ public class MapView implements Screen, MapObserver {
         mapBackground = new Texture("assets/images/map.png");
 
         lvlRune   = new Texture("assets/images/LVLRune.png");
+        lvlRuneBoss = new Texture("assets/images/BossRune.png");
         redX     = new Texture("assets/images/redX.png");
         lokiHead = new Texture("assets/images/lokiMapIcon.png");        
         
@@ -116,24 +114,24 @@ public class MapView implements Screen, MapObserver {
 
     private void drawOpponent() {
         mapSprites.clear();
+        List<String> regularOps = List.of("Imp", "Wolf", "Gnome");
 
         for (int i = 0; i < lvls.size(); i ++) {
 
             String name = lvls.get(i);
             float x = levelPositions[i][0];
             float y = levelPositions[i][1];
-
+            //if name is regular op, draw regular rune
+            boolean regular = regularOps.contains(name);
             if (completedLvls.contains(name)) {
-                drawComplete(x, y, name);
+                drawComplete(x, y, name,regular);
             }
-
             else if (availableLvls.contains(name)) {
-                drawCurrent(x, y, name);
-
+                drawCurrent(x,y,regular);
             }
 
             else  {
-                drawRest(x,y);
+                drawRest(x,y,regular);
 
             }
             for (Sprite s : lvlSprites) {
@@ -146,9 +144,12 @@ public class MapView implements Screen, MapObserver {
         }
     }
 
-    public void drawComplete(float x, float y,String name) {        
-        Sprite base =  makeSprite(lvlRune,x,y);
+    public void drawComplete(float x, float y,String name, boolean regular) {
+        Sprite base;
+        if(regular) {base = makeSprite(lvlRune,x,y);}
+        else { base =  makeSprite(lvlRuneBoss,x,y);}
         lvlSprites.add(base);
+
         Sprite cross = makeSprite(redX, x, y);
         mapSprites.add(cross);
 
@@ -159,17 +160,16 @@ public class MapView implements Screen, MapObserver {
               
     }
 
-    public void drawCurrent(float x, float y, String name) {
-        Sprite base =  makeSprite(lvlRune,x,y);
-        lvlSprites.add(base);                
-        if (lastLVL == name) {
-            Sprite player =  makeSprite(lokiHead, x, y);
-            mapSprites.add(player);
-        }
-        
+    public void drawCurrent(float x, float y, boolean regular) {
+        Sprite base;
+        if(regular) {base = makeSprite(lvlRune,x,y);}
+        else { base =  makeSprite(lvlRuneBoss,x,y);}
+        lvlSprites.add(base);
     }
-    public void drawRest(float x, float y) {
-        Sprite base =  makeSprite(lvlRune,x,y);
+    public void drawRest(float x, float y, boolean regular) {
+        Sprite base;
+        if(regular) {base = makeSprite(lvlRune,x,y);}
+        else { base =  makeSprite(lvlRuneBoss,x,y);}
         lvlSprites.add(base);
     }
 
@@ -187,7 +187,8 @@ public class MapView implements Screen, MapObserver {
         coords.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(coords);
 
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.justTouched()) {            
+
             for (int a =  0; a < lvls.size(); a++) {
                 Polygon poly = generateHitbox(a, lvlSprites);
                 String name = lvls.get(a);                
@@ -195,7 +196,7 @@ public class MapView implements Screen, MapObserver {
                 if (poly.contains(coords.x, coords.y)) {                                                        
                     if (availableLvls.contains(name)) {                        
                         lastLVL = name;
-                    }
+                    }                    
                     controller.selectLvl(name);
                     break;
                 }
@@ -225,9 +226,9 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void render(float v) {
-        stage.act(v);
-        manager.gameLoop();  
-        Gdx.input.setInputProcessor(stage);      
+        stage.act(v);        
+        Gdx.input.setInputProcessor(stage);              
+        controller.updateManager();
         
         draw();
         input(); 
@@ -262,7 +263,8 @@ public class MapView implements Screen, MapObserver {
     }
 
     @Override
-    public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {        
+    public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {
+System.out.println(lvls);
 
         this.lvls = lvls;
         this.completedLvls = completedLvls;

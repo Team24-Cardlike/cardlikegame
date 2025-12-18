@@ -20,4 +20,5 @@ public class MenuController {
     public void loadGame() {
         save.loadGame();
     }
+
 }

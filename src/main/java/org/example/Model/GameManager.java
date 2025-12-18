@@ -7,8 +7,9 @@ import org.example.Model.GameState.MenuState;
 import org.example.Model.GameState.RoundState;
 import org.example.Model.GameState.ShopState;
 import org.example.Model.OpponentFactories.OpponentInterface;
+
 import org.example.Model.OpponentFactories.Opponent;
-import org.example.Model.OpponentFactories.OpponentInterface;
+
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -143,6 +144,7 @@ public class GameManager {
        }
     }
 
-    
-
+    public Round getRound() {
+       return this.currentRound;
+    }
 }

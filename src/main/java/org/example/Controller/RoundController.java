@@ -55,4 +55,13 @@ public class RoundController {
     public void restart(){manager.resetRound();}
 
     public void switchView(String view){manager.setShopState();}
+
+    public void updateManager() {
+        manager.gameLoop();
+    }
+
+    public void initRound() {
+        Round r = this.manager.getRound();
+        this.round = r;
+    }
 }

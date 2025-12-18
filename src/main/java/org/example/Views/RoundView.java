@@ -80,15 +80,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     public ArrayList<Integer> selectedIndices;
     public ArrayList<Integer> removedIndices;
-    private GameManager gameManager;
     private RoundController roundController;
     private String currentBestCombo;
     private int totalDamageToOpponent;
     private int totalDamageToUser;
 
-    public void setGameManager (GameManager manager ) {
-        this.gameManager = manager;
-    }
 
     public void setController(RoundController roundController) {
         this.roundController = roundController;
@@ -116,9 +112,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         style = new Label.LabelStyle();
         style.font = comboFont;
 
-        vicTxt = new Texture("assets/images/victory.png");
-        lossTxt = new Texture("assets/images/gameover.png");
-        nextButtonTexture = new Texture("assets/images/nextbutton.png");
+        vicTxt = new Texture("assets/images/victoryBanner.png");
+        lossTxt = new Texture("assets/images/defeatBanner.png");
+        nextButtonTexture = new Texture("assets/images/nextButton.png");
         retryButtonTexture = new Texture("assets/images/nextPlaceholder.png");
         sr = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
@@ -149,7 +145,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         );
         stage.addActor(handbookButton);
 
-        discardButton = new Image(new Texture("assets/images/discard.png"));
+        discardButton = new Image(new Texture("assets/images/discardButton.png"));
         discardButton.setSize(140, 60);
         discardButton.setPosition(
                 viewport.getWorldWidth() - discardButton.getWidth() - 20,
@@ -157,21 +153,21 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         );
         stage.addActor(discardButton);
 
-        startButton = new Image(new Texture("assets/images/endTurn.png"));
+        startButton = new Image(new Texture("assets/images/playCards.png"));
         startButton.setPosition(20, 20);
         startButton.setSize(140, 60);
         stage.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
 
 
-        opponentTexture = new Texture("assets/images/bossPics/Heimdall.png");
+        opponentTexture = new Texture("assets/images/opponents/Heimdall.png");
         opponentSprite = new Sprite(opponentTexture);
         opponentSprite.setSize(350, 200);
         opponentSprite.setPosition(
                 viewport.getWorldWidth() / 2f - opponentSprite.getWidth() / 2f,
                 viewport.getWorldHeight() - opponentSprite.getHeight() - 50
         );
-        background = new Texture("assets/images/board.png");
+        background = new Texture("assets/images/background.png");
 
 
         startButton.addListener(new ClickListener() {
@@ -274,21 +270,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         else if(playerTurn){
             opponentAnimation();
         }
-
     }
 
-
-    public void updateView(ArrayList<Card> cards) {
-        createSpriteList();
-    }
 
     public void opponentAnimation() {
         oppAnimation();
     }
 
-    public Stage getStage() {
-        return stage;
-    }
 
     public void drawHealthBars() {
         sr.setProjectionMatrix(viewport.getCamera().combined);
@@ -683,16 +671,14 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onRoundInit() {
-
+        this.roundController.initRound();
         this.isVictory = false;
         this.gameEnded = false;
-        Round r = gameManager.currentRound;
-        this.roundController.setRound(r);
     }
 
     @Override
-    public void render ( float v){        
-        gameManager.gameLoop();
+    public void render ( float v){
+        roundController.updateManager();
         input();
         draw();
     }

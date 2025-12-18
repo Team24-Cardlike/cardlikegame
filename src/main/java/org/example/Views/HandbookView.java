@@ -12,13 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import org.example.Controller.RoundController;
-import org.example.Model.Round;
 import org.example.Controller.ShopController;
 
 public class HandbookView implements Screen {
     private Stage stage;
-    private Round round;
     private Image closeButton;
     private BitmapFont font;
     private SpriteBatch batch;

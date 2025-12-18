@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.Controller.ShopController;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
@@ -91,9 +90,9 @@ public class ShopView implements Screen {
 
         shopGrid();
 
-        closeShop = new Image(new Texture("assets/images/endTurn.png"));
-        closeShop.setSize(100, 100);
-        closeShop.setPosition(stage.getWidth() - 100, stage.getHeight() - 100); // Top-right
+        closeShop = new Image(new Texture("assets/images/xButton.png"));
+        closeShop.setSize(150, 100);
+        closeShop.setPosition(stage.getWidth() - 60, stage.getHeight() - 60); // Top-right
         stage.addActor(closeShop);
 
         closeShop.addListener(new ClickListener() {
@@ -202,7 +201,6 @@ public class ShopView implements Screen {
     @Override
     public void render(float delta) {
         Gdx.input.setInputProcessor(stage);
-
         ScreenUtils.clear(0, 0, 0, 1);
         stage.act(delta);
         stage.draw();

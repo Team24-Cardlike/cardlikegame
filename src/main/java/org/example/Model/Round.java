@@ -98,6 +98,7 @@ public class Round {
      */
     public void playCards(){
         deck.refill(user.getHand());        
+        if (user.getSelectedCards().isEmpty()) {return;}
         this.turnNumber += 1;
         this.user.damage = 0;
         this.user.damage = this.user.playCards();

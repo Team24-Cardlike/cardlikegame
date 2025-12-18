@@ -25,4 +25,8 @@ public class MapController {
     public void save() {
         save.saveGame(); 
     }    
+
+    public void updateManager() {
+        manager.gameLoop();
+    }
 }
