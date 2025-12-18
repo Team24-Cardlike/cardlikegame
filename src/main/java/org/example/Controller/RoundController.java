@@ -48,4 +48,8 @@ public class RoundController {
     public void restart(){manager.resetRound();}
 
     public void switchView(String view){manager.setShopState();}
+
+    public void updateManager() {
+        manager.gameLoop();
+    }
 }

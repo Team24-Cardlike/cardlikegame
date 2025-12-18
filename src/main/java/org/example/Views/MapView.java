@@ -194,8 +194,7 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void render(float v) {
-        manager.gameLoop();
-
+        controller.updateManager();
         input();
         draw();
     }

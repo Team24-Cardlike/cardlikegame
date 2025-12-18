@@ -65,7 +65,7 @@ public class MainMenuView implements Screen {
 
     @Override
     public void render(float v) {
-        gameManager.gameLoop();
+
         ScreenUtils.clear(Color.BLACK);
         stage.act(v);
         stage.draw();

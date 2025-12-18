@@ -186,7 +186,6 @@ public class ShopView implements Screen {
     @Override
     public void render(float delta) {
         Gdx.input.setInputProcessor(stage);
-
         ScreenUtils.clear(0, 0, 0, 1);
         stage.act(delta);
         stage.draw();
