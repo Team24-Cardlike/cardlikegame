@@ -32,6 +32,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public FitViewport viewport;
     private ShapeRenderer sr;
 
+    private boolean tableCreated = false;
+
     public Image moneyBag;
     public Image startButton;
     public Image handbookButton;
@@ -86,6 +88,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     private Group gameGroup;
     private Group endGameGroup;
+
+    Table upgradeTable;
 
     public final Image[] upgradeSlots = new Image[4];
     private int lastIndex;
@@ -276,33 +280,36 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     private void createUpgradeTable(){
-        Table table = new Table();
+        tableCreated = true;
+        //Table table = new Table();
         //table.setFillParent(true);
-        table.setPosition(50, 350);
+        this.upgradeTable = new Table();
+        this.upgradeTable.setPosition(50, 350);
 
         Label title = new Label("Upgrades", style);
         title.setFontScale(0.5f);
 
-        table.add(title).padBottom(10);
-        table.row();
+        this.upgradeTable.add(title).padBottom(10);
+        this.upgradeTable.row();
 
-        Image upgradeTable = new Image(new Texture("assets/images/upgrade_slots.png"));
-        upgradeTable.setPosition(22.5f,215);
-        upgradeTable.setSize(55, 235);
-        gameGroup.addActor(upgradeTable);
+        Image upgradeBackground = new Image(new Texture("assets/images/upgrade_slots.png"));
+        upgradeBackground.setPosition(22.5f,215);
+        upgradeBackground.setSize(55, 235);
+        gameGroup.addActor(upgradeBackground);
 
         for(int i = 0; i < 4; i++){
             Image slot = createEmptySlot();
             upgradeSlots[i] = slot;
 
-            table.add(slot).size(50,50).pad(5);
-            table.row();
+            this.upgradeTable.add(slot).size(50,50).pad(5);
+            this.upgradeTable.row();
         }
-        gameGroup.addActor(table);
+        gameGroup.addActor(this.upgradeTable);
     }
 
     private Image createEmptySlot() {
         Texture emptyTexture = new Texture(Gdx.files.internal("assets/images/upgrade_placeholder.png"));
+        System.out.println("Empty created");
         return new Image(emptyTexture);
     }
 
@@ -468,7 +475,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         currentComboLabel.setPosition(x, y);
         gameGroup.addActor(currentComboLabel);
     }
-
 
     public void resetView() {
         if (stage != null) stage.dispose();
@@ -677,6 +683,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onRoundInit(ArrayList<String> upgrades) {
         for(int i = 0; i < upgrades.size(); i++){
             addUpgradeImage(upgrades.get(i));
+            System.out.println("USER HAS: "+upgrades.get(i));
         }
         this.discardUsesLeft=3;
         this.discardNum.setText("Discards left: " + this.discardUsesLeft);

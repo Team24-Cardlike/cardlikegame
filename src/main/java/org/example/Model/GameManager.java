@@ -117,7 +117,6 @@ public class GameManager {
 
     public void initMap() {
         this.gameMap.updateMap();
-
     }
 
     public User getUser(){return user;}

@@ -22,7 +22,6 @@ public class HandbookView implements Screen {
     private SpriteBatch batch;
     private RoundController roundController;
 
-   // public HandbookView(){}
     public void setController(RoundController ctrl){
         this.roundController = ctrl;
     }
