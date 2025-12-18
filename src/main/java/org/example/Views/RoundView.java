@@ -248,7 +248,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onNewOpponent(String name, int damage, String image){
         Label opponentName = new Label(name, style);
         opponentName.setPosition(915, 615);
-
+        
         if(opponentImage != null){opponentImage.remove();}
         opponentTexture = new Texture("assets/images/opponents/"+image+".png");
         opponentImage = new Image(opponentTexture);//new Sprite(opponentTexture);
