@@ -680,8 +680,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     @Override
     public void onRoundInit(ArrayList<String> upgrades) {
         for(int i = 0; i < upgrades.size(); i++){
-            addUpgradeImage(upgrades.get(i));
-            System.out.println("UPPPPPP"); //Move to onRoundInit
+            addUpgradeImage(upgrades.get(i));            
             System.out.println(upgrades.get(i));
         }
 

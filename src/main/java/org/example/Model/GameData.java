@@ -52,5 +52,10 @@ public class GameData {
     void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
-    
+
+    void initializeData() {
+        this.setCompletedLvls();
+        this.setAvailableLvls();
+        this.setGold();
+    }    
 }
