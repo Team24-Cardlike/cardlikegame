@@ -11,7 +11,7 @@ public class UpgradeManager {
     UpgradeLibrary lib = new UpgradeLibrary();
     //Kind of an unnecessary middle-step IDK
     public void checkUpgrade(Upgrade upgrade, Round roundState){
-        if(upgrade.checkCondition(roundState) && roundState.getUser().upgrades.contains(upgrade)) {
+        if(upgrade.checkCondition(roundState) && roundState.getUser().getUpgrades().contains(upgrade)) {
             upgrade.onTriggered(roundState);
         }
 

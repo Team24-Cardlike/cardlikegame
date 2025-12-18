@@ -239,7 +239,7 @@ public class Round {
     }
 
     public void init() {
-        for(Upgrade upg : this.user.upgrades){
+        for(Upgrade upg : this.user.getUpgrades()){
             upgradeNames.add(upg.getPic());
         }
         o.notifyHandChanged(user.getHand());

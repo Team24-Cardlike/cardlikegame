@@ -7,7 +7,7 @@ import org.example.Model.GameState.MenuState;
 import org.example.Model.GameState.RoundState;
 import org.example.Model.GameState.ShopState;
 import org.example.Model.OpponentFactories.OpponentInterface;
-
+import org.example.Model.Upgrades.UpgradeLibrary;
 import org.example.Model.OpponentFactories.Opponent;
 
 
@@ -18,7 +18,7 @@ public class GameManager {
     private  MapObserver mapObs;
     public Round currentRound;
     public GameMap gameMap;
-    private User user;
+    private User user;    
 
 
 
@@ -30,6 +30,7 @@ public class GameManager {
     RoundObserver roundObs;
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
+    private UpgradeLibrary upgradeLibrary = new UpgradeLibrary();
 
 
     public GameManager(RoundObserver roundObs, MapObserver mapObs) {
@@ -145,5 +146,11 @@ public class GameManager {
 
     public Round getRound() {
        return this.currentRound;
+    }
+
+    public void setUpgrades(ArrayList<Integer> upgradeIds) {
+        for (int id : upgradeIds) {
+            user.getUpgrades().add(upgradeLibrary.getUpgrade(id));
+        }
     }
 }

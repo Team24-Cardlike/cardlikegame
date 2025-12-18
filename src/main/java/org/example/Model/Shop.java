@@ -29,8 +29,8 @@ public class Shop {
 
     public ArrayList<String> getUserUpgrades(User user){
         stringList.clear();
-        for(int i = 0; i < user.upgrades.size(); i++){
-            stringList.add(user.upgrades.get(i).getName());
+        for(int i = 0; i < user.getUpgrades().size(); i++){
+            stringList.add(user.getUpgrades().get(i).getName());
         }
         return stringList;
     }

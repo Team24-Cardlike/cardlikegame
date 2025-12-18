@@ -145,9 +145,9 @@ public class GameMap {
         }
 
         for (int i = 0; i < BossOpponents.size(); i++) {            
-            Opponent op = BossOpponents.get(i);                   
-            if (s == op.getName() && availableLvls.contains(op.getName()) && !completedLvls.contains(op.getName())) {                                                        
-                currentOpponent = op;                                   
+            Opponent op = BossOpponents.get(i);
+            if (s == op.getName() && availableLvls.contains(op.getName()) && !completedLvls.contains(op.getName())) {
+                currentOpponent = op;
                 manager.initRound();
             }
             else if (s == "Shop") {
