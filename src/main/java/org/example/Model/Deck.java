@@ -72,10 +72,10 @@ public class Deck {
      * Refills deck so that it's never empty
      * @param hand
      */
-    void refill(ArrayList<Card> hand) {
+    void refill(ArrayList<Card> hand) {        
         Random random = new Random();
         for (Card card : cards) {
-            if (!hand.contains(card) && !gameDeck.contains(card)) {
+            if (!hand.contains(card) && !gameDeck.contains(card)) {                
                 gameDeck.insertElementAt(card, random.nextInt(gameDeck.size()));
             }            
         }

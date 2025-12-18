@@ -56,11 +56,11 @@ public class UpgradeLibrary {
         this.sustainUpgrades.add(new ReviveUpgrade("Helbound Rebirth", "Hel uses her powers to give you another chance. Come back to life with 1HP.", 10, 20, "helbound_rebirth", 2201));
         //After round is over:
 
+        this.sustainUpgrades.add(new ReviveUpgrade("Helbound Rebirth", "Hel uses her powers to give you another chance. Come back to life with 1HP.", 10, 1, "hel", 22));
     }
     private void registerEconomyUpgrades() {
-        //After round is over:
-        this.economyUpgrades.add(new GoldOnKill("Spoils of War", 10, 3, "spoils_of_war",3301));
-        this.economyUpgrades.add(new GoldOnOneshot("One Punch Man", 10, 15, "one_punch_man",3302));
+        this.economyUpgrades.add(new GoldOnKill("Spoils of War", 10, 3, "initiative",31));
+        this.economyUpgrades.add(new GoldOnOneshot("One Punch Man", 10, 15, "overgrowth",32));
     }
 
     private void registerAllUpgrades(){

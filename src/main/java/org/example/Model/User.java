@@ -31,7 +31,7 @@ public class User extends Player {
     public void drawCards(Stack<Card> deck, int amount){
         Card card;
         for (int i = 0; i < amount; i++) {
-            card = deck.pop();
+            card = deck.pop();            
             this.hand.add(card);
         }
     }

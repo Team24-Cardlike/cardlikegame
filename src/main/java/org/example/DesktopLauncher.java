@@ -30,19 +30,17 @@ public class DesktopLauncher {
         MapView mapView = new MapView();
         ShopView shopView = new ShopView();
         GameManager manager = new GameManager(roundView,mapView);
-        mapView.setManager(manager);
 
-        roundView.setGameManager(manager);        
+        // roundView.setGameManager(manager);        
         Save save = new Save(new GameData(manager));
         RoundController roundController = new RoundController(manager);
-
-        roundView.setGameManager(manager);        
+              
 
         MapController mapController = new MapController(manager);
         mapController.setMap(manager.gameMap, save);
 
         MainMenuView menuView = new MainMenuView();
-        menuView.setGameManager(manager);
+        // menuView.setGameManager(manager);
         MenuController menuController = new MenuController(manager, save);
 
         HandbookView handbookView = new HandbookView();        

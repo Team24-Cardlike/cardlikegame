@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.Controller.ShopController;
 import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
@@ -203,7 +202,6 @@ public class ShopView implements Screen {
     @Override
     public void render(float delta) {
         Gdx.input.setInputProcessor(stage);
-
         ScreenUtils.clear(0, 0, 0, 1);
         stage.act(delta);
         stage.draw();

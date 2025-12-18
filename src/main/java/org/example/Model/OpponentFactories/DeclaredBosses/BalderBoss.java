@@ -5,7 +5,15 @@ import org.example.Model.OpponentFactories.BossOpponent;
 public class BalderBoss extends BossOpponent {
 
     public BalderBoss() {
-        super("Balder", 50, 15, 3, "Balder.png");
-        super.setHealth(getMaxHealth());
+        super.name = "Balder";
+        super.maxHealth = 50;
+        super.damage = 15;
+        super.turns = 3;
+        super.image = name+".png";
+        super.setHealth(maxHealth);
+    }
+    @Override
+    public String getName() {
+        return name;
     }
 }

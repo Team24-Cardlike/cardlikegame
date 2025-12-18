@@ -80,7 +80,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     public ArrayList<Integer> selectedIndices;
     public ArrayList<Integer> removedIndices;
-    private GameManager gameManager;
     private RoundController roundController;
     private String currentBestCombo;
     private int totalDamageToOpponent;
@@ -94,9 +93,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public final Image[] upgradeSlots = new Image[4];
     private int lastIndex;
     private int currentUpgradeIndex = 0;
-    public void setGameManager (GameManager manager ) {
-        this.gameManager = manager;
-    }
+   // public void setGameManager (GameManager manager ) {
+    //    this.gameManager = manager;
+    //}
 
     public void setController(RoundController roundController) {
         this.roundController = roundController;
@@ -315,9 +314,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         oppAnimation();
     }
 
-    public Stage getStage() {
-        return stage;
-    }
 
     public void drawHealthBars() {
         sr.setProjectionMatrix(viewport.getCamera().combined);
@@ -688,10 +684,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             System.out.println(upgrades.get(i));
         }
 
+    public void onRoundInit() {
+        this.roundController.initRound();
         this.isVictory = false;
         this.gameEnded = false;
-        Round r = gameManager.currentRound;
-        this.roundController.setRound(r);
     }
 
     @Override
@@ -704,8 +700,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     @Override
-    public void render ( float v){
-        gameManager.gameLoop();
+    public void render  float v){
+        roundController.updateManager();
         input();
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();

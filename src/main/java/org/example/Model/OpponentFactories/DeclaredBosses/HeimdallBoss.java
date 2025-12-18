@@ -5,7 +5,17 @@ import org.example.Model.OpponentFactories.BossOpponent;
 public class HeimdallBoss extends BossOpponent {
 
     public HeimdallBoss() {
-        super("Heimdall", 200,  5, 3, "Heimdall.png");
-        super.setHealth(getMaxHealth());
+        super.name = "Heimdall";
+        super.maxHealth = 400;
+        super.damage = 10;
+        super.turns = 3;
+        super.image = name+".png";
+
+        super.setHealth(maxHealth);
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }
