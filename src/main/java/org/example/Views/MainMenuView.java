@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -18,8 +19,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.example.Controller.MenuController;
-
-import java.awt.*;
 
 
 public class MainMenuView implements Screen {
@@ -52,12 +51,12 @@ public class MainMenuView implements Screen {
         bg.setFillParent(true);
         stage.addActor(bg);
 
-        playButton = new Image(new Texture("assets/images/playButton.png"));
+        playButton = new Image(new Texture("assets/images/buttons/playButton.png"));
         playButton.setSize(200, 80);
         playButton.setPosition(stage.getWidth()/2 - playButton.getWidth()/2, stage.getHeight()/2 - 200);
         stage.addActor(playButton);
 
-        loadButton = new Image(new Texture("assets/images/playButton.png"));
+        loadButton = new Image(new Texture("assets/images/buttons/loadButton.png"));
         loadButton.setSize(200, 80);
         loadButton.setPosition(stage.getWidth()/2 - playButton.getWidth()/2, playButton.getY() - playButton.getHeight() - 40);
         stage.addActor(loadButton);
@@ -81,20 +80,34 @@ public class MainMenuView implements Screen {
         title.setPosition(difPopup.getWidth()/2 - title.getWidth()/2, difPopup.getHeight() - 80);
         difPopup.addActor(title);
 
-        normalButton = new Image(new Texture("assets/images/playButton.png"));
-        normalButton.setSize(200, 50);
+        Image backButton = new Image(new Texture("assets/images/redX.png"));
+        backButton.setSize(30, 30);
+        backButton.setPosition(difPopup.getWidth()-35, difPopup.getHeight()-35);
+        difPopup.addActor(backButton);
+
+        normalButton = new Image(new Texture("assets/images/buttons/normalButton.png"));
+        normalButton.setSize(200, 80);
         normalButton.setPosition(difPopup.getWidth()/2 - normalButton.getWidth()/2, difPopup.getHeight()/2 - normalButton.getHeight()/2);
         difPopup.addActor(normalButton);
 
-        easyButton = new Image(new Texture("assets/images/playButton.png"));
-        easyButton.setSize(200, 50);
+        easyButton = new Image(new Texture("assets/images/buttons/easyButton.png"));
+        easyButton.setSize(200, 80);
         easyButton.setPosition(normalButton.getX() - normalButton.getWidth() - 40, difPopup.getHeight()/2 - easyButton.getHeight()/2);
         difPopup.addActor(easyButton);
 
-        hardButton = new Image(new Texture("assets/images/playButton.png"));
-        hardButton.setSize(200, 50);
+        hardButton = new Image(new Texture("assets/images/buttons/hardButton.png"));
+        hardButton.setSize(200, 80);
         hardButton.setPosition(normalButton.getX() + normalButton.getWidth() + 40,difPopup.getHeight()/2 - hardButton.getHeight()/2);
         difPopup.addActor(hardButton);
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                difPopup.remove();
+                stage.addActor(playButton);
+                stage.addActor(loadButton);
+            }
+        });
 
         playButton.addListener(new ClickListener() {
             @Override

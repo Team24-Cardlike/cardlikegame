@@ -76,7 +76,7 @@ public class ShopView implements Screen {
 
         shopGrid();
 
-        closeShop = new Image(new Texture("assets/images/xButton.png"));
+        closeShop = new Image(new Texture("assets/images/buttons/xButton.png"));
         closeShop.setSize(100, 100);
         closeShop.setPosition(stage.getWidth() - 120, stage.getHeight() - 120); // Top-right
         stage.addActor(closeShop);
@@ -159,7 +159,7 @@ public class ShopView implements Screen {
         insufficientGold.setPosition(popupWidth/2f - insufficientGold.getWidth()/2, 85);
         insufficientGold.setWrap(true);
 
-        Image buyButton = new Image(new Texture("assets/images/buyButton.png"));
+        Image buyButton = new Image(new Texture("assets/images/buttons/buyButton.png"));
         buyButton.setSize(120, 60);
         buyButton.setPosition(popupWidth/2f - 60, 20);
         buyButton.addListener(new ClickListener() {

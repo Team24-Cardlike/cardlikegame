@@ -12,10 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import org.example.Controller.RoundController;
-import org.example.Controller.ShopController;
 
 public class HandbookView implements Screen {
     private Stage stage;
@@ -67,7 +65,7 @@ public class HandbookView implements Screen {
         ScrollPane sacrollPane = new ScrollPane(handbookText, scrollStyle);
         sacrollPane.setFadeScrollBars(false);
 
-        closeButton = new Image(new Texture("assets/images/xButton.png"));
+        closeButton = new Image(new Texture("assets/images/buttons/xButton.png"));
         closeButton.setSize(100, 50);
         closeButton.setPosition(stage.getWidth()/2 -50, 50);
         stage.addActor(closeButton);

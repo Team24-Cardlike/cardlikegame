@@ -7,11 +7,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -20,17 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import jdk.jfr.Percentage;
 import org.example.Controller.RoundController;
 import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.example.Views.Animations.ImageAnimations;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class RoundView extends ApplicationAdapter implements RoundObserver, Screen {
@@ -152,8 +146,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         vicTxt = new Texture("assets/images/victoryBanner.png");
         lossTxt = new Texture("assets/images/defeatBanner.png");
-        nextButtonTexture = new Texture("assets/images/nextButton.png");
-        retryButtonTexture = new Texture("assets/images/nextButton.png");
+        nextButtonTexture = new Texture("assets/images/buttons/nextButton.png");
+        retryButtonTexture = new Texture("assets/images/buttons/nextButton.png");
         sr = new ShapeRenderer();
 
         OrthographicCamera camera = new OrthographicCamera();
@@ -193,7 +187,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         handbookButton.setPosition(10, viewport.getWorldHeight() - handbookButton.getHeight() -30);
         gameGroup.addActor(handbookButton);
 
-        discardButton = new Image(new Texture("assets/images/discardButton.png"));
+        discardButton = new Image(new Texture("assets/images/buttons/discardButton.png"));
         discardButton.setSize(140, 60);
         discardButton.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 10, viewport.getWorldHeight()/2 - discardButton.getHeight() - 10);
         gameGroup.addActor(discardButton);
