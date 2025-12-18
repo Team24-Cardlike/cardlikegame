@@ -10,12 +10,6 @@ public class ReviveUpgrade extends Upgrade{
         this.healthAfterRevive = healthAfterRevive;
     }
 
-    /*@Override
-    public T getNum() {
-        T t = null;
-        return t;
-    }*/
-
     @Override
     public boolean checkCondition(Round round) {
         return round.getUser().getHealthRatio() <= 0 && !beenUsed;

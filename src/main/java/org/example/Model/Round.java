@@ -10,7 +10,6 @@ import java.util.*;
 public class Round {
     private RoundObsMethods o = new RoundObsMethods(this);
     private Deck deck = new Deck();
-    Upgrade upgrades;
     private User user;
     private Opponent opponent;
 
@@ -26,7 +25,6 @@ public class Round {
     private String currentBestCombo;
 
     private UpgradeManager upgradeManager = new UpgradeManager();
-    private UpgradeLibrary lib = new UpgradeLibrary();
     private ArrayList<String> upgradeNames = new ArrayList<>();
     public int turnNumber = 0;
     public boolean beenAttacked = false;
@@ -35,7 +33,6 @@ public class Round {
         this.user = user;
         this.user.resetUser();
         this.opponent = opponent;
-        //this.opponent.resetOpponent();
         this.deck.createInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         o.addObserver(ob);
@@ -66,20 +63,6 @@ public class Round {
             opponentTurn();
         }
         // round ends
-        
-        // if ((user.health <= 0 || checkDeadOpponent()) && !roundFinished) {                              
-        //     if(opponentHealth < userHealth) {                
-        //         this.won = true;             
-        //         o.notifyGameEnded("Victory", totalDamageToOpponent,totalDamageToPlayer);}
-        //     else {
-        //         this.won = false;
-        //         o.notifyGameEnded("GameOver", totalDamageToOpponent,totalDamageToPlayer);
-        //     }
-        //     // roundFinished = true;
-        //     user.setHealth(user.maxHealth); // Terrible temp solution to winning-immediately-bug
-        //     opponent.setHealth(opponent.getMaxHealth());
-        // }
-
     }
 
 
@@ -102,7 +85,6 @@ public class Round {
         this.opponent.takeDamage(this.user.damage);
         this.opponentHealth = opponent.getHealthRatio();
         this.totalDamageToOpponent += this.user.damage;
-        // while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand - user.getHand().size());
 
 
@@ -179,7 +161,10 @@ public class Round {
         o.notifyUnselected(user.getSelectedCards());
     }
 
-    // Removing selected card from hand and adding it to selected cards
+    /**
+     * Removing selected card from hand and adding it to selected cards.
+     */
+
     public void addSelectedCards(int index) {
         ArrayList<Card> tempHand = new ArrayList<>(user.getHand());
         Card c = tempHand.get(index);
@@ -190,7 +175,9 @@ public class Round {
         o.notifySelected(user.getSelectedCards());
     }
 
-    //Removing card from selected and returning it back to the hand.
+    /**
+     * Removing card from selected and returning it back to the hand.
+     */
     public void unselectCard(int index) {
         ArrayList<Card> temp = user.getSelectedCards();
         user.hand.add(temp.get(index));

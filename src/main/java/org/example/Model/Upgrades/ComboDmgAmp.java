@@ -21,11 +21,6 @@ public class ComboDmgAmp extends Upgrade{
         this.ampAmount = ampAmount;
     }
 
-    /*@Override
-    public T getNum() {
-        return ampAmount;
-    }*/
-
     @Override
     public boolean checkCondition(Round round) {
         return Objects.equals(round.getUser().getComboPlayedCards().name, this.ampedCombo.name);

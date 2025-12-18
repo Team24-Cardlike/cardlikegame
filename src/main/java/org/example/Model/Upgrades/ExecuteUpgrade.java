@@ -19,11 +19,6 @@ public class ExecuteUpgrade extends Upgrade{
         this.threshold = threshold;
     }
 
-    /*@Override
-    public T getNum() {
-        return threshold;
-    }*/
-
     @Override
     public boolean checkCondition(Round round) {
         return round.getOpponent().getHealthRatio() <= this.threshold;
