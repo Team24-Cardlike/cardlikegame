@@ -92,10 +92,10 @@ public class GameManager {
     }
 
     public void resetRound(){
-
-        this.currentRound = new Round(user, gameMap.currentOpponent, roundObs);
+        //this.currentRound = new Round(user, gameMap.currentOpponent, roundObs);
+        setState(this.mapState);
         notifyState();
-        currentRound.init();
+        //currentRound.init();
     }
 
     public void initRound() {
