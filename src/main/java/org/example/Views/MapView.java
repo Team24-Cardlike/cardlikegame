@@ -45,12 +45,12 @@ public class MapView implements Screen, MapObserver {
 
     // Positions for lvls on map
     private final float[][] levelPositions = {
-            //[Heimdall, Wolf, Balder, Imp, Imp, Gnome, Freja, Tyr, Tor, Oden]
+            //[Heimdall, Wolf, Balder, Imp, Imp2, Gnome, Freja, Tyr, Tor, Oden]
             {130, 68}, // level 0 Heimdall
             {272, 185}, // level 1 Wolf
             {550, 215}, // level 2 Balder
             {300, 400}, // level 3 Imp
-            {785, 215}, // level 4 Imp
+            {785, 215}, // level 4 Imp2
             {610,370},  // level 5 Gnome
             {1000, 300} , // level 5 Freja
             {940, 410} , // level 5 Tyr
@@ -115,7 +115,7 @@ public class MapView implements Screen, MapObserver {
 
     private void drawOpponent() {
         mapSprites.clear();
-        List<String> regularOps = List.of("Imp", "Wolf", "Gnome");
+        List<String> regularOps = List.of("Imp", "Imp2", "Wolf", "Gnome");
 
         for (int i = 0; i < lvls.size(); i ++) {
 
@@ -200,7 +200,7 @@ public class MapView implements Screen, MapObserver {
                 String name = lvls.get(a);                
                 // Send input to roundController
                 if (poly.contains(coords.x, coords.y)) {                                                        
-                    if (availableLvls.contains(name)) {                        
+                    if (availableLvls.contains(name)) {
                         lastLVL = name;
                     }
                     controller.selectLvl(name);

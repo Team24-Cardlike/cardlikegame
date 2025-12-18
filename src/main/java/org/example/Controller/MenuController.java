@@ -1,7 +1,5 @@
 package org.example.Controller;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.example.Model.GameManager;
 import org.example.Model.Save;
 
@@ -18,9 +16,8 @@ public class MenuController {
         manager.setDifficulty(s);
     }
 
-    public void startGame() {
-        manager.startGame();
-    }
+    public void startGame() {manager.startGame();}
+
     public void loadGame() {
         save.loadGame();
     }
