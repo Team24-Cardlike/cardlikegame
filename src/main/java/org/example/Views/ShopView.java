@@ -164,7 +164,7 @@ public class ShopView implements Screen {
         desc.setWrap(true);
         popup.addActor(desc);
 
-        Image buyButton = new Image(new Texture("assets/images/endTurn.png"));
+        Image buyButton = new Image(new Texture(item.getPic()));
         buyButton.setSize(120, 60);
         buyButton.setPosition(popupWidth/2f - 60, 20);
         buyButton.addListener(new ClickListener() {
@@ -181,7 +181,7 @@ public class ShopView implements Screen {
         });
         popup.addActor(buyButton);
 
-        Image backButton = new Image(new Texture("assets/images/endTurn.png"));
+        Image backButton = new Image(new Texture("assets/images/xButton.png"));
         backButton.setSize(60, 60);
         backButton.setPosition(popupWidth-60, popupHeight-60);
         backButton.addListener(new ClickListener() {
