@@ -32,9 +32,9 @@ public class ShopView implements Screen {
     private SpriteBatch batch;
     private ShopController shopController;
     private Image closeShop;
-
+    private Label goldAmount;
     private BitmapFont font;
-
+    private Label.LabelStyle ls;
     public ShopView() {
         items = new ArrayList<>();
     }
@@ -68,6 +68,7 @@ public class ShopView implements Screen {
         parameter.size = 24;
         font = generator.generateFont(parameter);
         generator.dispose();
+        ls = new Label.LabelStyle(font, Color.WHITE);
 
         table = new Table();
         table.setFillParent(true);
@@ -76,10 +77,14 @@ public class ShopView implements Screen {
 
         shopGrid();
 
-        closeShop = new Image(new Texture("assets/images/xButton.png"));
+        closeShop = new Image(new Texture("assets/images/buttons/xButton.png"));
         closeShop.setSize(100, 100);
         closeShop.setPosition(stage.getWidth() - 120, stage.getHeight() - 120); // Top-right
         stage.addActor(closeShop);
+
+        goldAmount = new Label("Gold: "+String.valueOf(shopController.getUserGold()), ls);
+        goldAmount.setPosition(20,600);
+        stage.addActor(goldAmount);
 
         closeShop.addListener(new ClickListener() {
             @Override
@@ -138,7 +143,6 @@ public class ShopView implements Screen {
                 (stage.getHeight() - ph) / 2f
         );*/
 
-        Label.LabelStyle ls = new Label.LabelStyle(font, Color.WHITE);
         Label title = new Label(item.getName(), ls);
         title.setPosition(20, popupHeight - 40);
         popup.addActor(title);
@@ -159,7 +163,7 @@ public class ShopView implements Screen {
         insufficientGold.setPosition(popupWidth/2f - insufficientGold.getWidth()/2, 85);
         insufficientGold.setWrap(true);
 
-        Image buyButton = new Image(new Texture("assets/images/buyButton.png"));
+        Image buyButton = new Image(new Texture("assets/images/buttons/buyButton.png"));
         buyButton.setSize(120, 60);
         buyButton.setPosition(popupWidth/2f - 60, 20);
         buyButton.addListener(new ClickListener() {
@@ -173,6 +177,7 @@ public class ShopView implements Screen {
                     update();
                     shopGrid();
                     table.setTouchable(Touchable.enabled);
+                    goldAmount.setText("Gold: "+String.valueOf(shopController.getUserGold()));
                 }
                 else{
                     cost.remove();

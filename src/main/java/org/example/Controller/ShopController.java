@@ -46,4 +46,8 @@ public class ShopController {
     public void removeFromItems(Upgrade item){
         shop.removeFromItemList(item);
     }
+
+    public int getUserGold(){
+        return user.getGold();
+    }
 }
