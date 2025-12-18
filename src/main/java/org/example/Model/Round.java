@@ -58,10 +58,7 @@ public class Round {
         return user;
     }
     // Check states
-    public void roundUpdate() {
-        
-        if (deck.getInGameDeck().size() + user.hand.size() <= deck.cards.size()) deck.refill(user.hand);
-
+    public void roundUpdate() {                               
 
         if (playerTurn && !this.roundFinished) {
             // Wait for player to make turn
@@ -100,6 +97,7 @@ public class Round {
      * @param //playedCards cards played from the front end
      */
     public void playCards(){
+        deck.refill(user.getHand());        
         this.turnNumber += 1;
         this.user.damage = 0;
         this.user.damage = this.user.playCards();
@@ -107,7 +105,8 @@ public class Round {
         this.opponent.takeDamage(this.user.damage);
         this.opponentHealth = opponent.getHealthRatio();
         this.totalDamageToOpponent += this.user.damage;
-        while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
+        // while (user.hand.size() < user.cardsPerHand) user.hand.add(deck.gameDeck.pop());
+        user.drawCards(deck.getInGameDeck(), user.cardsPerHand - user.getHand().size());
 
 
         System.out.println("Din motståndare tog "+this.user.damage+" skada! "+ this.opponent.getHealth()+ " kvar");
@@ -171,9 +170,10 @@ public class Round {
         return user.getComboPlayedCards().name;
     }
 
-    public void discard(){
+    public void discard(){        
+        deck.refill(user.getHand());        
         removeSelectedCards();
-        user.drawCards(deck.getInGameDeck(),10 - user.getHand().size());
+        user.drawCards(deck.getInGameDeck(), user.cardsPerHand - user.getHand().size());
         o.notifySelectedChanged(user.getSelectedCards());
         o.notifyHandChanged(user.getHand());
     }
