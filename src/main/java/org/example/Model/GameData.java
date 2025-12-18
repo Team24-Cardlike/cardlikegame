@@ -11,8 +11,7 @@ import org.example.Model.Upgrades.Upgrade;
  */
 public class GameData {
     private transient GameManager gameManager; // Should not be serialized, we don't need everything from gameManager
-
-    // TODO: Add new attributes here (e.g. money)
+    
     // These attributes get saved when saveGame() in Save.java
     // gets called
     private Set<String> completedLvls;

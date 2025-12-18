@@ -6,17 +6,14 @@ import org.example.Model.GameState.MapState;
 import org.example.Model.GameState.MenuState;
 import org.example.Model.GameState.RoundState;
 import org.example.Model.GameState.ShopState;
-import org.example.Model.OpponentFactories.OpponentInterface;
 import org.example.Model.Upgrades.UpgradeLibrary;
 import org.example.Model.OpponentFactories.Opponent;
 
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Set;
 
-public class GameManager {
-    private  MapObserver mapObs;
+public class GameManager {    
     public Round currentRound;
     public GameMap gameMap;
     private User user;
@@ -24,8 +21,7 @@ public class GameManager {
 
 
     private RoundState roundState;
-    private ShopState shopState;
-    private MenuState menuState;
+    private ShopState shopState;    
     private MapState mapState;
 
     RoundObserver roundObs;
@@ -33,16 +29,14 @@ public class GameManager {
     GameState state;
     private UpgradeLibrary upgradeLibrary = new UpgradeLibrary();
 
-    String difficulty = "Normal";
+    String difficulty = "Normal"; // Default difficulty
 
     public GameManager(RoundObserver roundObs, MapObserver mapObs) {
         this.gameMap = new GameMap(this, mapObs);
-        this.roundObs = roundObs;
-        this.mapObs = mapObs;
+        this.roundObs = roundObs;        
         this.user = new User(50);
 
-        shopState = new ShopState();
-        menuState = new MenuState();
+        shopState = new ShopState();        
 
         this.setState(new MenuState());
         notifyState();
@@ -52,8 +46,7 @@ public class GameManager {
         // Load saved game, start att map State
         this.user = user;
         this.gameMap = map;
-        this.roundObs = roundObs;
-        this.mapObs = mapObs;
+        this.roundObs = roundObs;        
     }
     void setCompletedLvls(Set<String> completedLvls) {
         gameMap.setCompletedLvls(completedLvls);
@@ -98,13 +91,14 @@ public class GameManager {
         return this.state.getName();
     }
 
-    public void resetRound(){
-        //this.currentRound = new Round(user, gameMap.currentOpponent, roundObs);
+    public void resetRound(){        
         setState(this.mapState);
-        notifyState();
-        //currentRound.init();
+        notifyState();        
     }
 
+    /**
+     * Create new round and set new RoundState
+     */
     public void initRound() {
         Opponent op = gameMap.currentOpponent;
         this.currentRound = new Round(this.user,op,roundObs);
@@ -155,6 +149,10 @@ public class GameManager {
        return this.currentRound;
     }
 
+    /**
+     * Load in upgrades based on ids saved in GameData.java
+     * @param upgradeIds list of upgrade ids
+     */
     public void setUpgrades(ArrayList<Integer> upgradeIds) {
         for (int id : upgradeIds) {
             user.getUpgrades().add(upgradeLibrary.getUpgrade(id));
