@@ -5,9 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -15,14 +19,21 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.example.Controller.MenuController;
 
+import java.awt.*;
+
 
 public class MainMenuView implements Screen {
-    public Image menuButton;
+    public Image playButton;
+    public Image loadButton;
     Stage stage;
     Texture background;
     Viewport viewport;
     MenuController controller;
 
+    public Image easyButton;
+    public Image normalButton;
+    public Image hardButton;
+    BitmapFont font;
 
 
     public void setController(MenuController controller) {
@@ -41,18 +52,97 @@ public class MainMenuView implements Screen {
         bg.setFillParent(true);
         stage.addActor(bg);
 
-        menuButton = new Image(new Texture("assets/images/playButton.png"));
-        menuButton.setSize(200, 50);
-        menuButton.setPosition(stage.getWidth()/2 -100, 150);
-        stage.addActor(menuButton);
+        playButton = new Image(new Texture("assets/images/playButton.png"));
+        playButton.setSize(200, 80);
+        playButton.setPosition(stage.getWidth()/2 - playButton.getWidth()/2, stage.getHeight()/2 - 200);
+        stage.addActor(playButton);
 
-        menuButton.addListener(new ClickListener() {
+        loadButton = new Image(new Texture("assets/images/playButton.png"));
+        loadButton.setSize(200, 80);
+        loadButton.setPosition(stage.getWidth()/2 - playButton.getWidth()/2, playButton.getY() - playButton.getHeight() - 40);
+        stage.addActor(loadButton);
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Italic.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 24;
+        font = generator.generateFont(parameter);
+        generator.dispose();
+
+        Group difPopup = new Group();
+        difPopup.setSize(800, 300);
+        difPopup.setPosition(stage.getWidth()/2 - difPopup.getWidth()/2, stage.getHeight()/2 - difPopup.getHeight()/2);
+        Texture popupBG = new Texture("assets/images/itemBG.png");
+        Image popupImage = new Image(popupBG);
+        difPopup.addActor(popupImage);
+        popupImage.setSize(difPopup.getWidth(), difPopup.getHeight());
+
+        Label.LabelStyle ls = new Label.LabelStyle(font, Color.WHITE);
+        Label title = new Label("Choose your difficulty:", ls);
+        title.setPosition(difPopup.getWidth()/2 - title.getWidth()/2, difPopup.getHeight() - 80);
+        difPopup.addActor(title);
+
+        normalButton = new Image(new Texture("assets/images/playButton.png"));
+        normalButton.setSize(200, 50);
+        normalButton.setPosition(difPopup.getWidth()/2 - normalButton.getWidth()/2, difPopup.getHeight()/2 - normalButton.getHeight()/2);
+        difPopup.addActor(normalButton);
+
+        easyButton = new Image(new Texture("assets/images/playButton.png"));
+        easyButton.setSize(200, 50);
+        easyButton.setPosition(normalButton.getX() - normalButton.getWidth() - 40, difPopup.getHeight()/2 - easyButton.getHeight()/2);
+        difPopup.addActor(easyButton);
+
+        hardButton = new Image(new Texture("assets/images/playButton.png"));
+        hardButton.setSize(200, 50);
+        hardButton.setPosition(normalButton.getX() + normalButton.getWidth() + 40,difPopup.getHeight()/2 - hardButton.getHeight()/2);
+        difPopup.addActor(hardButton);
+
+        playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                playButton.remove();
+                loadButton.remove();
+                stage.addActor(difPopup);
+            }
+        });
+
+        loadButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                playButton.remove();
+                loadButton.remove();
                 controller.loadGame();
+                controller.startGame();
+                stage.addActor(difPopup);
+            }
+        });
+
+        easyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                difPopup.remove();
+                controller.setDifficulty("Easy");
                 controller.startGame();
             }
         });
+
+        normalButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                difPopup.remove();
+                controller.setDifficulty("Normal");
+                controller.startGame();
+            }
+        });
+
+        hardButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                difPopup.remove();
+                controller.setDifficulty("Hard");
+                controller.startGame();
+            }
+        });
+
     }
 
     @Override

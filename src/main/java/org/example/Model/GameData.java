@@ -3,6 +3,8 @@ package org.example.Model;
 import java.util.ArrayList;
 import java.util.Set;
 
+import org.example.Model.Upgrades.Upgrade;
+
 /**
  * Serializable class that saves the latest data from the model
  * and initializes data when the game is started 
@@ -16,9 +18,10 @@ public class GameData {
     private Set<String> completedLvls;
     private Set<String> availableLvls;    
     private int gold;
+    private ArrayList<Integer> upgradeIds;
 
     public GameData(GameManager gameManager) {        
-        this.gameManager = gameManager;        
+        this.gameManager = gameManager;
     }
 
 
@@ -32,6 +35,12 @@ public class GameData {
         this.availableLvls = gameManager.getAvailableLvls();    
         this.gold = gameManager.getUser().getGold();    
 
+        upgradeIds = new ArrayList<Integer>();
+        ArrayList<Upgrade> upgrades = gameManager.getUser().getUpgrades();
+        for (Upgrade upgrade : upgrades) {            
+            upgradeIds.add(upgrade.getIdNum());
+        }
+
     }
 
     void setGold() {        
@@ -39,23 +48,32 @@ public class GameData {
     }
 
     void setCompletedLvls() {        
-        gameManager.gameMap.setCompletedLvls(completedLvls);
+        gameManager.setCompletedLvls(completedLvls);
     }
 
     void setAvailableLvls() {
-        gameManager.gameMap.setAvailableLvls(availableLvls);
+        gameManager.setAvailableLvls(availableLvls);
     }
 
-    GameManager getGameManager() {
-        return gameManager;
-    }
-    void setGameManager(GameManager gameManager) {
-        this.gameManager = gameManager;
+    void setUpgrades() {
+        // gameManager.getUser().setUpgrades(upgradeIds);
+        gameManager.setUpgrades(upgradeIds);
     }
 
+    
     void initializeData() {
         this.setCompletedLvls();
         this.setAvailableLvls();
         this.setGold();
+        this.setUpgrades();
     }    
+
+    GameManager getGameManager() {
+        return gameManager;
+    }
+
+    void setGameManager(GameManager gameManager) {
+        this.gameManager = gameManager;
+    }
+
 }

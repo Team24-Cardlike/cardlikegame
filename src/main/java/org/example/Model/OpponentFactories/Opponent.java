@@ -3,21 +3,45 @@ package org.example.Model.OpponentFactories;
 
 public abstract class Opponent implements OpponentInterface {
     int health;
-    protected String name;
-    protected int maxHealth;
-    public int damage;
-    public String image;
+    String name;
+    int maxHealth;
+    int damage;
+    String image;
 
     public int getDamage() {
-        return damage;
+        return this.damage;
     }
 
-    public String getTexture() {
-        return image;
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public String getImage() {
+        return this.image;
+    }
+
+    public void setImage(){
+        this.image = (this.name + ".png");
     }
 
     public String getName() {
-        return name;
+        return this.name;
+    }
+
+    public int getHealth(){
+        return this.health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getMaxHealth() {
+        return this.maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
     public void takeDamage(int damage) {
@@ -25,21 +49,8 @@ public abstract class Opponent implements OpponentInterface {
     }
 
     public float getHealthRatio() {
-        if(health!=0)
-            return (float)health/maxHealth;
+        if(this.health!=0)
+            return (float)((float)this.health/(float)this.maxHealth);
         return 0;
     }
-
-    public int getHealth(){
-        return this.health;
-    }
-
-    public int getMaxHealth() {
-        return this.maxHealth;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
 }

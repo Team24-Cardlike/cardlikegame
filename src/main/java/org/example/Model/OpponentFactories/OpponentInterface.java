@@ -6,7 +6,7 @@ public interface OpponentInterface {
 
     public int getDamage();
 
-    public String getTexture();
+    public String getImage();
 
     public String getName();
 

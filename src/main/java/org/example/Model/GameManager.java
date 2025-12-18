@@ -7,11 +7,12 @@ import org.example.Model.GameState.MenuState;
 import org.example.Model.GameState.RoundState;
 import org.example.Model.GameState.ShopState;
 import org.example.Model.OpponentFactories.OpponentInterface;
-
+import org.example.Model.Upgrades.UpgradeLibrary;
 import org.example.Model.OpponentFactories.Opponent;
 
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 
 public class GameManager {
@@ -30,10 +31,12 @@ public class GameManager {
     RoundObserver roundObs;
     ArrayList<StateObserver> stateObservers = new ArrayList<>();
     GameState state;
+    private UpgradeLibrary upgradeLibrary = new UpgradeLibrary();
 
+    String difficulty = "Normal";
 
     public GameManager(RoundObserver roundObs, MapObserver mapObs) {
-        this.gameMap = new GameMap(100, this, mapObs);
+        this.gameMap = new GameMap(this, mapObs);
         this.roundObs = roundObs;
         this.mapObs = mapObs;
         this.user = new User(50);
@@ -128,6 +131,7 @@ public class GameManager {
 
     public void startGame( ){
         initMap();
+        gameMap.setDifficulty(this.difficulty);
         this.mapState = new MapState();
         setState(mapState);;
         notifyState();
@@ -145,5 +149,15 @@ public class GameManager {
 
     public Round getRound() {
        return this.currentRound;
+    }
+
+    public void setUpgrades(ArrayList<Integer> upgradeIds) {
+        for (int id : upgradeIds) {
+            user.getUpgrades().add(upgradeLibrary.getUpgrade(id));
+        }
+    }
+
+    public void setDifficulty(String s){
+        this.difficulty = s;
     }
 }

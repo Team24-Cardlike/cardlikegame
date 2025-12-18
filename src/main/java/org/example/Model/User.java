@@ -17,7 +17,7 @@ public class User extends Player {
 
     CardCombos combos = new CardCombos();
 
-    public ArrayList<Upgrade> upgrades = new ArrayList<>();
+    private ArrayList<Upgrade> upgrades = new ArrayList<>();
 
     public User(int startHealth){
         this.damage = 0;
