@@ -19,6 +19,7 @@ public class GameData {
     private Set<String> availableLvls;    
     private int gold;
     private ArrayList<Integer> upgradeIds;
+    private String difficulity;
 
     public GameData(GameManager gameManager) {        
         this.gameManager = gameManager;
@@ -33,7 +34,8 @@ public class GameData {
         // TODO: Add more getters here!
         this.completedLvls = gameManager.getCompletedLvls();
         this.availableLvls = gameManager.getAvailableLvls();    
-        this.gold = gameManager.getUser().getGold();    
+        this.gold = gameManager.getUser().getGold();   
+        this.difficulity = gameManager.getDifficulty(); 
 
         upgradeIds = new ArrayList<Integer>();
         ArrayList<Upgrade> upgrades = gameManager.getUser().getUpgrades();
@@ -41,6 +43,10 @@ public class GameData {
             upgradeIds.add(upgrade.getIdNum());
         }
 
+    }
+
+    void setDifficulty() {
+        gameManager.setDifficulty(difficulity);
     }
 
     void setGold() {        
@@ -66,6 +72,7 @@ public class GameData {
         this.setAvailableLvls();
         this.setGold();
         this.setUpgrades();
+        this.setDifficulty();
     }    
 
     GameManager getGameManager() {

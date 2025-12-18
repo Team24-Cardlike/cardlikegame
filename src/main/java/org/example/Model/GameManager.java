@@ -63,6 +63,10 @@ public class GameManager {
         gameMap.setAvailableLvls(availableLvls);
     }
 
+    String getDifficulty() {
+        return this.difficulty;
+    }
+
     Set<String> getCompletedLvls() {
         return gameMap.getCompletedLvls();
     }
