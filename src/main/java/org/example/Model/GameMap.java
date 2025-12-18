@@ -134,9 +134,7 @@ public class GameMap {
     public void levelSelect(String s) {    
                         
         for (int i = 0; i < RegularOpponents.size(); i++) {            
-            Opponent op = RegularOpponents.get(i);       
-            if (s == op.getName()) System.out.println(map.neighbours(op) + " " + s);     
-            System.out.println(availableLvls + " " + completedLvls);    
+            Opponent op = RegularOpponents.get(i);                               
             if (s == op.getName() && availableLvls.contains(op.getName()) && !completedLvls.contains(op.getName())) {                                                        
                 currentOpponent = op;                             
                 manager.initRound();
@@ -147,9 +145,7 @@ public class GameMap {
         }
 
         for (int i = 0; i < BossOpponents.size(); i++) {            
-            Opponent op = BossOpponents.get(i);       
-            if (s == op.getName()) System.out.println(map.neighbours(op) + " " + s);     
-            System.out.println(availableLvls + " " + completedLvls);
+            Opponent op = BossOpponents.get(i);                   
             if (s == op.getName() && availableLvls.contains(op.getName()) && !completedLvls.contains(op.getName())) {                                                        
                 currentOpponent = op;                                   
                 manager.initRound();

@@ -270,7 +270,6 @@ public class MapView implements Screen, MapObserver {
 
     @Override
     public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {
-System.out.println(lvls);
 
         this.lvls = lvls;
         this.completedLvls = completedLvls;

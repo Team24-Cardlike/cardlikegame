@@ -64,10 +64,8 @@ public class Save {
     private void setLoadedData(GameData loadedData) {
         // loadedData.setHealth();
         // TODO: Add new setters here
-        try {            
-            loadedData.setCompletedLvls();
-            loadedData.setAvailableLvls();
-            loadedData.setGold();
+        try {
+            loadedData.initializeData();
             // loadedData.getGameManager().gameMap.updateMap();            
         } catch (NullPointerException e) {
             System.out.println("No previous data stored, you may have forgotten to save.");
