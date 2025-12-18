@@ -543,13 +543,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         return startX + index * spacing;
     }
 
-    private float selectedX(int selectedCardImagesSize, int index){
-        float spacing = 250;
-        float total = selectedCardImagesSize*spacing;
-        float sx = viewport.getWorldWidth()/4f - total/2f;
-        return sx +index*spacing;
-    }
-
     @Override
     public void onUnselectedCard(ArrayList<String> selected){
         for (Image img : selectedCardImages) {
@@ -678,7 +671,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             oppAnimation();
         }
         moneyAmount.setText(String.valueOf(userGold)+" gold");
-        //oppAttack.setVisible(false);
     }
 
     @Override
