@@ -30,16 +30,12 @@ public class DesktopLauncher {
         MapView mapView = new MapView();
 
         GameManager manager = new GameManager(roundView,mapView);
-        mapView.setManager(manager);
 
-        roundView.setGameManager(manager);
         RoundController roundController = new RoundController(manager);
 
         MapController mapController = new MapController(manager);
         mapController.setMap(manager.gameMap);
-
         MainMenuView menuView = new MainMenuView();
-        menuView.setGameManager(manager);
         MenuController menuController = new MenuController(manager);
 
         HandbookView handbookView = new HandbookView();

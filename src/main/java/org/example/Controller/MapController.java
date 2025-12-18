@@ -19,4 +19,8 @@ public class MapController {
     public void selectLvl(String opName) {
         map.levelSelect(opName);
     }
+
+    public void updateManager() {
+        manager.gameLoop();
+    }
 }
