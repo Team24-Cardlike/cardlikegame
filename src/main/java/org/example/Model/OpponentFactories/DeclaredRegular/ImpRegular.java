@@ -3,8 +3,7 @@ package org.example.Model.OpponentFactories.DeclaredRegular;
 import org.example.Model.OpponentFactories.RegularOpponent;
 
 public class ImpRegular extends RegularOpponent {
-    @Override
-    public void Create() {
+   public ImpRegular() {
         super.name = "Imp";
         super.maxHealth = 200;
         super.damage = 10;

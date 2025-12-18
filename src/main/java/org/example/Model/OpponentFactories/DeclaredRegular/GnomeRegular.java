@@ -3,8 +3,7 @@ package org.example.Model.OpponentFactories.DeclaredRegular;
 import org.example.Model.OpponentFactories.RegularOpponent;
 
 public class GnomeRegular extends RegularOpponent {
-    @Override
-    public void Create() {
+   public GnomeRegular() {
         super.name = "Gnome";
         super.maxHealth = 200;
         super.damage = 10;
@@ -16,4 +15,6 @@ public class GnomeRegular extends RegularOpponent {
     public String getName() {
         return name;
     }
+
+
 }

@@ -2,7 +2,6 @@ package org.example.Model.OpponentFactories;
 
 public abstract class RegularOpponent extends Opponent{
 
-    public abstract void Create();
 
 
     @Override
