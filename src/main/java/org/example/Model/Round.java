@@ -120,8 +120,6 @@ public class Round {
         checkDeadPlayer();
     }
 
-
-
     private void opponentTurn() {
         this.beenAttacked = true;
         int oppDamage = opponent.getDamage();

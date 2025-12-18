@@ -45,8 +45,8 @@ public class HandbookView implements Screen {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         Label handbookText = new Label("The travelers handbook: \n" +
-                "Each round you get to place up to 5 cards. These cards will damage your opponent according to the combination of cards placed\n" +
-                "these combinations follow regular poker hands. You can also choose to discard up to 5 cards.\n" +
+                "Each round you get to place up to 5 cards. These cards will damage your opponent depending of the combination of cards placed\n" +
+                "these combinations follow regular poker hands. You can also choose to discard up to 5 cards (but only three times).\n" +
                 "\n" +
                 "These hands are: \n" +
                 "Royal flush: A-K-Q-J-10 of the same suit\n" +
@@ -65,10 +65,7 @@ public class HandbookView implements Screen {
         ScrollPane sacrollPane = new ScrollPane(handbookText, scrollStyle);
         sacrollPane.setFadeScrollBars(false);
 
-        closeButton = new Image(new Texture("assets/images/buttons/xButton.png"));
-        closeButton.setSize(100, 50);
-        closeButton.setPosition(stage.getWidth()/2 -50, 50);
-        stage.addActor(closeButton);
+        closeButton = new Image(new Texture("assets/images/xButton.png"));
 
         closeButton.addListener(new ClickListener() {
             @Override
@@ -77,7 +74,7 @@ public class HandbookView implements Screen {
             }
         });
         table.add(sacrollPane).expand().fill().pad(20).row();
-        table.add(closeButton).pad(10);
+        table.add(closeButton).size(100,75).pad(10);
     }
 
     @Override

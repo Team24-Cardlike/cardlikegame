@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -63,10 +64,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private Label opponentName;
     private Label playerName;
     private Label moneyAmount;
-    private float opponentStartY = 300;      // original Y
+    private Label oppAttack;
+    private float opponentStartY = 300;
     private float opponentDropY = 180;
     private boolean animatingCard = false;
-
+    private String opponentNameString;
     private float opponentHealthPercentage;
     private float userHealthPercentage;
     private boolean playerTurn;
@@ -98,9 +100,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     private void reduceDiscards(){
         this.discardUsesLeft -= 1;
-        this.discardNum = new Label("Discards left: " + this.discardUsesLeft, lilStyle);
-        this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 22, 82);
-        gameGroup.addActor(this.discardNum);
+        this.discardNum.setText("Discards left: " + this.discardUsesLeft);
+        if(discardUsesLeft <=0){
+            discardButton.setTouchable(Touchable.disabled);
+            discardButton.setColor(0.5f, 0.5f, 0.5f, 0.6f);
+        }
     }
 
     public int getDiscardUsesLeft() {
@@ -180,6 +184,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         gameGroup.addActor(moneyAmount);
         gameGroup.addActor(moneyBag);
 
+        oppAttack = new Label("", style);
+        oppAttack.setPosition(850, 525);
+        oppAttack.setVisible(false);
+        gameGroup.addActor(oppAttack);
+
         cardImages = new ArrayList<>();
 
         handbookButton = new Image(new Texture("assets/images/rules.png"));
@@ -214,13 +223,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         });
 
         this.discardNum = new Label("Discards left: " + this.discardUsesLeft, lilStyle);
-        this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 22, 82);
+        this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 50, 260);
         gameGroup.addActor(this.discardNum);
         discardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(getDiscardUsesLeft() > 0){
-                    discardNum.remove();
+                    //discardNum.remove();
                     reduceDiscards();
                     roundController.discardCards(removedIndices);
                 }
@@ -242,7 +251,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onNewOpponent(String name, int damage, String image){
         Label opponentName = new Label(name, style);
         opponentName.setPosition(915, 615);
-        
+        opponentNameString = name;
         if(opponentImage != null){opponentImage.remove();}
         opponentTexture = new Texture("assets/images/opponents/"+image+".png");
         opponentImage = new Image(opponentTexture);//new Sprite(opponentTexture);
@@ -534,13 +543,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         return startX + index * spacing;
     }
 
-    private float selectedX(int selectedCardImagesSize, int index){
-        float spacing = 250;
-        float total = selectedCardImagesSize*spacing;
-        float sx = viewport.getWorldWidth()/4f - total/2f;
-        return sx +index*spacing;
-    }
-
     @Override
     public void onUnselectedCard(ArrayList<String> selected){
         for (Image img : selectedCardImages) {
@@ -674,10 +676,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     @Override
     public void onRoundInit(ArrayList<String> upgrades) {
         for(int i = 0; i < upgrades.size(); i++){
-            addUpgradeImage(upgrades.get(i));            
-            System.out.println(upgrades.get(i));
+            addUpgradeImage(upgrades.get(i));
         }
-
+        this.discardUsesLeft=3;
+        this.discardNum.setText("Discards left: " + this.discardUsesLeft);
         this.roundController.initRound();
         this.isVictory = false;
         this.gameEnded = false;
@@ -685,11 +687,15 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onOpponentAttack(int damage) {
-            Label oppAttack = new Label("Name attacked you!\n" +
-                    "You took "+damage+ " damage!\n" +
-                    "Players turn.", style);
-            oppAttack.setPosition(800,275);
-        gameGroup.addActor(oppAttack);
+        oppAttack.setText(opponentNameString+ " attacked you!\n"
+                + "You took "+damage+ " damage!\n"
+                + "Players turn.");
+        oppAttack.setVisible(true);
+        oppAttack.getColor().a = 1f;
+
+        oppAttack.clearActions();
+        oppAttack.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.visible(false))
+        );
     }
 
     @Override
