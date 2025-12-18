@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -69,10 +70,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private Label opponentName;
     private Label playerName;
     private Label moneyAmount;
+    private Label oppAttack;
     private float opponentStartY = 300;      // original Y
     private float opponentDropY = 180;
     private boolean animatingCard = false;
-
+    private String opponentNameString;
     private float opponentHealthPercentage;
     private float userHealthPercentage;
     private boolean playerTurn;
@@ -105,8 +107,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private void reduceDiscards(){
         this.discardUsesLeft -= 1;
         this.discardNum = new Label("Discards left: " + this.discardUsesLeft, lilStyle);
-        this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 22, 82);
+        //this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 22, 250);
         gameGroup.addActor(this.discardNum);
+        if(discardUsesLeft <=0){
+            discardButton.setVisible(false);
+        }
     }
 
     public int getDiscardUsesLeft() {
@@ -186,6 +191,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         gameGroup.addActor(moneyAmount);
         gameGroup.addActor(moneyBag);
 
+        oppAttack = new Label("", style);
+        oppAttack.setPosition(850, 525);
+        oppAttack.setVisible(false);
+        gameGroup.addActor(oppAttack);
+
         cardImages = new ArrayList<>();
 
         handbookButton = new Image(new Texture("assets/images/rules.png"));
@@ -220,7 +230,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         });
 
         this.discardNum = new Label("Discards left: " + this.discardUsesLeft, lilStyle);
-        this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 22, 82);
+        this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 50, 260);
         gameGroup.addActor(this.discardNum);
         discardButton.addListener(new ClickListener() {
             @Override
@@ -248,7 +258,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onNewOpponent(String name, int damage, String image){
         Label opponentName = new Label(name, style);
         opponentName.setPosition(915, 615);
-
+        opponentNameString = name;
         if(opponentImage != null){opponentImage.remove();}
         opponentTexture = new Texture("assets/images/opponents/"+image+".png");
         opponentImage = new Image(opponentTexture);//new Sprite(opponentTexture);
@@ -675,14 +685,13 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             oppAnimation();
         }
         moneyAmount.setText(String.valueOf(userGold)+" gold");
+        //oppAttack.setVisible(false);
     }
 
     @Override
     public void onRoundInit(ArrayList<String> upgrades) {
         for(int i = 0; i < upgrades.size(); i++){
             addUpgradeImage(upgrades.get(i));
-            System.out.println("UPPPPPP"); //Move to onRoundInit
-            System.out.println(upgrades.get(i));
         }
 
         this.roundController.initRound();
@@ -692,11 +701,15 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onOpponentAttack(int damage) {
-            Label oppAttack = new Label("Name attacked you!\n" +
-                    "You took "+damage+ " damage!\n" +
-                    "Players turn.", style);
-            oppAttack.setPosition(800,275);
-        gameGroup.addActor(oppAttack);
+        oppAttack.setText(opponentNameString+ " attacked you!\n"
+                + "You took "+damage+ " damage!\n"
+                + "Players turn.");
+        oppAttack.setVisible(true);
+        oppAttack.getColor().a = 1f;
+
+        oppAttack.clearActions();
+        oppAttack.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.visible(false))
+        );
     }
 
     @Override
