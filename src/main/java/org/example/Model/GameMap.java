@@ -48,9 +48,9 @@ public class GameMap {
         this.imp1 = rf.Create("Imp");
         this.wolf = rf.Create("Wolf");
         this.gnome = rf.Create("Gnome");
-        this.imp2 = rf.Create("Imp");
+        this.imp2 = rf.Create("Imp2");
 
-        this.bossOpponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.oden));
+        this.bossOpponents.addAll(Arrays.asList(this.heimdall,this.balder,this.freja, this.tor,this.tyr,this.oden));
         this.regularOpponents.addAll(Arrays.asList(this.imp1,this.imp2,this.gnome,this.wolf));
 
         obs.add(mapObs);
@@ -174,8 +174,7 @@ public class GameMap {
      * calls initRound based on where you click
      * @param s name of level clicked
      */
-    public void levelSelect(String s) {    
-                        
+    public void levelSelect(String s) {
         for (int i = 0; i < this.regularOpponents.size(); i++) {
             Opponent op = this.regularOpponents.get(i);
             if (s == op.getName() && this.availableLvls.contains(op.getName()) && !completedLvls.contains(op.getName())) {

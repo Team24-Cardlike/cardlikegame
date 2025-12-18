@@ -3,6 +3,7 @@ package org.example.Model.OpponentFactories;
 import org.example.Model.OpponentFactories.DeclaredBosses.*;
 import org.example.Model.OpponentFactories.DeclaredRegular.GnomeRegular;
 import org.example.Model.OpponentFactories.DeclaredRegular.ImpRegular;
+import org.example.Model.OpponentFactories.DeclaredRegular.ImpRegular2;
 import org.example.Model.OpponentFactories.DeclaredRegular.WolfRegular;
 
 public class RegularFactory extends OpponentFactory {
@@ -15,6 +16,8 @@ public class RegularFactory extends OpponentFactory {
                 return new GnomeRegular();
             case "Imp":
                 return new ImpRegular();
+            case "Imp2":
+                return new ImpRegular2();
         }
         return null;
     }

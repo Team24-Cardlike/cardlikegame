@@ -236,7 +236,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 if(getDiscardUsesLeft() > 0 && !selectedCardImages.isEmpty()){
                     //discardNum.remove();
                     reduceDiscards();
-                    roundController.discardCards(removedIndices);
+                    roundController.discardCards();
                 }
             }
         });

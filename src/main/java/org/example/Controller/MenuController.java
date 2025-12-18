@@ -1,7 +1,5 @@
 package org.example.Controller;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.example.Model.GameManager;
 import org.example.Model.Save;
 

@@ -15,9 +15,6 @@ public class RoundController {
         this.manager = manager;
     }
 
-    public void setRound(Round r) {
-        this.round = manager.currentRound;
-    }
 
     public void nextRound(){
         manager.setState(new MapState());        
@@ -32,7 +29,7 @@ public class RoundController {
         round.unselectCard(a);
     }
 
-    public void discardCards(ArrayList<Integer> cards){
+    public void discardCards(){
         this.round.discard();
     }
 
@@ -47,8 +44,6 @@ public class RoundController {
     public void openHandbook(){manager.setHandbookState();}
 
     public void restart(){manager.resetRound();}
-
-    public void switchView(String view){manager.setShopState();}
 
     public void updateManager() {
         manager.gameLoop();
