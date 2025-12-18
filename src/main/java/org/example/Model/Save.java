@@ -41,19 +41,21 @@ public class Save {
     /**
      * Retrieves saved data
      */
-    public void loadGame() {
+    public boolean loadGame() {
         try (FileReader reader = new FileReader(fileName)) {
-                    
+
             GameData loadedData = GSON.fromJson(reader, GameData.class);
             if (loadedData != null) loadedData.setGameManager(gameData.getGameManager());                                                            
             setLoadedData(loadedData);
-
+            return true;
 
         } catch (FileNotFoundException e) {            
-            System.out.println("No save file found. Starting a new game.");    
+            System.out.println("No save file found. Start a new game.");
+            return false;
         } catch (IOException e) {
             System.err.println("Error reading or processing save file: " + e.getMessage());
-            e.printStackTrace();            
+            e.printStackTrace();
+            return false;
         }
     }
 

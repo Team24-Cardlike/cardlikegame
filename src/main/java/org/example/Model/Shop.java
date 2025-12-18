@@ -33,11 +33,7 @@ public class Shop {
             stringList.add(user.getUpgrades().get(i).getName());
         }
         return stringList;
-    }
-
-    public void switchState(){
-        //manager.setState();
-    }
+    }    
 
     public ArrayList<Upgrade> getUpdatedList(User user){
             while(items.size() < 10){

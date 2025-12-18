@@ -80,6 +80,9 @@ public class MainMenuView implements Screen {
         title.setPosition(difPopup.getWidth()/2 - title.getWidth()/2, difPopup.getHeight() - 80);
         difPopup.addActor(title);
 
+        Label loadFail = new Label("No save available", ls);
+        loadFail.setPosition(stage.getWidth()/2 - loadFail.getWidth()/2, loadButton.getY() - loadFail.getHeight()/2 - 20);
+
         Image backButton = new Image(new Texture("assets/images/redX.png"));
         backButton.setSize(30, 30);
         backButton.setPosition(difPopup.getWidth()-35, difPopup.getHeight()-35);
@@ -114,6 +117,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 playButton.remove();
                 loadButton.remove();
+                loadFail.remove();
                 stage.addActor(difPopup);
             }
         });
@@ -121,11 +125,13 @@ public class MainMenuView implements Screen {
         loadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                playButton.remove();
-                loadButton.remove();
-                controller.loadGame();
-                controller.startGame();
-                stage.addActor(difPopup);
+                if(controller.loadGame())
+                    controller.startGame();
+                else {
+                    stage.addActor(loadFail);
+                    loadButton.setColor(0.5f, 0.5f, 0.5f, 0.6f);
+                    loadButton.setTouchable(Touchable.disabled);
+                }
             }
         });
 

@@ -48,7 +48,6 @@ public abstract class Upgrade {
     public String getCategory() {
         return this.category;
     }
-    //public abstract T getNum();
 
     public abstract boolean checkCondition(Round round);
 

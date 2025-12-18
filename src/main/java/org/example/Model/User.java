@@ -1,7 +1,5 @@
 package org.example.Model;
 import org.example.Model.Upgrades.Upgrade;
-import org.example.Model.Upgrades.UpgradeLibrary;
-import org.example.Model.Upgrades.UpgradeManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +34,9 @@ public class User extends Player {
         }
     }
 
+    /**     
+     * @return Returns cards that have been pressed but not played or discarded
+     */
     public ArrayList<Card> getSelectedCards(){
         return this.selectedCards;
     }
@@ -61,6 +62,11 @@ public class User extends Player {
         this.damage = getHiVal(this.selectedCards) + getComboPlayedCards().value;
     }
 
+    /**
+     * 
+     * @param cards
+     * @return Returns highest rank in cards
+     */
     int getHiVal(ArrayList<Card> cards){
         ArrayList<Integer> ranks = new ArrayList<>();
         for (Card c : cards) {
@@ -83,8 +89,7 @@ public class User extends Player {
 
     int playCards(){
         setDamage();
-        return this.damage;
-        // TODO: FINISH FUNCTION
+        return this.damage;        
     }
 
     public void setHand(ArrayList<Card> hand) {

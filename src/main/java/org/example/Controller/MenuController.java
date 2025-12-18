@@ -21,8 +21,8 @@ public class MenuController {
     public void startGame() {
         manager.startGame();
     }
-    public void loadGame() {
-        save.loadGame();
+    public boolean loadGame() {
+        return save.loadGame();
     }
 
 }

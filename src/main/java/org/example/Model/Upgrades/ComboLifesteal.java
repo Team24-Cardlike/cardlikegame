@@ -16,12 +16,6 @@ public class ComboLifesteal extends Upgrade{
         this.vampAmount = vampAmount;
     }
 
-
-    /*@Override
-    public T getNum() {
-        return vampAmount;
-    }*/
-
     @Override
     public boolean checkCondition(Round round) {
         return Objects.equals(round.getUser().getComboPlayedCards().name, this.vampCombo.name);

@@ -202,12 +202,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         discardButton = new Image(new Texture("assets/images/buttons/discardButton.png"));
         discardButton.setSize(140, 60);
-        discardButton.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 10, viewport.getWorldHeight()/2 - discardButton.getHeight() - 10);
+        discardButton.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 20, viewport.getWorldHeight()/2 - discardButton.getHeight() - 10);
         gameGroup.addActor(discardButton);
 
         startButton = new Image(new Texture("assets/images/playCards.png"));
         startButton.setSize(140, 60);
-        startButton.setPosition(viewport.getWorldWidth()-startButton.getWidth() - 10, viewport.getWorldHeight()/2+10);
+        startButton.setPosition(viewport.getWorldWidth()-startButton.getWidth() - 20, viewport.getWorldHeight()/2+10);
 
         gameGroup.addActor(startButton);
         Gdx.input.setInputProcessor(stage);
@@ -215,7 +215,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                onPlaySelectedCards();
+                if(!selectedCardImages.isEmpty())
+                    onPlaySelectedCards();
             }
         });
 
@@ -227,12 +228,12 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         });
 
         this.discardNum = new Label("Discards left: " + this.discardUsesLeft, lilStyle);
-        this.discardNum.setPosition(viewport.getWorldWidth() - discardButton.getWidth() - 50, 260);
+        this.discardNum.setPosition(discardButton.getX() + discardButton.getWidth()/2 - discardNum.getWidth()/2, discardButton.getY() - discardButton.getHeight()/2);
         gameGroup.addActor(this.discardNum);
         discardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(getDiscardUsesLeft() > 0){
+                if(getDiscardUsesLeft() > 0 && !selectedCardImages.isEmpty()){
                     //discardNum.remove();
                     reduceDiscards();
                     roundController.discardCards(removedIndices);
