@@ -80,9 +80,9 @@ public class MapView implements Screen, MapObserver {
         redX     = new Texture("assets/images/redX.png");
         lokiHead = new Texture("assets/images/lokiMapIcon.png");
         
-        saveButton = new Image(new Texture("assets/images/save.png"));
-        saveButton.setPosition(viewport.getWorldWidth()-110, viewport.getWorldHeight()-90);
-        saveButton.setSize(100, 100);
+        saveButton = new Image(new Texture("assets/images/buttons/saveGameButton.png"));
+        saveButton.setPosition(viewport.getWorldWidth()-105, viewport.getWorldHeight()-60);
+        saveButton.setSize(100, 50);
 
 
         stage.addActor(saveButton);
