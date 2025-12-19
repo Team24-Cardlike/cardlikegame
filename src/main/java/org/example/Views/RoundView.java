@@ -25,43 +25,40 @@ import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.example.Views.Animations.ImageAnimations;
 import com.badlogic.gdx.audio.Sound;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class RoundView extends ApplicationAdapter implements RoundObserver, Screen {
-    public FitViewport viewport;
+    private FitViewport viewport;
     private ShapeRenderer sr;
     private Sound cardSound; // Sound of card being selected
 
-    private boolean tableCreated = false;
-
-    public Image moneyBag;
-    public Image startButton;
-    public Image handbookButton;
-    public Image discardButton;
-    public Image nextButton;
-    public Image retryButton;
+    private Image moneyBag;
+    private Image startButton;
+    private Image handbookButton;
+    private Image discardButton;
+    private Image nextButton;
+    private Image retryButton;
     private Image backgroundImage;
-    Texture background;
-    public Texture shopButtonTexture;
-    public Texture retryButtonTexture;
-    public Texture nextButtonTexture;
-    public Texture vicTxt;
-    public Texture lossTxt;
+    private Image opponentImage;
+    private Image panel;
+
+    private Texture background;
+    private Texture shopButtonTexture;
+    private Texture retryButtonTexture;
+    private Texture nextButtonTexture;
+    private Texture vicTxt;
+    private Texture lossTxt;
+    private Texture opponentTexture;
 
     //ArrayList containing card-sprites for selected cards and hand
     public ArrayList<Image> cardImages = new ArrayList<>();
     public ArrayList<Image> selectedCardImages = new ArrayList<>();
 
-    private Texture opponentTexture;
-    private Image opponentImage;
-
     private Stage stage;
     public ArrayList<Boolean> hoveredCards = new ArrayList<>();;
     private Label currentComboLabel;
     public Vector3 coords;
-    private Image panel;
 
     Label.LabelStyle style;
     Label.LabelStyle lilStyle;
@@ -69,9 +66,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private Label playerName;
     private Label moneyAmount;
     private Label oppAttack;
-    private float opponentStartY = 300;
-    private float opponentDropY = 180;
-    private boolean animatingCard = false;
     private String opponentNameString;
     private float opponentHealthPercentage;
     private float userHealthPercentage;
@@ -88,9 +82,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private int discardUsesLeft = 3;
     Label discardNum;
 
-    Label enemyHeath;
-    Label playerHealth;
-
     private Group gameGroup;
     private Group endGameGroup;
 
@@ -99,9 +90,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public final Image[] upgradeSlots = new Image[4];
     private int lastIndex;
     private int currentUpgradeIndex = 0;
-   // public void setGameManager (GameManager manager ) {
-    //    this.gameManager = manager;
-    //}
 
     public void setController(RoundController roundController) {
         this.roundController = roundController;
@@ -181,7 +169,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         backgroundImage.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
 
         backgroundImage.setPosition(0, 0);
-        backgroundImage.setZIndex(0); // längst bak
+        backgroundImage.setZIndex(0); //Furthest back
 
         stage.addActor(backgroundImage);
 
@@ -246,7 +234,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             }
         });
 
-        Label playerName = new Label("Player", style);
+        playerName = new Label("Player", style);
         playerName.setPosition(180, 615);
         gameGroup.addActor(playerName);
         createUpgradeTable();
@@ -258,10 +246,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         cardSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/card-sounds-35956.mp3"));
     }
 
-
     @Override
     public void onNewOpponent(String name, int damage, String image){
-        Label opponentName = new Label(name, style);
+        opponentName = new Label(name, style);
         opponentName.setPosition(915, 615);
         opponentNameString = name;
         if(opponentImage != null){opponentImage.remove();}
@@ -288,9 +275,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     private void createUpgradeTable(){
-        tableCreated = true;
-        //Table table = new Table();
-        //table.setFillParent(true);
         this.upgradeTable = new Table();
         this.upgradeTable.setPosition(50, 350);
 
@@ -329,11 +313,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         currentUpgradeIndex++;
     }
 
-    public void opponentAnimation() {
-        oppAnimation();
-    }
-
-
+    /**
+     * @param //Draws a red rectangle and scales a green over according to health percentage
+     */
     public void drawHealthBars() {
         sr.setProjectionMatrix(viewport.getCamera().combined);
 
@@ -350,17 +332,15 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        // RED background
         sr.setColor(Color.RED);
-        sr.rect(x, y, width, height); // rita hela baren röd först
+        sr.rect(x, y, width, height);
 
-        // GREEN foreground (skalar med procent)
         if (greenWidthUser > 0) {
-            sr.setColor(Color.GREEN);
+            sr.setColor(Color.FOREST);
             sr.rect(x, y, greenWidthUser, height);
         }
 
-        // ENEMY HEALTH BAR (top-right)
+        //Opponent health bar
         float ex = viewport.getWorldWidth()/2 + opponentImage.getWidth()/2 +30;;
         float ey = 665;
 
@@ -369,16 +349,14 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         float greenWidthOpp = width * clampedOpponentHealth;
 
         sr.setColor(Color.RED);
-        sr.rect(ex, ey, width, height); // röd bakgrund
+        sr.rect(ex, ey, width, height);
 
         if (greenWidthOpp > 0) {
-            sr.setColor(Color.GREEN);
+            sr.setColor(Color.FOREST);
             sr.rect(ex, ey, greenWidthOpp, height);
         }
 
         sr.end();
-
-
     }
 
 
@@ -394,11 +372,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
         if(!this.gameEnded){
             drawHealthBars();
-
         }
     }
 
-    public void oppAnimation() {
+    public void opponentAnimation() {
         float initX = opponentImage.getX();
         float initY = opponentImage.getY();
         ImageAnimations.opponentAnimation(opponentImage, initX, initY,viewport.getWorldHeight()/2);
@@ -539,7 +516,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
 
-                    // MAX 5 cards
+                    //Max 5 cards
                     if (selectedCardImages.size() >= 5) {
                         return;
                     }
@@ -665,7 +642,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onHealthChanged(float userHealth, float opponentHealth) {
         this.opponentHealthPercentage = opponentHealth;
         this.userHealthPercentage = userHealth;
-
     }
 
     @Override
@@ -687,7 +663,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onPlayerTurn(boolean playerTurn, int userGold) {
         this.playerTurn = playerTurn;
         if (!playerTurn) {
-            oppAnimation();
+            opponentAnimation();
         }
         moneyAmount.setText(String.valueOf(userGold)+" gold");
     }

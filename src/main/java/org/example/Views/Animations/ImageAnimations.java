@@ -35,15 +35,11 @@ public class ImageAnimations{
 
     public static Action screenShake(float intensity, float duration) {
         return Actions.sequence(
-                Actions.repeat(
-                        (int)(duration / 0.05f),
+                Actions.repeat((int)(duration / 0.05f),
                         Actions.sequence(
                                 Actions.moveBy(-intensity, 0, 0.025f),
-                                Actions.moveBy(intensity, 0, 0.025f)
-                        )
-                ),
+                                Actions.moveBy(intensity, 0, 0.025f))),
                 Actions.moveTo(0, 0)
         );
     }
-
 }

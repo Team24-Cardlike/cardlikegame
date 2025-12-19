@@ -8,9 +8,7 @@ import org.example.Views.RoundView;
 import org.example.Views.MainMenuView;
 import org.example.Views.ShopView;
 
-
 public class GameRender extends Game implements StateObserver {
-
     private RoundView roundView;
     private MainMenuView menuView;
     private MapView mapView;    
@@ -24,11 +22,11 @@ public class GameRender extends Game implements StateObserver {
         this.handbookView = handbookView;
         this.mapView = mapview;
     }
+
     @Override
     public void create() {
         setScreen(menuView);
     }
-
 
     public void switchView(String state) {
         switch (state) {

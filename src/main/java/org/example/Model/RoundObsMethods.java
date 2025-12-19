@@ -49,7 +49,7 @@ public class RoundObsMethods {
     }
 
     //Notify health changed
-    public void notifyHealthChanged(float playerHealthFloat,float opponentHealthFloat, int playerMaxHelath, int opponentMaxHelath) {
+    public void notifyHealthChanged(float playerHealthFloat,float opponentHealthFloat) {
         for (RoundObserver o : observers) {
             o.onHealthChanged(playerHealthFloat,opponentHealthFloat);
         }

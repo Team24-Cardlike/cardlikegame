@@ -1,6 +1,5 @@
 package org.example.Views;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -16,30 +15,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.example.Controller.MenuController;
 
-
 public class MainMenuView implements Screen {
-    public Image playButton;
-    public Image loadButton;
+    private Image playButton;
+    private Image loadButton;
+    private Image easyButton;
+    private Image normalButton;
+    private Image hardButton;
+
     Stage stage;
     Texture background;
-    Viewport viewport;
     MenuController controller;
-
-    public Image easyButton;
-    public Image normalButton;
-    public Image hardButton;
     BitmapFont font;
-
 
     public void setController(MenuController controller) {
         this.controller = controller;
     }
-
-    public Stage getStage() { return stage; }
 
     @Override
     public void show() {
@@ -161,12 +154,10 @@ public class MainMenuView implements Screen {
                 controller.startGame();
             }
         });
-
     }
 
     @Override
     public void render(float v) {
-
         ScreenUtils.clear(Color.BLACK);
         stage.act(v);
         stage.draw();
@@ -179,19 +170,13 @@ public class MainMenuView implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
