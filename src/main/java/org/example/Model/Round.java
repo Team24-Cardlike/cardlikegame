@@ -93,7 +93,7 @@ public class Round {
         this.user.damage = 0;
         playerTurn = false;
 
-        o.notifyHealthChanged(userHealth, opponentHealth); // Notify observer of health changed
+        o.notifyHealthChanged(userHealth, opponentHealth, opponent.getMaxHealth(), user.maxHealth); // Notify observer of health changed
         o.notifyPlayerTurn(playerTurn, user.getGold()); // Notify observer of changed player turn
         o.notifyUnselected(user.getSelectedCards()); // Notify observer of reset selected
         o.notifyHandChanged(user.getHand());// Notify observer of new hand
@@ -113,7 +113,7 @@ public class Round {
         checkDeadPlayer();
         playerTurn = true;
 
-        o.notifyHealthChanged(userHealth,opponentHealth);// Notify observer of health changed
+        o.notifyHealthChanged(userHealth,opponentHealth, opponent.getMaxHealth(), user.maxHealth);// Notify observer of health changed
         o.notifyOpponentAttacked(oppDamage);//, oppopnent.name, opponent.attackName));
         o.notifyPlayerTurn(playerTurn, user.getGold()); // notify player turn changed
 
@@ -228,7 +228,7 @@ public class Round {
         o.notifyHandChanged(user.getHand());
         o.notifyUnselected(user.getSelectedCards());
         o.notifyBestCombo(currentBestCombo);
-        o.notifyHealthChanged(userHealth, opponentHealth);
+        o.notifyHealthChanged(userHealth, opponentHealth, opponent.getMaxHealth(), user.maxHealth);
         o.notifyCurrentOpponent(this.opponent.getName(), this.opponent.getName(), this.opponent.getDamage());
         o.notifyPlayerTurn(playerTurn, user.getGold());
         o.notifyNewRound(upgradeNames);

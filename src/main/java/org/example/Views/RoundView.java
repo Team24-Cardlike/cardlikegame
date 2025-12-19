@@ -24,6 +24,7 @@ import org.example.Controller.RoundController;
 import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.example.Views.Animations.ImageAnimations;
+import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -31,6 +32,7 @@ import java.util.Objects;
 public class RoundView extends ApplicationAdapter implements RoundObserver, Screen {
     public FitViewport viewport;
     private ShapeRenderer sr;
+    private Sound cardSound; // Sound of card being selected
 
     private boolean tableCreated = false;
 
@@ -86,6 +88,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private int discardUsesLeft = 3;
     Label discardNum;
 
+    Label enemyHeath;
+    Label playerHealth;
+
     private Group gameGroup;
     private Group endGameGroup;
 
@@ -121,7 +126,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     @Override
     public void show() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/impact.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();        
         parameter.size = 35;
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 4f;
@@ -249,6 +254,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         stage.addActor(gameGroup);
         stage.addActor(endGameGroup);
+
+        cardSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/card-sounds-35956.mp3"));
     }
 
 
@@ -387,6 +394,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
         if(!this.gameEnded){
             drawHealthBars();
+
         }
     }
 
@@ -600,6 +608,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onSelectedCard(ArrayList<String> selected) {
+        cardSound.play();
         float spacing = 250;
             for (Image img : selectedCardImages) {
                 img.remove();
@@ -656,6 +665,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onHealthChanged(float userHealth, float opponentHealth) {
         this.opponentHealthPercentage = opponentHealth;
         this.userHealthPercentage = userHealth;
+
     }
 
     @Override
