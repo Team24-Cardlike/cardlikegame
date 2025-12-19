@@ -1,15 +1,11 @@
 package org.example.Model;
 
 
-import org.example.DesktopLauncher;
 import org.example.Model.OpponentFactories.BossFactory;
 import org.example.Model.OpponentFactories.Opponent;
 import org.example.Model.OpponentFactories.OpponentFactory;
 import org.example.Model.OpponentFactories.RegularFactory;
-import org.example.Model.Upgrades.ComboDmgAmp;
-import org.example.Model.Upgrades.Upgrade;
 import org.example.Model.Upgrades.UpgradeLibrary;
-import org.example.Model.Upgrades.UpgradeManager;
 import org.junit.*;
 
 import java.util.ArrayList;

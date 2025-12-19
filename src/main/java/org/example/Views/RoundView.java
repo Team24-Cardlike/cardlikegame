@@ -25,7 +25,6 @@ import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.example.Views.Animations.ImageAnimations;
 
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -46,8 +45,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private Image opponentImage;
     private Image panel;
 
-    private Texture background;
-    private Texture shopButtonTexture;
+    private Texture background;    
     private Texture retryButtonTexture;
     private Texture nextButtonTexture;
     private Texture vicTxt;

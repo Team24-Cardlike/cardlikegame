@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Controller.ShopController;
 import org.example.Model.Upgrades.Upgrade;
-import org.example.Model.Upgrades.UpgradeLibrary;
 import java.util.ArrayList;
 import java.util.List;
 
