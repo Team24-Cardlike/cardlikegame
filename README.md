@@ -23,7 +23,11 @@
 <p>Run it through an IDE.</p>
 
 <h2>Tutorial:</h2>
-<p>Click on the first level on the map and then press the handbook for instructions.</p>
+<p>The game is quite simple. After launching, press play (or load if u have saved before). THhen you click on the leftmost node in the map. You will be taken to the first fight where you will use your card to defeat your opponent. Information about gameplay can be found in the handbook by pressing it during the fight. After your first fight, you will be taken back to the map where you now can press "Anton's Shop" to buy upgrades for your upcoming fights you are allowed max four upgrades, so choose wisely. <br> Have fun! </p>
 
-<h2>Notes:</h2>
-<p>If you get errors about assets not loading, try running <code>mvn clean</code> in the terminal.</p>
+<h2>Known issues:</h2>
+<ul>
+    <li>If you get errors about assets not loading, try running <code>mvn clean</code> in the terminal.</li>
+    <li>If you buy too many upgrades the game will ultimately crash and you will lose your progress if you didn't save before.</li>
+    <li>Your avatar isn't visible on the map until after your first fight.</li>
+</ul>
