@@ -23,7 +23,7 @@
 <p>Run it through an IDE.</p>
 
 <h2>Tutorial:</h2>
-<p>The game is quite simple. After launching, press play (or load if u have saved before). THhen you click on the leftmost node in the map. You will be taken to the first fight where you will use your card to defeat your opponent. Information about gameplay can be found in the handbook by pressing it during the fight. After your first fight, you will be taken back to the map where you now can press "Anton's Shop" to buy upgrades for your upcoming fights you are allowed max four upgrades, so choose wisely. <br> Have fun! </p>
+<p>The game is quite simple. After launching, press play (or load if u have saved before). Then you click on the leftmost node in the map. You will be taken to the first fight where you will use your card to defeat your opponent.</p> <p>Information about gameplay can be found in the handbook by pressing it during the fight. After your first fight, you will be taken back to the map where you now can press "Anton's Shop" to buy upgrades for your upcoming fights you are allowed max four upgrades, so choose wisely.</p> <p>Have fun! </p>
 
 <h2>Known issues:</h2>
 <ul>
