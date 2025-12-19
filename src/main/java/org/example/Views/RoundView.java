@@ -33,6 +33,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public FitViewport viewport;
     private ShapeRenderer sr;
     private Sound cardSound; // Sound of card being selected
+    private Sound opponentSound; // Sound of opponent attacking 
 
     private boolean tableCreated = false;
 
@@ -253,6 +254,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         stage.addActor(endGameGroup);
 
         cardSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/card-sounds-35956.mp3"));
+        opponentSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/sfx12-boss_damage1-324520.mp3"));
     }
 
 
@@ -699,7 +701,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     @Override
-    public void onOpponentAttack(int damage) {
+    public void onOpponentAttack(int damage) {        
+        opponentSound.play();
         oppAttack.setText(opponentNameString+ " attacked you!\n"
                 + "You took "+damage+ " damage!\n"
                 + "Players turn.");
