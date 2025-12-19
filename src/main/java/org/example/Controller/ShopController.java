@@ -14,7 +14,6 @@ public class ShopController {
     User user;
     GameManager manager;
     public ShopController(GameManager manager){
-        //this.round = round;
         this.user = manager.getUser();
         this.manager = manager;
         this.stringList = new ArrayList<>();
