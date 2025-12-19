@@ -6,7 +6,7 @@ public class BackgroundMusic {
     private Music music;
     public BackgroundMusic(String musicPath) {        
         music = Gdx.audio.newMusic(Gdx.files.internal(musicPath));
-        music.setVolume(0.5f);
+        music.setVolume(0.1f);
         music.play();
         music.setLooping(true);
     }
