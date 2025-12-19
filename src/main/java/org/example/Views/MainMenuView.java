@@ -39,7 +39,7 @@ public class MainMenuView implements Screen {
         stage = new Stage(new FitViewport(1280, 720));
         Gdx.input.setInputProcessor(stage);
 
-        background = new Texture("assets/images/mainmenu.png");
+        background = new Texture("assets/images/mainMenu.png");
         Image bg = new Image(background);
         bg.setFillParent(true);
         stage.addActor(bg);

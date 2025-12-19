@@ -24,6 +24,8 @@ import org.example.Controller.RoundController;
 import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.example.Views.Animations.ImageAnimations;
+
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -32,6 +34,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private FitViewport viewport;
     private ShapeRenderer sr;
     private Sound cardSound; // Sound of card being selected
+    private Sound opponentSound; // Sound of opponent attacking
 
     private Image moneyBag;
     private Image startButton;
@@ -227,7 +230,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(getDiscardUsesLeft() > 0 && !selectedCardImages.isEmpty()){
-                    //discardNum.remove();
                     reduceDiscards();
                     roundController.discardCards();
                 }
@@ -244,6 +246,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         stage.addActor(endGameGroup);
 
         cardSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/card-sounds-35956.mp3"));
+        opponentSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/sfx12-boss_damage1-324520.mp3"));
     }
 
     @Override
@@ -253,7 +256,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         opponentNameString = name;
         if(opponentImage != null){opponentImage.remove();}
         opponentTexture = new Texture("assets/images/opponents/"+image+".png");
-        opponentImage = new Image(opponentTexture);//new Sprite(opponentTexture);
+        opponentImage = new Image(opponentTexture);
         opponentImage.setSize(350, 200);
         opponentImage.setPosition(viewport.getWorldWidth() / 2f - opponentImage.getWidth() / 2f, viewport.getWorldHeight() - opponentImage.getHeight() -10);
         gameGroup.addActor(opponentImage);
@@ -494,9 +497,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             cardSprite.setSize(100,175);
             cardSprite.setOrigin(Align.center);
             float y = 35;
+            float startX = viewport.getWorldWidth()/2 - cardSprite.getWidth()/2 + 40 - 60 * (hand.size()/2 - i);
 
-            cardSprite.setPosition(handX(i, cardImages.size()), y);
-            cardSprite.setRotation(5 * (hand.size()/2 - i)); // Rotating cars
+            cardSprite.setPosition(startX, y);
+            cardSprite.setRotation(5 * (hand.size()/2 - i)); // Rotating cards
             cardSprite.setTouchable(Touchable.enabled);
 
             cardSprite.addListener(new InputListener() {
@@ -529,11 +533,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
     }
 
-    private float handX(int index, int totalCards){
+    private float handX(int i, int totalCards){
         float spacing = 150;
         float totalWidth = totalCards * spacing;
         float startX = viewport.getWorldWidth() / 4f - totalWidth / 2f;
-        return startX + index * spacing;
+        return startX + i * spacing;
     }
 
     @Override
@@ -681,6 +685,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     @Override
     public void onOpponentAttack(int damage) {
+        opponentSound.play();
         oppAttack.setText(opponentNameString+ " attacked you!\n"
                 + "You took "+damage+ " damage!\n"
                 + "Players turn.");
