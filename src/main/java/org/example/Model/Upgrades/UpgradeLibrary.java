@@ -33,34 +33,32 @@ public class UpgradeLibrary {
         this.damageUpgrades.add(new ExtraDmgFirstAttack("Initiative", 100, 20, "initiative", 1101));
 
         //Before damaging:
-        this.damageUpgrades.add(new SuitDamageAmp("Full Moon", "moon", 15, 25, "full_moon", 1102));
-        this.damageUpgrades.add(new SuitDamageAmp("Solar Flare", "sun", 15, 25, "solar_flare", 1103));
+        this.damageUpgrades.add(new SuitDamageAmp("Full Moon", "moon", 15, 25, "fullMoon", 1102));
+        this.damageUpgrades.add(new SuitDamageAmp("Solar Flare", "sun", 15, 25, "solarFlare", 1103));
         this.damageUpgrades.add(new SuitDamageAmp("Tsunami", "water", 15, 25, "tsunami", 1104));
         this.damageUpgrades.add(new SuitDamageAmp("Overgrowth", "tree", 15, 25, "overgrowth", 1105));
 
-        this.damageUpgrades.add(new ComboDmgAmp("Lone Wolf", combos.single, 3f, 15, "lone_wolf", 1106));
-        this.damageUpgrades.add(new ComboDmgAmp("Twin Synergy", combos.pair,2.5f, 15, "twin_synergy", 1107));
-        this.damageUpgrades.add(new ComboDmgAmp("Three Musketeers", combos.three_of_a_kind, 1.75f, 15, "three_musketeers", 1108));
-        this.damageUpgrades.add(new ComboDmgAmp("Jhin's Blessing", combos.four_of_a_kind,1.4444f, 15, "jhins_blessing", 1109));
+        this.damageUpgrades.add(new ComboDmgAmp("Lone Wolf", combos.single, 3f, 15, "loneWolf", 1106));
+        this.damageUpgrades.add(new ComboDmgAmp("Twin Synergy", combos.pair,2.5f, 15, "twinSynergy", 1107));
+        this.damageUpgrades.add(new ComboDmgAmp("Three Musketeers", combos.three_of_a_kind, 1.75f, 15, "threeMusketeers", 1108));
+        this.damageUpgrades.add(new ComboDmgAmp("Jhin's Blessing", combos.four_of_a_kind,1.4444f, 15, "jhinsBlessing", 1109));
 
         //After damaging
         this.damageUpgrades.add(new ExecuteUpgrade("Fatality", 0.10f, 10, "fatality", 1301));
     }
     private void registerSustainUpgrades() {
         //When damaging:
-        this.sustainUpgrades.add(new ComboLifesteal("Rampager's Thirst", combos.single, 0.20f, 15, "rampagers_thirst",2301));
-        this.sustainUpgrades.add(new ComboLifesteal("Shield-Brothers' Draught", combos.pair, 0.15f, 15, "shieldbrothers_draught",2302));
-        this.sustainUpgrades.add(new ComboLifesteal("Warband's Blood Rite", combos.three_of_a_kind, 0.10f, 15, "warbands_blood_rite",2303));
-        this.sustainUpgrades.add(new ComboLifesteal("Feast of the Einherjar", combos.four_of_a_kind, 0.03f, 15, "feats_of_the_einherjar",2304));
+        this.sustainUpgrades.add(new ComboLifesteal("Rampager's Thirst", combos.single, 0.20f, 15, "rampagersThirst",2301));
+        this.sustainUpgrades.add(new ComboLifesteal("Shield-Brothers' Draught", combos.pair, 0.15f, 15, "shieldbrothersDraught",2302));
+        this.sustainUpgrades.add(new ComboLifesteal("Warband's Blood Rite", combos.three_of_a_kind, 0.10f, 15, "warbandsBloodRite",2303));
+        this.sustainUpgrades.add(new ComboLifesteal("Feast of the Einherjar", combos.four_of_a_kind, 0.03f, 15, "feastOfTheEinherjar",2304));
         //When taking damage:
-        this.sustainUpgrades.add(new ReviveUpgrade("Helbound Rebirth", "Hel uses her powers to give you another chance. Come back to life with 1HP.", 10, 20, "helbound_rebirth", 2201));
+        this.sustainUpgrades.add(new ReviveUpgrade("Helbound Rebirth", "Hel uses her powers to give you another chance. Come back to life with 1HP.", 10, 20, "helboundRebirth", 2201));
         //After round is over:
-
-        this.sustainUpgrades.add(new ReviveUpgrade("Helbound Rebirth", "Hel uses her powers to give you another chance. Come back to life with 1HP.", 10, 1, "hel", 22));
     }
     private void registerEconomyUpgrades() {
-        this.economyUpgrades.add(new GoldOnKill("Spoils of War", 10, 3, "initiative",31));
-        this.economyUpgrades.add(new GoldOnOneshot("One Punch Man", 10, 15, "overgrowth",32));
+        this.economyUpgrades.add(new GoldOnKill("Spoils of War", 10, 3, "spoilsOfWar",3901));
+        this.economyUpgrades.add(new GoldOnOneshot("One Punch Man", 10, 15, "onePunchMan",3902));
     }
 
     private void registerAllUpgrades(){

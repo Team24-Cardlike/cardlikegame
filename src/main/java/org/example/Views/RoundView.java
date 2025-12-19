@@ -24,6 +24,8 @@ import org.example.Controller.RoundController;
 import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.example.Views.Animations.ImageAnimations;
+
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public FitViewport viewport;
     private ShapeRenderer sr;
     private Sound cardSound; // Sound of card being selected
-    private Sound opponentSound; // Sound of opponent attacking 
+    private Sound opponentSound; // Sound of opponent attacking     
 
     private boolean tableCreated = false;
 
@@ -100,9 +102,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public final Image[] upgradeSlots = new Image[4];
     private int lastIndex;
     private int currentUpgradeIndex = 0;
-   // public void setGameManager (GameManager manager ) {
-    //    this.gameManager = manager;
-    //}
 
     public void setController(RoundController roundController) {
         this.roundController = roundController;
@@ -182,7 +181,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         backgroundImage.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
 
         backgroundImage.setPosition(0, 0);
-        backgroundImage.setZIndex(0); // längst bak
+        backgroundImage.setZIndex(0); 
 
         stage.addActor(backgroundImage);
 
@@ -239,8 +238,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         discardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(getDiscardUsesLeft() > 0 && !selectedCardImages.isEmpty()){
-                    //discardNum.remove();
+                if(getDiscardUsesLeft() > 0 && !selectedCardImages.isEmpty()){                    
                     reduceDiscards();
                     roundController.discardCards();
                 }
@@ -257,7 +255,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         stage.addActor(endGameGroup);
 
         cardSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/card-sounds-35956.mp3"));
-        opponentSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/sfx12-boss_damage1-324520.mp3"));
+        opponentSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/sfx12-boss_damage1-324520.mp3"));        
     }
 
 
@@ -268,7 +266,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         opponentNameString = name;
         if(opponentImage != null){opponentImage.remove();}
         opponentTexture = new Texture("assets/images/opponents/"+image+".png");
-        opponentImage = new Image(opponentTexture);//new Sprite(opponentTexture);
+        opponentImage = new Image(opponentTexture);
         opponentImage.setSize(350, 200);
         opponentImage.setPosition(viewport.getWorldWidth() / 2f - opponentImage.getWidth() / 2f, viewport.getWorldHeight() - opponentImage.getHeight() -10);
         gameGroup.addActor(opponentImage);
@@ -290,9 +288,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     }
 
     private void createUpgradeTable(){
-        tableCreated = true;
-        //Table table = new Table();
-        //table.setFillParent(true);
+        tableCreated = true;        
         this.upgradeTable = new Table();
         this.upgradeTable.setPosition(50, 350);
 
@@ -354,9 +350,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
         // RED background
         sr.setColor(Color.RED);
-        sr.rect(x, y, width, height); // rita hela baren röd först
+        sr.rect(x, y, width, height); // Make the bar red at first
 
-        // GREEN foreground (skalar med procent)
+        // GREEN foreground 
         if (greenWidthUser > 0) {
             sr.setColor(Color.GREEN);
             sr.rect(x, y, greenWidthUser, height);
@@ -371,7 +367,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         float greenWidthOpp = width * clampedOpponentHealth;
 
         sr.setColor(Color.RED);
-        sr.rect(ex, ey, width, height); // röd bakgrund
+        sr.rect(ex, ey, width, height); // red background
 
         if (greenWidthOpp > 0) {
             sr.setColor(Color.GREEN);
@@ -518,9 +514,10 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
             cardSprite.setSize(100,175);
             cardSprite.setOrigin(Align.center);
             float y = 35;
-
-            cardSprite.setPosition(handX(i, cardImages.size()), y);
-            cardSprite.setRotation(5 * (hand.size()/2 - i)); // Rotating cars
+            float startX = viewport.getWorldWidth()/2 - cardSprite.getWidth()/2 + 40 - 60 * (hand.size()/2 - i);
+                        
+            cardSprite.setPosition(startX, y);
+            cardSprite.setRotation(5 * (hand.size()/2 - i)); // Rotating cards
             cardSprite.setTouchable(Touchable.enabled);
 
             cardSprite.addListener(new InputListener() {
@@ -553,11 +550,11 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
     }
 
-    private float handX(int index, int totalCards){
+    private float handX(int i, int totalCards){
         float spacing = 150;
         float totalWidth = totalCards * spacing;
-        float startX = viewport.getWorldWidth() / 4f - totalWidth / 2f;
-        return startX + index * spacing;
+        float startX = viewport.getWorldWidth() / 4f - totalWidth / 2f;        
+        return startX + i * spacing;
     }
 
     @Override
