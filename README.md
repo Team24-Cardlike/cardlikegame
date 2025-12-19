@@ -11,11 +11,10 @@
 
 <h2>Running the game:</h2>
 <h3>Option 1:</h3>
-<p>Run `src/main/java/org/example/DesktopLauncher.java`.</p>
+Run `src/main/java/org/example/DesktopLauncher.java`.
 
 <h3>Option 2:</h3>
-<p>Run the command `mvn compile exec:java`. 
-For this you need Maven installed on your computer</p>
+Run the command `mvn compile exec:java`. For this you need Maven installed on your computer
 
 <h3>Option 3:</h3>
 <p>Run it through an IDE.</p>
