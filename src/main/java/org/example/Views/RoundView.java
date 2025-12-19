@@ -671,7 +671,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onRoundInit(ArrayList<String> upgrades) {
         for(int i = 0; i < upgrades.size(); i++){
             addUpgradeImage(upgrades.get(i));
-            System.out.println("USER HAS: "+upgrades.get(i));
         }
         this.discardUsesLeft=3;
         this.discardNum.setText("Discards left: " + this.discardUsesLeft);
