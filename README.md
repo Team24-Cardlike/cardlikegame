@@ -2,7 +2,7 @@
 
 <h2>Requirements:</h2>
 <ul>
-    <li>Java 23+</li>
+    <li>Java 21+</li>
     <li>Maven 3.8+</li>
     <li>LibGDX 1.12.1+</li>
     <li>Gson 2.10.1+</li>
