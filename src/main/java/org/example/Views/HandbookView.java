@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
 import org.example.Controller.RoundController;
 
 public class HandbookView implements Screen {
@@ -25,6 +24,7 @@ public class HandbookView implements Screen {
     public void setController(RoundController ctrl){
         this.roundController = ctrl;
     }
+
     @Override
     public void show() {
         stage = new Stage(new FitViewport(1280,720));
@@ -61,8 +61,8 @@ public class HandbookView implements Screen {
         handbookText.setWrap(true);
 
         ScrollPane.ScrollPaneStyle scrollStyle = new ScrollPane.ScrollPaneStyle();
-        ScrollPane sacrollPane = new ScrollPane(handbookText, scrollStyle);
-        sacrollPane.setFadeScrollBars(false);
+        ScrollPane scrollPane = new ScrollPane(handbookText, scrollStyle);
+        scrollPane.setFadeScrollBars(false);
 
         closeButton = new Image(new Texture("assets/images/buttons/xButton.png"));
 
@@ -72,7 +72,7 @@ public class HandbookView implements Screen {
                 roundController.closeHandBook();
             }
         });
-        table.add(sacrollPane).expand().fill().pad(20).row();
+        table.add(scrollPane).expand().fill().pad(20).row();
         table.add(closeButton).size(100,75).pad(10);
     }
 
@@ -91,19 +91,13 @@ public class HandbookView implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {

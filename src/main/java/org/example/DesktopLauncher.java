@@ -2,7 +2,6 @@ package org.example;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-
 import org.example.Controller.MenuController;
 import org.example.Controller.RoundController;
 import org.example.Controller.MapController;
@@ -26,16 +25,13 @@ public class DesktopLauncher {
         ShopView shopView = new ShopView();
         GameManager manager = new GameManager(roundView,mapView);
 
-        // roundView.setGameManager(manager);        
         Save save = new Save(new GameData(manager));
         RoundController roundController = new RoundController(manager);
-              
 
         MapController mapController = new MapController(manager);
         mapController.setMap(manager.gameMap, save);
 
         MainMenuView menuView = new MainMenuView();
-        // menuView.setGameManager(manager);
         MenuController menuController = new MenuController(manager, save);
 
         HandbookView handbookView = new HandbookView();        

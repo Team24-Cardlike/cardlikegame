@@ -1,6 +1,5 @@
 package org.example.Model.OpponentFactories;
 
-import org.example.Model.OpponentFactories.DeclaredBosses.*;
 import org.example.Model.OpponentFactories.DeclaredRegular.GnomeRegular;
 import org.example.Model.OpponentFactories.DeclaredRegular.ImpRegular;
 import org.example.Model.OpponentFactories.DeclaredRegular.ImpRegular2;

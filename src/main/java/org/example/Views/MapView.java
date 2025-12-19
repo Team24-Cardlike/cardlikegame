@@ -40,8 +40,7 @@ public class MapView implements Screen, MapObserver {
     private Set<String> availableLvls;
 
     private String lastLVL;
-
-    private String currentOp;
+    Vector3 coords = new Vector3();
 
     // Positions for lvls on map
     private final float[][] levelPositions = {
@@ -58,9 +57,6 @@ public class MapView implements Screen, MapObserver {
             {860, 540}  // level 5  Oden
 
     };
-
-    Vector3 coords = new Vector3();
-
 
     public void setController(MapController c) {
         this.controller = c;
@@ -84,17 +80,14 @@ public class MapView implements Screen, MapObserver {
         saveButton.setPosition(viewport.getWorldWidth()-105, viewport.getWorldHeight()-60);
         saveButton.setSize(100, 50);
 
-
         stage.addActor(saveButton);
         saveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {                
                 controller.save();
-            
             }
         });
         lokiHead = new Texture("assets/images/lokiMapIcon.png");
-
     }
 
     public void draw(){
@@ -102,16 +95,9 @@ public class MapView implements Screen, MapObserver {
         batch.draw(mapBackground,0,0,viewport.getWorldWidth(),viewport.getWorldHeight());
 
         drawOpponent();
-        drawSaveButton();
-
         batch.end();
         stage.draw();
     }
-
-    private void drawSaveButton() {
-
-    }
-
 
     private void drawOpponent() {
         mapSprites.clear();
@@ -133,7 +119,6 @@ public class MapView implements Screen, MapObserver {
 
             else  {
                 drawRest(x,y,regular);
-
             }
             for (Sprite s : lvlSprites) {
                 s.draw(batch);
@@ -141,7 +126,6 @@ public class MapView implements Screen, MapObserver {
             for (Sprite s : mapSprites) {
                 s.draw(batch);
             }
-
         }
     }
 
@@ -157,7 +141,6 @@ public class MapView implements Screen, MapObserver {
             Sprite player =  makeSprite(lokiHead, x, y);
             mapSprites.add(player);
         }
-
     }
 
     public void drawCurrent(float x, float y, boolean regular) {
@@ -166,13 +149,13 @@ public class MapView implements Screen, MapObserver {
         else { base =  makeSprite(lvlRuneBoss,x,y);}
         lvlSprites.add(base);
     }
+
     public void drawRest(float x, float y, boolean regular) {
         Sprite base;
         if(regular) {base = makeSprite(lvlRune,x,y);}
         else { base =  makeSprite(lvlRuneBoss,x,y);}
         lvlSprites.add(base);
     }
-
 
     public Sprite makeSprite(Texture tex, float centerX,float centerY) {
         Sprite s = new Sprite(tex);
@@ -183,7 +166,7 @@ public class MapView implements Screen, MapObserver {
     }
 
     private void input() {
-        // Hämta muskoordinater
+        //Get mouse coordinates
         coords.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(coords);
 
@@ -212,23 +195,23 @@ public class MapView implements Screen, MapObserver {
             }
     }  }
 
-        private Polygon generateHitbox(int index,ArrayList<Sprite> ops) {        
-            // AI-generated solution for getting the correct hitbox
-            Sprite sprite = ops.get(index);
-            float[] vertices = new float[]{
-                    0, 0,
-                    sprite.getWidth(), 0,
-                    sprite.getWidth(), sprite.getHeight(),
-                    0, sprite.getHeight()
-            };
-            Polygon poly = new Polygon(vertices);
+    private Polygon generateHitbox(int index,ArrayList<Sprite> ops) {
+        // AI-generated solution for getting the correct hitboxes
+        Sprite sprite = ops.get(index);
+        float[] vertices = new float[]{
+                0, 0,
+                sprite.getWidth(), 0,
+                sprite.getWidth(), sprite.getHeight(),
+                0, sprite.getHeight()
+        };
+        Polygon poly = new Polygon(vertices);
 
-            poly.setOrigin(sprite.getOriginX(), sprite.getOriginY());
-            poly.setPosition(sprite.getX(), sprite.getY());
-            poly.setRotation(sprite.getRotation());
-            poly.setScale(sprite.getScaleX(), sprite.getScaleY());
-            return poly;
-        }
+        poly.setOrigin(sprite.getOriginX(), sprite.getOriginY());
+        poly.setPosition(sprite.getX(), sprite.getY());
+        poly.setRotation(sprite.getRotation());
+        poly.setScale(sprite.getScaleX(), sprite.getScaleY());
+        return poly;
+    }
 
     @Override
     public void render(float v) {
@@ -247,14 +230,10 @@ public class MapView implements Screen, MapObserver {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
     public void hide() {
@@ -264,13 +243,10 @@ public class MapView implements Screen, MapObserver {
     }
 
     @Override
-    public void dispose() {
-
-    }
+    public void dispose() {}
 
     @Override
     public void onMapChanged(ArrayList<String> lvls, Set<String> completedLvls, Set<String> availableLvls) {
-
         this.lvls = lvls;
         this.completedLvls = completedLvls;
         this.availableLvls = availableLvls;

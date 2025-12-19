@@ -19,14 +19,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import org.example.Controller.ShopController;
 import org.example.Model.Upgrades.Upgrade;
-import org.example.Model.Upgrades.UpgradeLibrary;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShopView implements Screen {
     private List<Upgrade> items;
-    private UpgradeLibrary upgradeLibrary;
     private Stage stage;
     private Table table;
     private SpriteBatch batch;
@@ -41,7 +38,6 @@ public class ShopView implements Screen {
 
     public void setShopController(ShopController ctrl){
         this.shopController = ctrl;
-        //this.upgradeLibrary = shopController.getUpgradeLibrary();
     }
 
     public void update(){
@@ -135,18 +131,10 @@ public class ShopView implements Screen {
         float popupHeight = 300;
         background.setSize(popupWidth, popupHeight);
         popup.setPosition((stage.getWidth() - popupWidth)/2f, (stage.getHeight() - popupHeight)/2f);
-        /*
-        float pw = background.getWidth();
-        float ph = background.getHeight();
-        popup.setPosition(
-                (stage.getWidth() - pw) / 2f,
-                (stage.getHeight() - ph) / 2f
-        );*/
 
         Label title = new Label(item.getName(), ls);
         title.setPosition(20, popupHeight - 40);
         popup.addActor(title);
-
 
         Label desc = new Label(item.getDesc(), ls);
         desc.setPosition(20, popupHeight - 100);
@@ -169,10 +157,8 @@ public class ShopView implements Screen {
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO: MAKE SURE THAT U CANT BUY WITH INSUFFICIENT GOLD!
                 if(shopController.upgradeBought(item)){
                     popup.remove();
-                    //items.remove(item);
                     shopController.removeFromItems(item);
                     update();
                     shopGrid();
@@ -201,7 +187,7 @@ public class ShopView implements Screen {
         popup.addActor(backButton);
 
         stage.addActor(popup);
-        popup.setZIndex(Integer.MAX_VALUE); // säkerställ att det ligger överst
+        popup.setZIndex(Integer.MAX_VALUE);//Ensures its placed at the top
     }
 
     @Override
@@ -218,20 +204,13 @@ public class ShopView implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override public void dispose(){ stage.dispose(); }
-
 }
