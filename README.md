@@ -12,7 +12,8 @@
 <h2>Running the game:</h2>
 
 <h3>Option 1:</h3>
-<p>Run the following command when in the directory outside the src folder:</p><pre><code>src/main/java/org/example/DesktopLauncher.java</code></pre>
+<p>Run the following command when in the directory outside the src folder (cardlikegame):</p>
+<pre><code>src/main/java/org/example/DesktopLauncher.java</code></pre>
 
 <h3>Option 2:</h3>
 <p>Run the following command (requires Maven):</p>
