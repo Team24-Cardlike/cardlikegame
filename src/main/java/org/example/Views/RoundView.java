@@ -370,6 +370,8 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
 
         sr.end();
+
+
     }
 
 

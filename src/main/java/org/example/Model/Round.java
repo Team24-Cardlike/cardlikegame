@@ -35,7 +35,6 @@ public class Round {
         this.deck.createInGameDeck();
         user.drawCards(deck.getInGameDeck(), user.cardsPerHand);
         o.addObserver(ob);
-
     }
 
     public Round(Opponent opponent , RoundObserver ob){
