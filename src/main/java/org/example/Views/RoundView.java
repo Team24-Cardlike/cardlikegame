@@ -89,6 +89,9 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private int discardUsesLeft = 3;
     Label discardNum;
 
+    Label enemyHeath;
+    Label playerHealth;
+
     private Group gameGroup;
     private Group endGameGroup;
 
@@ -391,6 +394,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         }
         if(!this.gameEnded){
             drawHealthBars();
+
         }
     }
 
@@ -661,6 +665,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     public void onHealthChanged(float userHealth, float opponentHealth) {
         this.opponentHealthPercentage = opponentHealth;
         this.userHealthPercentage = userHealth;
+
     }
 
     @Override
