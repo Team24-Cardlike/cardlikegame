@@ -301,7 +301,6 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
 
     private Image createEmptySlot() {
         Texture emptyTexture = new Texture(Gdx.files.internal("assets/images/upgrade_placeholder.png"));
-        System.out.println("Empty created");
         return new Image(emptyTexture);
     }
 
