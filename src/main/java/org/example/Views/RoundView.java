@@ -24,6 +24,8 @@ import org.example.Controller.RoundController;
 import org.example.Model.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.example.Views.Animations.ImageAnimations;
+
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
     private ShapeRenderer sr;
     private Sound cardSound; // Sound of card being selected
     private Sound opponentSound; // Sound of opponent attacking 
+    // private Music roundMusic; // Background music in a round
 
     private boolean tableCreated = false;
 
@@ -257,7 +260,7 @@ public class RoundView extends ApplicationAdapter implements RoundObserver, Scre
         stage.addActor(endGameGroup);
 
         cardSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/card-sounds-35956.mp3"));
-        opponentSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/sfx12-boss_damage1-324520.mp3"));
+        opponentSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/sfx12-boss_damage1-324520.mp3"));        
     }
 
 

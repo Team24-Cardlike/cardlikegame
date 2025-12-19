@@ -19,7 +19,7 @@ public class DesktopLauncher {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(("Rouges of Midgaard"));
         config.setWindowedMode(1280,720);
-
+        
         //Creating View, Controler for round
         RoundView roundView = new RoundView();        
         MapView mapView = new MapView();
@@ -48,7 +48,7 @@ public class DesktopLauncher {
         menuView.setController(menuController);
         roundView.setController(roundController);
 
-        mapView.setController(mapController);
+        mapView.setController(mapController);    
 
         new Lwjgl3Application(gameRender, config);
     }

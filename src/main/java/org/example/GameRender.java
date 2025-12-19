@@ -7,6 +7,7 @@ import org.example.Views.HandbookView;
 import org.example.Views.RoundView;
 import org.example.Views.MainMenuView;
 import org.example.Views.ShopView;
+import org.example.Views.Music.BackgroundMusic;
 
 
 public class GameRender extends Game implements StateObserver {
@@ -27,6 +28,7 @@ public class GameRender extends Game implements StateObserver {
     @Override
     public void create() {
         setScreen(menuView);
+        new BackgroundMusic("assets/music/Valheim OST - Plains.mp3");
     }
 
 
