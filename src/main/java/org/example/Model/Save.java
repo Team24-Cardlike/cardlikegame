@@ -9,7 +9,7 @@ import java.io.IOException;
 
 
 /**
- * Saves data 
+ * Saves data and loads it in
  */
 public class Save {
     
@@ -18,16 +18,16 @@ public class Save {
     private GameData gameData;
     
     public Save(GameData gameData) {
-        this.gameData = gameData; // TODO: IS THIS DTO PATTERN?
+        this.gameData = gameData;
     }
     
     /**
      * Runs when Save button is pressed
-     * Saves data using GSON
+     * Saves data using Gson
      */
     public void saveGame() {  
 
-        gameData.updateData(); // Updates gameData the newest data from the model
+        gameData.updateData(); // Updates gameData with the newest data from the model
 
         try (FileWriter writer = new FileWriter(fileName)) {            
             GSON.toJson(gameData, writer);
@@ -63,12 +63,9 @@ public class Save {
     /**
      * Loads saved data into the game
      */
-    private void setLoadedData(GameData loadedData) {
-        // loadedData.setHealth();
-        // TODO: Add new setters here
+    private void setLoadedData(GameData loadedData) {        
         try {
-            loadedData.initializeData();
-            // loadedData.getGameManager().gameMap.updateMap();            
+            loadedData.initializeData();                   
         } catch (NullPointerException e) {
             System.out.println("No previous data stored, you may have forgotten to save.");
         }

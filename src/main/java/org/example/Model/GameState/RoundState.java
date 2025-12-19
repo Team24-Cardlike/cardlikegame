@@ -1,10 +1,7 @@
 package org.example.Model.GameState;
 
-import org.example.Controller.RoundController;
 import org.example.Model.GameManager;
 import org.example.Model.Round;
-import org.example.Model.RoundObserver;
-import org.example.Views.RoundView;
 
 public class RoundState implements GameState{
     String name = "round";
@@ -17,11 +14,7 @@ public class RoundState implements GameState{
         if (r.roundFinished) {                             
             if (manager.currentRound.getWon()) {                                            
                 manager.initMap();                       
-            }
-            // System.out.println();
-            // manager.setState(new MapState());
-
-
+            }            
         }
 
     }

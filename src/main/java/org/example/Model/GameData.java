@@ -29,13 +29,11 @@ public class GameData {
      * Retrieves data from gameManager and 
      * saves it here as an attribute
      */
-    void updateData() {                
-        // TODO: Add more getters here!
+    void updateData() {                           
         this.completedLvls = gameManager.getCompletedLvls();
         this.availableLvls = gameManager.getAvailableLvls();    
         this.gold = gameManager.getUser().getGold();   
         this.difficulity = gameManager.getDifficulty(); 
-
         upgradeIds = new ArrayList<Integer>();
         ArrayList<Upgrade> upgrades = gameManager.getUser().getUpgrades();
         for (Upgrade upgrade : upgrades) {            
@@ -60,8 +58,7 @@ public class GameData {
         gameManager.setAvailableLvls(availableLvls);
     }
 
-    void setUpgrades() {
-        // gameManager.getUser().setUpgrades(upgradeIds);
+    void setUpgrades() {        
         gameManager.setUpgrades(upgradeIds);
     }
 

@@ -1,34 +1,23 @@
 package org.example;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
-import org.example.Controller.MenuController;
-import org.example.Model.GameState.*;
-import org.example.Model.Round;
-import org.example.Model.Save;
 import org.example.Model.StateObserver;
 import org.example.Views.MapView;
 import org.example.Views.HandbookView;
 import org.example.Views.RoundView;
-import org.example.Controller.RoundController;
-import org.example.Model.GameManager;
 import org.example.Views.MainMenuView;
 import org.example.Views.ShopView;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class GameRender extends Game implements StateObserver {
 
     private RoundView roundView;
     private MainMenuView menuView;
-    private MapView mapView;
-    private Screen current;
+    private MapView mapView;    
     private ShopView shopView;
     private HandbookView handbookView;
 
-    GameRender(RoundView roundView, MainMenuView menuView, ShopView shopView, HandbookView handbookView, MapView mapview) {
-        //this.round = round;
+    GameRender(RoundView roundView, MainMenuView menuView, ShopView shopView, HandbookView handbookView, MapView mapview) {        
         this.roundView = roundView;
         this.menuView = menuView;
         this.shopView = shopView;

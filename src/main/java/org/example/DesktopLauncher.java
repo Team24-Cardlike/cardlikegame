@@ -12,12 +12,7 @@ import org.example.Views.RoundView;
 import org.example.Views.MainMenuView;
 import org.example.Views.HandbookView;
 import org.example.Views.MapView;
-
-//Du är mer av ett problem nu än problemet själv -Kristoffer under roleplaying workshop till Axel :)
-//Holy words
-import org.example.Controller.RoundController;
 import org.example.Views.ShopView;
-//import org.example.GameRender;
 
 public class DesktopLauncher {
     public static void main(String[] args) {
