@@ -188,7 +188,7 @@ public class Round {
 
     // Round ended
     public void endRound() {
-        user.addGold(totalDamageToOpponent);
+        user.addGold(totalDamageToOpponent/10);
         this.roundFinished = true;
     }
 
